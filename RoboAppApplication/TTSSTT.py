@@ -67,8 +67,8 @@ class VoiceAssistant:
     
     #WakeUp Word function
     def wake_check(self):
-        keyword_path = 'C:/Users/dghai/OneDrive/Desktop/RoboApp/Hey-Jack_en_windows_v2_2_0.ppn'
-        access_key = 'kFYBTDtUiBn8PUPOWm8jtm7kNhRqZ67YAgjaKOlX2B8H7160vxfspA=='
+        keyword_path = 'C:/Users/dghai/OneDrive/Documents/GitHub/WOB-Robo-Code/RoboAppApplication/Hey-Jack_en_windows_v2_2_0.ppn'
+        access_key = 'f+1PrkzAJ0E0137WHvvVxB1D/1KDtXYgzj1pkVw4NimMUm5B0iH4zQ=='
         print("Entered wake check")
         self.detection= False
         def audio_callback(in_data, frame_count, time_info, status):
@@ -284,9 +284,9 @@ class VoiceAssistant:
 
     def run(self):
         future = self.executor.submit(self.wake_check)
-        future2 = self.executor.submit(botConnecter.connectToBot)
+        # future2 = self.executor.submit(botConnecter.connectToBot)
         future3 = self.executor.submit(self.gui_setup)
-        return future, future2, future3
+        return future, future3
         
 
 
