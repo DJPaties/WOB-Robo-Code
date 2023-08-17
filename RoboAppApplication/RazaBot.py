@@ -10,7 +10,7 @@ def send_message(msg):
                     "message": msg
                 }
     print("Payload done")
-    r = requests.post('https://362c-185-127-126-166.ngrok.io/webhooks/rest/webhook', json=payload)
+    r = requests.post('https://0e8b-185-127-126-166.ngrok.io/webhooks/rest/webhook', json=payload)
     print("Request done")
     data = r.json()
     # print(type(data))

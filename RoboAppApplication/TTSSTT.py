@@ -15,6 +15,7 @@ from mutagen.mp3 import MP3
 
 class VoiceAssistant:
     def __init__(self):
+        #initialize values to work with
         self.lang_change = False
         self.detection = False
         self.msg = ""
@@ -28,7 +29,7 @@ class VoiceAssistant:
         self.root = None
         self.response_message = ""
         self.speech_label = None
-        self.lang_code = "en-US"
+        self.lang_code = "ar-LB"
     #To reopen microphone
     def open_mic(self):
         if self.detection:
@@ -40,6 +41,7 @@ class VoiceAssistant:
     def selectLangauge(self, msg):
         x = botConnecter.checkForSwitch(msg)
         print("Language code is", x)
+        #language logic to change the speech to text
         if x is not None:
             self.lang_code = x
             if self.lang_code == "en-US":
@@ -65,7 +67,7 @@ class VoiceAssistant:
         exit(0)
 
     
-    #WakeUp Word function
+    #WakeUp Word function it detects hey jack then moves on to the tts function
     def wake_check(self):
         keyword_path = 'C:/Users/dghai/OneDrive/Documents/GitHub/WOB-Robo-Code/RoboAppApplication/Hey-Jack_en_windows_v2_2_0.ppn'
         access_key = 'f+1PrkzAJ0E0137WHvvVxB1D/1KDtXYgzj1pkVw4NimMUm5B0iH4zQ=='
@@ -116,24 +118,30 @@ class VoiceAssistant:
             self.tts()
         
 
-
+    #its simple job is to only read the words that are results
     def tts(self):
-
-        os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'tts.json'
+        print("TTS")
+        os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'text.json'
+        
         client = texttospeech.TextToSpeechClient()
+
+        
         text = '<speak>'+""+self.response_message+""+'</speak>'
         synthesis_input = texttospeech.SynthesisInput(ssml=text)
+        
         if self.lang_code == "en-US":
             voice = texttospeech.VoiceSelectionParams(
-                language_code=self.lang_code ,
-                ssml_gender=texttospeech.SsmlVoiceGender.MALE,
-            )
+            language_code=self.lang_code ,
+            ssml_gender=texttospeech.SsmlVoiceGender.MALE,
+        )
             audio_config = texttospeech.AudioConfig(
                         audio_encoding=texttospeech.AudioEncoding.MP3,
                     )
             response = client.synthesize_speech(
                         input=synthesis_input, voice=voice, audio_config=audio_config,
                     )
+
+
             filename = 'audio.mp3'
             with open(filename, 'wb') as out:
                 out.write(response.audio_content)
@@ -159,6 +167,8 @@ class VoiceAssistant:
             pygame.mixer.music.play()
             while pygame.mixer.music.get_busy():
                 time.sleep(0.2)  # Wait a second before checking again
+        
+        #if lamguage is arabic then a whole new process is written 
         else:
 
             name = "ar-XA-Standard-B"
@@ -202,7 +212,6 @@ class VoiceAssistant:
             pygame.mixer.music.play()
             while pygame.mixer.music.get_busy():
                 time.sleep(0.2)  # Wait a second before checking again
-
         if self.lang_change:
             self.wake_check()
         else:
@@ -211,7 +220,7 @@ class VoiceAssistant:
 
 
     
-
+    #this function is where the user speaks and handles its requests
     def stt(self, speech_label):
         if self.detection:
             self.lang_change = False
@@ -239,6 +248,8 @@ class VoiceAssistant:
 
                 
                 except sr.UnknownValueError:
+                    #TODO here in future time is where will we implement the sleep function that turns microphoneoff
+                    # when there is no one talking to him
                     x = "could not understand audio please repeat and be clear"
                     print(x)
                     if self.lang_code == "en-US":
@@ -256,7 +267,7 @@ class VoiceAssistant:
             self.tts()
     
 
-
+    #this is the Tkinter setup for main interface and the application window
     def gui_setup(self):
         self.root = tk.Tk()
         self.screen_width = self.root.winfo_screenwidth()
@@ -281,7 +292,7 @@ class VoiceAssistant:
         self.generate_button.configure(height=2, width=20)
         self.root.protocol("WM_DELETE_WINDOW", self.on_close)
         self.root.mainloop()
-
+    #THread theruns multiple functions at once
     def run(self):
         future = self.executor.submit(self.wake_check)
         # future2 = self.executor.submit(botConnecter.connectToBot)
@@ -289,7 +300,7 @@ class VoiceAssistant:
         return future, future3
         
 
-
+#this starts the application
 if __name__ == "__main__":
     assistant = VoiceAssistant()
     assistant.run()

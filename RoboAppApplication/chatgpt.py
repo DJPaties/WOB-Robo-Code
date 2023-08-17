@@ -41,7 +41,7 @@ def send_response(msg):
     return collected_contents
 
 server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-server_socket.bind(("localhost", 8888))
+server_socket.bind(("192.168.0.152", 8888))
 server_socket.listen()
 
 print("Server is Active")
