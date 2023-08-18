@@ -29,7 +29,7 @@ class VoiceAssistant:
         self.root = None
         self.response_message = ""
         self.speech_label = None
-        self.lang_code = "ar-LB"
+        self.lang_code = "en-US"
     #To reopen microphone
     def open_mic(self):
         if self.detection:
