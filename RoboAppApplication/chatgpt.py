@@ -3,7 +3,7 @@ import time
 import socket
 
 # Set your OpenAI API key
-api_key = "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"
+api_key = "place your api key here"
 openai.api_key = api_key
 
 # Define the previous conversation (if any)
