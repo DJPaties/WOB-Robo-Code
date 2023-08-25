@@ -310,7 +310,8 @@ class VoiceAssistant:
         future = self.executor.submit(server.start_server)
         future2 = self.executor.submit(self.wake_check)
         future3 = self.executor.submit(self.gui_setup)
-        return future2, future3
+        future4 = self.executor.submit(botConnecter.initialize_client)
+        return future,future2, future3, future4
         
 
 #this starts the application
