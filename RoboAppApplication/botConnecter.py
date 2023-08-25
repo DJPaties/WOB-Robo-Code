@@ -1,15 +1,16 @@
-# from direct_line_api_helper import DirectLineAPI
 import RazaBot
-import serial
-import time
+import socket
+import server
+server_ip = '192.168.16.157'
+server_port = 12345     # Change this to the server's port
+name_to_server=""
 
 expecting_input_detection = None
-# arduino = serial.Serial(port='COM10', baudrate= 9600, timeout=.1)      
-
+nanme_Recognized = ""
 def send_delay(delay_time):
-    # arduino.write(str(delay_time).encode('utf-8'))
-    # time.sleep(0.65)
+
     pass
+
 
 def checkForSwitch(msg):
     keyword_list = ["change", "talk", "switch"]
@@ -36,41 +37,32 @@ def checkForSwitch(msg):
         print("No action needed")
         return None
 
+def get_Name():
+    return nanme_Recognized
 
-
-# def translateToEnglish(message):
-#     tr = Translator()
-#     out = tr.translate(message, dest="en")
-#     return out.text
-
-
-# def translateToArabic(message):
-#     tr = Translator()
-#     out = tr.translate(message, dest="ar")
-#     print("After Translating", out.text)
-#     return out.text
-
-
-# def connectToBot():
-#     global api
-#     api=DirectLineAPI("taz30Qet5pA.vi8qB12H0Vf_0_25pvUlu3y9FRVa2hNZnfYBbywVGcI")
-#     api.set_headers()
-#     api.start_conversation() 
-    
+def set_Name(name):
+    global nanme_Recognized
+    nanme_Recognized = name
+  
     
 def main(x):
     global expecting_input_detection
 
     print("THE MESSAGE SENT IS",x)
-    # api.send_message(x)
+
     
     print("recieving the message")
-    response1 = RazaBot.send_message(x)
-    
-    # print("THIS IS RESPONSE ONE:"+ response1) 
+    # response1 = RazaBot.send_message(x)
+    response1 = {
+    "text":"Hello mohammad Dghaily",
+    "name": "Mohammad Dghaily",
+    "intent": "new_user",
+    "inputHint": ""
+}
+
     if isinstance(response1,dict):
         if response1['inputHint'] == 'acceptingInput':
-            #print("ACCEPTING INPUT: THE MESSAGE IS:" + response1['text'])
+
             intent = response1.get('intent')
             entities = response1.get('entities')
 
@@ -81,38 +73,33 @@ def main(x):
                     "degree_value": entities["degree_value"],
                     "time_value": int(entities["time_value"].split(":")[-1])
                 }
-                # full_entity = ""
-                # for key, value in entities.items():
-                #     full_entity += key + " " + str(value) + " "
-                # print(intent, " full_entity " + full_entity)
+
                 print(payload)
             elif intent:
                 payload={
-                    "intent": intent
-                }
+                        "intent": intent
+                    }
                 print(payload)
             expecting_input_detection = False
-
-
-            # if  lang_code == "ar-LB":
-            #     msg = translateToArabic(response1['text'])
-            #     return msg
-            return response1['text']
+        elif response1["intent"] == 'new_user':
+            # print(payload)
+            server.setSendNameTrue()
+        print("before return")
+        return response1['text']
+        
         
     else:
         
         expecting_input_detection = True
 
-        #print("EXPECTING INPUT: THE MESSAGE IS:" + response1['text'])
-
-        # if lang_code == "ar-LB":
-        #     x = translateToArabic(response1['text'])
-        #     return x
         return response1
         
         
-
-
+# def set_name(received_name):
+#     global name_to_server
+#     name_to_server=received_name
+# def get_name():
+#     return name_to_server
     
 def InputType():
     global expecting_input_detection
@@ -120,4 +107,4 @@ def InputType():
 
 # while True:
 #     msg = input('')
-#     print(main(msg))
+print(main("a"))

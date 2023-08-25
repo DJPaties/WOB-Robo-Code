@@ -2,6 +2,7 @@ import json
 import requests
 
 
+
 def send_message(msg):
 
     payload = {
@@ -10,7 +11,7 @@ def send_message(msg):
                     "message": msg
                 }
     print("Payload done")
-    r = requests.post('https://aa70-185-127-126-50.ngrok.io/webhooks/rest/webhook', json=payload)
+    r = requests.post('https://3f1f-185-127-125-57.ngrok.io/webhooks/rest/webhook', json=payload)
     print("Request done")
     data = r.json()
     # print(type(data))
@@ -23,7 +24,8 @@ def send_message(msg):
     # print(response)
     try:
         return_Message = json.loads(response)
-        print(return_Message)
+        x = (return_Message)
+        print(x)
         return return_Message
     except ValueError as e :
         print("Response is not a json")
@@ -33,4 +35,6 @@ def send_message(msg):
     # return return_Message
     
     # return data
-# print(send_message("mimic my hand"))
+# print(send_message("yes"))s
+
+
