@@ -1,44 +1,59 @@
 import RazaBot
 import socket
 import json
-from concurrent.futures import ThreadPoolExecutor
+# from concurrent.futures import ThreadPoolExecutor
 
 
 # import server
 
-
-name_detected = False
-nanme_Recognized = ""
 send_New_Name = False
-name_callback_update = None
+name_detected = False
+denied_name = False
+Name = ""
+# name_callback_update = None
 def send_delay(delay_time):
 
     pass
 
 def process_input(input):
     try:
+        global name_detected
+        global Name
         # Attempt to parse the input as JSON
         response = json.loads(input)
         if "known" in response and response["known"] :
             try:
                 print("Name found: ", response['name'])
-                global name_detected
+                
+                
                 name_detected = True
+                Name = response['name']
                 return response['name']
             except Exception as e:
                 return e
         else:
             
             name_detected = False
+            
+            Name = ""
+            return Name
+            
     except json.JSONDecodeError:
         pass
 
     # If JSON parsing failed or the type is not "new_user", treat it as a regular string
     parts = input.split(" ", 1)
     if parts[0] == "new_user" and len(parts) > 1:
+        global send_New_Name
+        name_detected = True
+        send_New_Name = True
         rest_of_sentence = parts[1]
-        return rest_of_sentence
+        Name = rest_of_sentence
+       
+
+        return Name
     else:
+        Name = ""
         return "None of the above expected results came" 
 
 def checkForSwitch(msg):
@@ -67,12 +82,17 @@ def checkForSwitch(msg):
         return None
 
 def get_Name():
-    return nanme_Recognized
+    print("The get name function returned :", Name)
+    return Name
     
+def get_denied_Name ():
+    return denied_name
+def set_Name_deny_False():
+    global denied_name
+    denied_name=False
 
-def set_Name(name):
-    global nanme_Recognized
-    nanme_Recognized = name
+
+
 
   
     
@@ -113,9 +133,14 @@ def main(x):
         
         elif response1["intent"] == 'new_user':
             print("anything")
+        elif response1["intent"] ==  'denied name':
+            global denied_name
+            denied_name = True
+            # msg = ("denied name")
+            print(response1)
+            
 
-
-
+        print(response1)
         print("before return")
         return response1['text']
         
@@ -128,38 +153,46 @@ def main(x):
         
         
 def initialize_client():
-    global client_socket
-    server_ip = '192.168.0.105'
-    server_port = 12345
-
-    # Create a socket object
-    client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-
-    # Connect to the server
-    server_address = (server_ip, server_port)
-    client_socket.connect(server_address)
+    
     try:
+
+        
+        
+        global client_socket
+        server_ip = '192.168.0.105'
+        server_port = 12345
+
+        # Create a socket object
+        client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+        # Connect to the server
+        server_address = (server_ip, server_port)
+        client_socket.connect(server_address)
         while True:
             message = client_socket.recv(1024).decode()
             # print(message)
             if not message:
                 break
             response = process_input(str(message))
+            print("THIS IS THE RESPONSE:"+response)
             global name_detected
             global send_New_Name
             if name_detected and not send_New_Name:
                 print("Image is known,"+response)
                 name_detected = False
-                set_Name(response)
+
                 client_socket.send(response.encode())
 
 
             elif not name_detected and not send_New_Name:
-                msg = "Aborted Commmand"
+                
+                msg = "Image not found "                
                 client_socket.send(msg.encode())
             elif name_detected and send_New_Name:
+                name_detected = False
+                send_New_Name = False
+                
                 client_socket.send(response.encode())
-            
             
     except KeyboardInterrupt:
         pass
@@ -173,8 +206,8 @@ def initialize_client():
 
 # def send_message(msg):
 #     client_socket.send(msg.encode())
-executer = ThreadPoolExecutor()
-executer.submit(initialize_client())
+# executer = ThreadPoolExecutor()
+# executer.submit(initialize_client())
 # send_message("Testing")
 
 # def InputType():

@@ -16,8 +16,8 @@ import server
 
 class VoiceAssistant:
     def __init__(self):
-        #initialize values to work with
-        # self.recognizedFace = ""
+        # initialize values to work with
+        self.recognizedFace = ""
         self.lang_change = False
         self.detection = False
         self.msg = ""
@@ -70,11 +70,14 @@ class VoiceAssistant:
         print("Application closed")
         exit(0)
 
-    
+    def updateface(self):
+        self.recognizedFace=botConnecter.get_Name()
+
+
     #WakeUp Word function it detects hey jack then moves on to the tts function
     def wake_check(self):
-        keyword_path = 'C:/Users/PC/Desktop/roboapp/hey-jack_en_windows_v2_2_0.ppn'
-        access_key = 'MPVcUoAFchyBEfyBL7kFvZf9RiotPw+OZ251r0cIobF8m0C25TGJag=='
+        keyword_path = 'C:/Users/pc/Desktop/WOB-Robo-Code/RoboAppApplication/Hey-Jack_en_windows_v2_2_0.ppn'
+        access_key = 'UyspK1A0DsRJJ3i4lRvJ7I9LgOD7G9hQ+d7tcVUDtWcThB5P7gsY3g=='
         print("Entered wake check")
         self.detection= False
         def audio_callback(in_data, frame_count, time_info, status):
@@ -111,34 +114,41 @@ class VoiceAssistant:
 
         print("All CLEAR")
         print(self.detection)
+
+        self.updateface()
         self.lang_change = False
-        if len(botConnecter.get_Name()) == 0:
+        if len(self.recognizedFace) == 0:
             self.response_message = "hey,"+ botConnecter.main("name not recognized")
+            self.speech_label.config(text=self.response_message)
             self.tts()
         else:
             if self.lang_code == "en-US":
-                self.response_message = "Hey, " + botConnecter.get_Name() + "."
-                print( "Hey, " + botConnecter.get_Name() + ".")
+                self.response_message = "Hey, " + self.recognizedFace + "."
+                print( "Hey, " + self.recognizedFace + ".")
                 self.speech_label.config(text=self.response_message)
-                # exec(open("server.py").read())
-                self.tts()   
+                self.tts() 
+
             else:
                 self.response_message = "مرحبا كِيفْ فِيِّ ساعْدَكْ "
                 self.speech_label.config(text=self.response_message)
-                # exec(open("server.py").read())
                 self.tts()
             
 
     #its simple job is to only read the words that are results
     def tts(self):
+   
         print("TTS")
         os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'text.json'
-        
-        client = texttospeech.TextToSpeechClient()
-
-        
+        try:        
+            
+            client = texttospeech.TextToSpeechClient()
+            print("Client created successfully.")
+        except Exception as e:
+            print("Error:", str(e))
+        print("TTS")
         text = '<speak>'+""+self.response_message+""+'</speak>'
         synthesis_input = texttospeech.SynthesisInput(ssml=text)
+        
         try:
             if self.lang_code == "en-US":
                 voice = texttospeech.VoiceSelectionParams(
@@ -229,6 +239,9 @@ class VoiceAssistant:
             self.wake_check()
         else:
             self.stt(self.speech_label)
+            # self.wake_check()
+        # if self.response_message == 'denied name':
+        #     botConnecter.main("name not recognized")
 
 
 
@@ -236,48 +249,54 @@ class VoiceAssistant:
     #this function is where the user speaks and handles its requests
     def stt(self, speech_label):
         if self.detection:
-            self.lang_change = False
-            # Create a recognizer object
-            r = sr.Recognizer()
+            if botConnecter.denied_name:
+                self.response_message = botConnecter.main("name not recognized")
+                botConnecter.set_Name_deny_False()
+                self.tts()
+            else:
+                self.lang_change = False
+                # Create a recognizer object
+                r = sr.Recognizer()
 
-            # Open the microphone for capturing the speech
-            with sr.Microphone() as source:
-                print("Listening...")   
-                
-                # Adjust the energy threshold for silence detection
-                r.energy_threshold = 4000
-
-                # Listen for speech and convert it to text
-                audio = r.listen(source)
-
-                try:
+                # Open the microphone for capturing the speech
+                with sr.Microphone() as source:
+                    print("Listening...")   
                     
-                    # Use the Google Web Speech API to recognize the speech 
-                    text = r.recognize_google(audio, language=self.lang_code)
-                    print("You said:", text)
-                    self.selectLangauge(text)
-                    self.response_message = botConnecter.main(text) 
-                    
+                    # Adjust the energy threshold for silence detection
+                    r.energy_threshold = 4000
 
-                
-                except sr.UnknownValueError:
-                    #TODO here in future time is where will we implement the sleep function that turns microphoneoff
-                    # when there is no one talking to him
-                    x = "could not understand audio please repeat and be clear"
-                    print(x) 
-                    if self.lang_code == "en-US":
-                        self.response_message = "could not understand audio please repeat and be clear"
-                    else:
-                        self.response_message = "مش عم بِفْهَمْ عَلَيْك عيد"
-                    self.speech_label.config(text=self.response_message)    
-                    self.tts()
+                    # Listen for speech and convert it to text
+                    audio = r.listen(source)
+
+                    try:
+                        
+                        # Use the Google Web Speech API to recognize the speech 
+                        text = r.recognize_google(audio, language=self.lang_code)
+                        print("You said:", text)
+                        self.selectLangauge(text)
+                        self.response_message = botConnecter.main(text) 
+
+                        
+
                     
-                except sr.RequestError as e:
-                    x="Could not request results from Google Speech Recognition service; {0}".format(e)
-                    print(x)
-                    self.open_mic()
-            self.speech_label.config(text=self.response_message)
-            self.tts()
+                    except sr.UnknownValueError:
+                        #TODO here in future time is where will we implement the sleep function that turns microphoneoff
+                        # when there is no one talking to him
+                        x = "could not understand audio please repeat and be clear"
+                        print(x) 
+                        if self.lang_code == "en-US":
+                            self.response_message = "could not understand audio please repeat and be clear"
+                        else:
+                            self.response_message = "مش عم بِفْهَمْ عَلَيْك عيد"
+                        self.speech_label.config(text=self.response_message)    
+                        self.tts()
+                        
+                    except sr.RequestError as e:
+                        x="Could not request results from Google Speech Recognition service; {0}".format(e)
+                        print(x)
+                        self.open_mic()
+                self.speech_label.config(text=self.response_message)
+                self.tts()
     
 
     #this is the Tkinter setup for main interface and the application window
@@ -308,9 +327,9 @@ class VoiceAssistant:
     #THread theruns multiple functions at once
     def run(self):
         future = self.executor.submit(server.start_server)
-        future2 = self.executor.submit(self.wake_check)
         future3 = self.executor.submit(self.gui_setup)
         future4 = self.executor.submit(botConnecter.initialize_client)
+        future2 = self.executor.submit(self.wake_check)
         return future,future2, future3, future4
         
 

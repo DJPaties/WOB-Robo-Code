@@ -47,4 +47,4 @@ def start_server():
         except Exception as e:
             print("Error accepting connection:", e)
 
-start_server()
+# start_server()

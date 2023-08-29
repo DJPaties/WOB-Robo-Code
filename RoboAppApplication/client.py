@@ -1,6 +1,7 @@
 import socket
 import json
 response1 = {'known': True, 'name': "Mohammad Dghaily"}
+response5 = {'known': True, 'name': "Adnan Abdulla"}
 response2 = {'known': False, 'name': ""}
 response3 = "new_user Mohammad Dghaily"
 response4 = "None of the above"
@@ -16,10 +17,12 @@ try:
             client_socket.send((json.dumps(response1)).encode())
         elif message == '2':
             client_socket.send((json.dumps(response2)).encode())
-        elif message == '3':
+        elif message == 'new':
             client_socket.send(response3.encode())
         elif message == '4':
             client_socket.send(response4.encode())
+        elif message == 'name':
+            client_socket.send((json.dumps(response5)).encode())
         else:
             client_socket.send(str(message).encode())
 
