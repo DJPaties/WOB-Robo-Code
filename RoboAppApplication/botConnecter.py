@@ -159,7 +159,7 @@ def initialize_client():
         
         
         global client_socket
-        server_ip = '192.168.0.105'
+        server_ip = '192.168.16.157'
         server_port = 12345
 
         # Create a socket object

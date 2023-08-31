@@ -76,8 +76,9 @@ class VoiceAssistant:
 
     #WakeUp Word function it detects hey jack then moves on to the tts function
     def wake_check(self):
-        keyword_path = 'C:/Users/pc/Desktop/WOB-Robo-Code/RoboAppApplication/Hey-Jack_en_windows_v2_2_0.ppn'
-        access_key = 'UyspK1A0DsRJJ3i4lRvJ7I9LgOD7G9hQ+d7tcVUDtWcThB5P7gsY3g=='
+
+        keyword_path = 'C:/Users/PC/Desktop/roboapp/hey-jack_en_windows_v2_2_0.ppn'
+        access_key = 'MPVcUoAFchyBEfyBL7kFvZf9RiotPw+OZ251r0cIobF8m0C25TGJag=='
         print("Entered wake check")
         self.detection= False
         def audio_callback(in_data, frame_count, time_info, status):
