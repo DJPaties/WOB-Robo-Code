@@ -115,6 +115,12 @@ def main(x):
                 entities = response1.get('entities')
 
                 if intent and entities:
+                    if entities["side"] == "right" or entities["side"]=="right side":
+                        print("right side")
+                    elif entities["side"] == "left" or entities["side"]=="left side":
+                        print("left side")
+                    elif entities["side"] == "both" or entities["side"]=="both side":
+                        print("both side")
                     payload = {
                         "intent": intent,
                         "side": entities["side"],
@@ -159,7 +165,7 @@ def initialize_client():
         
         
         global client_socket
-        server_ip = '192.168.16.157'
+        server_ip = '192.168.0.105'
         server_port = 12345
 
         # Create a socket object

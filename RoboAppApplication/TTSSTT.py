@@ -76,9 +76,8 @@ class VoiceAssistant:
 
     #WakeUp Word function it detects hey jack then moves on to the tts function
     def wake_check(self):
-
-        keyword_path = 'C:/Users/PC/Desktop/roboapp/hey-jack_en_windows_v2_2_0.ppn'
-        access_key = 'MPVcUoAFchyBEfyBL7kFvZf9RiotPw+OZ251r0cIobF8m0C25TGJag=='
+        keyword_path = 'C:/Users/pc/Desktop/WOB-Robo-Code/RoboAppApplication/Hey-Jack_en_windows_v2_2_0.ppn'
+        access_key = 'UyspK1A0DsRJJ3i4lRvJ7I9LgOD7G9hQ+d7tcVUDtWcThB5P7gsY3g=='
         print("Entered wake check")
         self.detection= False
         def audio_callback(in_data, frame_count, time_info, status):
@@ -329,9 +328,10 @@ class VoiceAssistant:
     def run(self):
         future = self.executor.submit(server.start_server)
         future3 = self.executor.submit(self.gui_setup)
-        future4 = self.executor.submit(botConnecter.initialize_client)
         future2 = self.executor.submit(self.wake_check)
-        return future,future2, future3, future4
+        future5 = self.executor.submit(botConnecter.main(self.stt(self.speech_label)))
+        future4 = self.executor.submit(botConnecter.initialize_client)
+        return future,future2, future3, future4,future5
         
 
 #this starts the application
