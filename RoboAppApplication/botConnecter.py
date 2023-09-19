@@ -9,7 +9,7 @@ import json
 send_New_Name = False
 name_detected = False
 denied_name = False
-Name = ""
+Name = "Mohammad Dghaily"
 # name_callback_update = None
 def send_delay(delay_time):
 
@@ -139,12 +139,7 @@ def main(x):
         
         elif response1["intent"] == 'new_user':
             print("anything")
-        elif response1["intent"] ==  'denied name':
-            global denied_name
-            denied_name = True
-            # msg = ("denied name")
-            print(response1)
-            
+      
 
         print(response1)
         print("before return")
