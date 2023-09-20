@@ -17,7 +17,7 @@ import server
 class VoiceAssistant:
     def __init__(self):
         # initialize values to work with
-        self.recognizedFace = "لارا"
+        self.recognizedFace = "lara"
         self.lang_change = False
         self.detection = False
         self.msg = ""
@@ -31,7 +31,7 @@ class VoiceAssistant:
         self.root = None
         self.response_message = ""
         self.speech_label = None
-        self.lang_code = "ar-LB"
+        self.lang_code = "en-US"
 
     #To reopen microphone
     def open_mic(self):
@@ -325,12 +325,26 @@ class VoiceAssistant:
                 # when there is no one talking to him
                 x = "could not understand audio please repeat and be clear"
                 print(x) 
-                if self.lang_code == "en-US":
-                    self.response_message = "could not understand audio please repeat and be clear"
+                if self.counter == 1:
+                     
+                     if self.lang_code == "en-US":
+                        self.response_message = "could not understand audio please repeat and be clear"
+                     else:
+                         self.response_message = "مش عم بِفْهَمْ عَلَيْك عيد"
+                     self.speech_label.config(text=self.response_message) 
+                     print("loop- number 1")   
+                     self.counter += 1 
+                     self.tts()
+                     
+                elif self.counter == 2:
+                    print("loop number 2")
+                    self.counter += 1
+                    self.stt(self.speech_label)
+                
                 else:
-                    self.response_message = "مش عم بِفْهَمْ عَلَيْك عيد"
-                self.speech_label.config(text=self.response_message)    
-                self.tts()
+                    print("loop number 3")
+                    self.counter = 1
+                    self.wake_check()
                 
             except sr.RequestError as e:
                 x="Could not request results from Google Speech Recognition service; {0}".format(e)
