@@ -1,6 +1,0 @@
-When launching the app make sure of the following things (IMPORTANT):
-
-Always relocate the .ppn files to their correct destination
-Always create a new key for porcupine to avoid issues in the future.
-
-ANything else review the documentation.
