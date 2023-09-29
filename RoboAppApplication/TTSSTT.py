@@ -13,16 +13,17 @@ import speech_recognition as sr
 import wave
 from mutagen.mp3 import MP3
 import server
+# import client
 
 class VoiceAssistant:
     def __init__(self):
         # initialize values to work with
-        self.recognizedFace = "lara"
+        self.recognizedFace = ""
         self.lang_change = False
         self.detection = False
         self.msg = ""
         self.screen_width = None
-        self.screen_height = None
+        self.screen_height = None 
         self.label = None
         self.wake_label = None
         self.generate_button = None
@@ -31,7 +32,8 @@ class VoiceAssistant:
         self.root = None
         self.response_message = ""
         self.speech_label = None
-        self.lang_code = "en-US"
+        self.lang_code = "ar-LB"
+        self.counter = 1
 
     #To reopen microphone
     def open_mic(self):
@@ -76,12 +78,11 @@ class VoiceAssistant:
 
     #WakeUp Word function it detects hey jack then moves on to the tts function
     def wake_check(self):
-        
-        access_key = 'H8mZzbhecZ5FIkIyCxcAeM5KF8KCn6RlO+E1OgsQ/zLeY0e/mGQzWg=='
-        keyword_path_arab= 'C:/Users/PC/Desktop/roboCopy/RoboAppApplication/مرحبا-جاك_ar_windows_v2_2_0.ppn'
-        keyword_path_eng = 'C:/Users/PC/Desktop/roboCopy/RoboAppApplication/Hey-Jack_en_windows_v2_2_0.ppn'
-        # Spécifiez le chemin vers le modèle Porcupine en arabe (.pv)
-        model_path = 'C:/Users/PC/Downloads/porcupine_params_ar.pv'
+
+        keyword_path = r'C:\Users\wot\Desktop\RoboAppApplication\Hey-Jack_en_windows_v2_2_0.ppn'
+        keyword_path_arabic = "C:/Users/wot/Desktop/RoboAppApplication/مرحبا-جاك_ar_windows_v2_2_0.ppn"
+        access_key = '4HceBz+B5ZnPRKTBlanhYjuwZxWZVG5RBuE9V9Fa7FY66pQs0M57MA=='
+        model_path = 'C:/Users/wot/Desktop/RoboAppApplication/porcupine_params_ar.pv'
         print("Entered wake check")
         self.detection= False
         def audio_callback(in_data, frame_count, time_info, status):
@@ -92,12 +93,12 @@ class VoiceAssistant:
                 print("Keyword Detected!")
             
             return None, pyaudio.paContinue
+
+
         if self.lang_code == "en-US":
-            print("language is english")
 
+            handle = pvporcupine.create(keyword_paths=[keyword_path], access_key=access_key)
 
-            handle = pvporcupine.create(keyword_paths=[keyword_path_eng], access_key=access_key)
-      
             pa = pyaudio.PyAudio()
 
             audio_stream = pa.open(
@@ -124,19 +125,19 @@ class VoiceAssistant:
 
             self.updateface()
             self.lang_change = False
-            # if len(self.recognizedFace) == 0:
-            #     self.response_message = "hey,"+ botConnecter.main("name not recognized")
-            #     self.speech_label.config(text=self.response_message)
-            #     self.tts()
-        # else:
-            self.response_message = "Hey, " + self.recognizedFace + "."
-            print( "Hey, " + self.recognizedFace + ".")
-            self.speech_label.config(text=self.response_message)
-            self.tts() 
 
+            if len(self.recognizedFace) == 0:
+                self.response_message = "hey,"+ botConnecter.main("name not recognized")
+                self.speech_label.config(text=self.response_message)
+                self.tts()
+            else:
+                self.response_message = "Hey, " + self.recognizedFace + "."
+                print( "Hey, " + self.recognizedFace + ".")
+                self.speech_label.config(text=self.response_message)
+                self.tts() 
         if self.lang_code == "ar-LB":
             print("language is arabic")
-            handle = pvporcupine.create(keyword_paths=[keyword_path_arab], access_key=access_key,model_path=model_path)
+            handle = pvporcupine.create(keyword_paths=[keyword_path_arabic], access_key=access_key,model_path=model_path)
             pa = pyaudio.PyAudio()
 
             audio_stream = pa.open(
@@ -162,18 +163,19 @@ class VoiceAssistant:
             print("All CLEAR")
             print(self.detection)
 
-            #self.updateface()
+            self.updateface()
             self.lang_change = False
-            # if len(self.recognizedFace) == 0:
-            #     self.response_message = "hey,"+ botConnecter.main("name not recognized")
-            #     self.speech_label.config(text=self.response_message)
-            #     self.tts()
-        # else:
-            self.response_message = "مرحبا"+self.recognizedFace
-            print( "مرحبا"+self.recognizedFace + ".")
-            self.speech_label.config(text=self.response_message)
-            self.tts()
-            
+            if len(self.recognizedFace) == 0:
+                self.response_message = "hey,"+ botConnecter.main("name not recognized")
+                self.speech_label.config(text=self.response_message)
+                self.tts()
+            else:
+                self.response_message = "مرحبا"+self.recognizedFace
+                print( "مرحبا"+self.recognizedFace + ".")
+                self.speech_label.config(text=self.response_message)
+                self.tts()
+ 
+        
 
     #its simple job is to only read the words that are results
     def tts(self):
@@ -255,10 +257,10 @@ class VoiceAssistant:
                 with wave.open(filename) as mywav:
                     duration_seconds = mywav.getnframes() / mywav.getframerate()
                     print(f"Length of the WAV file: {duration_seconds:.1f} s")
-                # try:    
-                #     botConnecter.send_delay(float(duration_seconds))
-                # except Exception as e:
-                #     print(e)
+                try:    
+                    botConnecter.send_delay(float(duration_seconds))
+                except Exception as e:
+                    print(e)
                 pygame.mixer.init()
                 pygame.mixer.music.load('dummy.mp3')
                 files = glob.glob('ar-XA-Standard-*.mp3')
@@ -289,70 +291,69 @@ class VoiceAssistant:
     
     #this function is where the user speaks and handles its requests
     def stt(self, speech_label):
-        # if self.detection:
-        #     if botConnecter.denied_name:
-        #         self.response_message = botConnecter.main("name not recognized")
-        #         botConnecter.set_Name_deny_False()
-        #         self.tts()
-        #     else:
-        self.lang_change = False
-        # Create a recognizer object
-        r = sr.Recognizer()
+        if self.detection:
+            if botConnecter.denied_name:
+                self.response_message = botConnecter.main("name not recognized")
+                botConnecter.set_Name_deny_False()
+                self.tts()
+            else:
+                self.lang_change = False
+                # Create a recognizer object
+                r = sr.Recognizer()
 
-        # Open the microphone for capturing the speech
-        with sr.Microphone() as source:
-            print("Listening...")   
-            
-            # Adjust the energy threshold for silence detection
-            r.energy_threshold = 4000
+                # Open the microphone for capturing the speech
+                with sr.Microphone() as source:
+                    print("Listening...")   
+                    
+                    # Adjust the energy threshold for silence detection
+                    r.energy_threshold = 4000
 
-            # Listen for speech and convert it to text
-            audio = r.listen(source)
+                    # Listen for speech and convert it to text
+                    audio = r.listen(source)
 
-            try:
-                
-                # Use the Google Web Speech API to recognize the speech 
-                text = r.recognize_google(audio, language=self.lang_code)
-                print("You said:", text)
-                self.selectLangauge(text)
-                self.response_message = botConnecter.main(text) 
+                    try:
+                        
+                        # Use the Google Web Speech API to recognize the speech 
+                        text = r.recognize_google(audio, language=self.lang_code)
+                        print("You said:", text)
+                        self.selectLangauge(text)
+                        self.response_message = botConnecter.main(text) 
 
-                
+                        
 
-            
-            except sr.UnknownValueError:
-                #TODO here in future time is where will we implement the sleep function that turns microphoneoff
-                # when there is no one talking to him
-                x = "could not understand audio please repeat and be clear"
-                print(x) 
-                if self.counter == 1:
-                     
-                     if self.lang_code == "en-US":
-                        self.response_message = "could not understand audio please repeat and be clear"
-                     else:
-                         self.response_message = "مش عم بِفْهَمْ عَلَيْك عيد"
-                     self.speech_label.config(text=self.response_message) 
-                     print("loop- number 1")   
-                     self.counter += 1 
-                     self.tts()
-                     
-                elif self.counter == 2:
-                    print("loop number 2")
-                    self.counter += 1
-                    self.stt(self.speech_label)
-                
-                else:
-                    print("loop number 3")
-                    self.counter = 1
-                    self.wake_check()
-                
-            except sr.RequestError as e:
-                x="Could not request results from Google Speech Recognition service; {0}".format(e)
-                print(x)
-                self.open_mic()
-        self.speech_label.config(text=self.response_message)
-        self.tts()
+                    
+                    except sr.UnknownValueError:
+                        #TODO here in future time is where will we implement the sleep function that turns microphoneoff
+                        # when there is no one talking to him
+                        if self.counter == 1:
+                            
+                            if self.lang_code == "en-US":
+                                self.response_message = "could not understand audio please repeat and be clear"
+                            else:
+                                self.response_message = "مش عم بِفْهَمْ عَلَيْك عيد"
+                            self.speech_label.config(text=self.response_message) 
+                            print("loop- number 1")   
+                            self.counter += 1 
+                            self.tts()
+                            
+                        elif self.counter == 2:
+                            print("loop number 2")
+                            self.counter += 1
+                            self.stt(self.speech_label)
+                        
+                        else:
+                            print("loop number 3")
+                            self.counter = 1
+                            self.wake_check()
 
+                        
+                    except sr.RequestError as e:
+                        x="Could not request results from Google Speech Recognition service; {0}".format(e)
+                        print(x)
+                        self.open_mic()
+                self.speech_label.config(text=self.response_message)
+                self.tts()
+    
 
     #this is the Tkinter setup for main interface and the application window
     def gui_setup(self):
@@ -383,14 +384,16 @@ class VoiceAssistant:
     def run(self):
         future = self.executor.submit(server.start_server)
         future3 = self.executor.submit(self.gui_setup)
+        future4 = self.executor.submit(botConnecter.initialize_client)
         future2 = self.executor.submit(self.wake_check)
-        # future5 = self.executor.submit(botConnecter.main(self.stt(self.speech_label)))
-        #future4 = self.executor.submit(botConnecter.initialize_client)
-        return future,future2, future3
+        return future,future2, future3, future4
         
 
 #this starts the application
 if __name__ == "__main__":
     assistant = VoiceAssistant()
     assistant.run()
+
+
+
 

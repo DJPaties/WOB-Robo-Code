@@ -1,60 +1,27 @@
 import RazaBot
 import socket
 import json
-# from concurrent.futures import ThreadPoolExecutor
+import time
+import subprocess
+from botconnecterTTS import tts
 
 
-# import server
-
-send_New_Name = False
-name_detected = False
+Name = "محمد"
+# Name = "Mohammad Dghaily"
+New_User = False
+false_detecion = False
 denied_name = False
-Name = "Mohammad Dghaily"
 # name_callback_update = None
 def send_delay(delay_time):
-
     pass
 
-def process_input(input):
-    try:
-        global name_detected
-        global Name
-        # Attempt to parse the input as JSON
-        response = json.loads(input)
-        if "known" in response and response["known"] :
-            try:
-                print("Name found: ", response['name'])
-                
-                
-                name_detected = True
-                Name = response['name']
-                return response['name']
-            except Exception as e:
-                return e
-        else:
-            
-            name_detected = False
-            
-            Name = ""
-            return Name
-            
-    except json.JSONDecodeError:
-        pass
+def get_New_User_detected():
+    return New_User    
+    
+def set_get_New_User_detected_False():
+    New_User = False 
+          
 
-    # If JSON parsing failed or the type is not "new_user", treat it as a regular string
-    parts = input.split(" ", 1)
-    if parts[0] == "new_user" and len(parts) > 1:
-        global send_New_Name
-        name_detected = True
-        send_New_Name = True
-        rest_of_sentence = parts[1]
-        Name = rest_of_sentence
-       
-
-        return Name
-    else:
-        Name = ""
-        return "None of the above expected results came" 
 
 def checkForSwitch(msg):
     keyword_list = ["change", "talk", "switch"]
@@ -105,8 +72,9 @@ def main(x):
     print("recieving the message")
     response1 = RazaBot.send_message(x)
 
-
+    print("Before IF")
     if isinstance(response1,dict):
+        
         inputHint = response1.get('inputHint')
         if inputHint:
             if response1['inputHint'] == 'acceptingInput':
@@ -115,12 +83,6 @@ def main(x):
                 entities = response1.get('entities')
 
                 if intent and entities:
-                    if entities["side"] == "right" or entities["side"]=="right side":
-                        print("right side")
-                    elif entities["side"] == "left" or entities["side"]=="left side":
-                        print("left side")
-                    elif entities["side"] == "both" or entities["side"]=="both side":
-                        print("both side")
                     payload = {
                         "intent": intent,
                         "side": entities["side"],
@@ -136,11 +98,56 @@ def main(x):
                     print(payload)
                 expecting_input_detection = False
             
-        
-        elif response1["intent"] == 'new_user':
-            print("anything")
-      
 
+        elif response1["intent"] == 'new_user':
+            global New_User
+            global Name
+            Name = response1['name']
+            print("NEW USER IS FOUND", Name)
+ 
+            New_User = True
+            
+            
+            # client_socket.send(Name)         
+
+        elif response1["intent"] ==  'denied name':
+            global denied_name
+            denied_name = True
+            # msg = ("denied name")
+            print(response1)
+        elif response1["intent"] ==  'rock_paper_seaser':
+            tts(response1['text'], "en-US") 
+            subprocess.run([r"C:/Users/wot/AppData/Local/Programs/Python/Python311/python.exe", "RockPaperScissors.py"], check=True, text=True, shell=True)
+            return "Nice Game I had fun playin with you"
+        elif response1["intent"] ==  '':#TODO fix rock paper scissor arabic version
+            tts(response1['text'], "en-US") 
+            subprocess.run([r"C:/Users/wot/AppData/Local/Programs/Python/Python311/python.exe", "RockPaperScissors.py"], check=True, text=True, shell=True)
+            return "Nice Game I had fun playin with you"
+        elif response1["intent"] == "finger_count":
+            tts(response1['text'],"en-US") 
+            subprocess.run([r"C:/Users/wot/AppData/Local/Programs/Python/Python311/python.exe", "FingerCounter.py"], check=True, text=True, shell=True)
+            return "Okay I'm stopping counting your finger"
+        elif response1["intent"] == "finger_count_arabic":
+            tts(response1['text'],"ar-LB") 
+            subprocess.run([r"C:/Users/wot/AppData/Local/Programs/Python/Python311/python.exe", "FingerCounterArabic.py"], check=True, text=True, shell=True)
+            return "Okay I'm stopping counting your finger"
+        elif response1["intent"] ==  'object_detection':
+            tts(response1['text'],"en-US") 
+            subprocess.run([r"C:/Users/wot/AppData/Local/Programs/Python/Python311/python.exe", "object_tracking.py"], check=True, text=True, shell=True)
+            return "Okay I'm stopping counting your finger"
+        elif response1["intent"] ==  'object_detection_arabic':
+            tts(response1['text'],"ar-LB") 
+            subprocess.run([r"C:/Users/wot/AppData/Local/Programs/Python/Python311/python.exe", "object_tracking_ar.py"], check=True, text=True, shell=True)
+            return "Okay I'm stopping counting your finger"
+        elif response1["intent"] ==  'mimic_my_hand':
+            tts(response1['text'],"en-US") 
+            subprocess.run([r"C:/Users/wot/AppData/Local/Programs/Python/Python311/python.exe", "handTrackingModule.py"], check=True, text=True, shell=True)    
+            return "okay stopped mimicking your hand"
+        elif response1["intent"] ==  'mimic_my_hand_ar':
+            print("After if")
+            tts(response1['text'],"ar-LB") 
+            subprocess.run([r"C:/Users/wot/AppData/Local/Programs/Python/Python311/python.exe", "handTrackingModuleAR.py"], check=True, text=True, shell=True)    
+            return "ماشي حَوَءِّفْ  تَءْليدْ أِيْدَكْ"
         print(response1)
         print("before return")
         return response1['text']
@@ -153,14 +160,13 @@ def main(x):
         return response1
         
         
+
 def initialize_client():
     
     try:
-
-        
-        
         global client_socket
-        server_ip = '192.168.0.105'
+        global Name
+        server_ip = '192.168.16.166'
         server_port = 12345
 
         # Create a socket object
@@ -169,51 +175,30 @@ def initialize_client():
         # Connect to the server
         server_address = (server_ip, server_port)
         client_socket.connect(server_address)
+        print("before loop")
         while True:
+
+            print(" Server is on")
             message = client_socket.recv(1024).decode()
-            # print(message)
             if not message:
                 break
-            response = process_input(str(message))
-            print("THIS IS THE RESPONSE:"+response)
-            global name_detected
-            global send_New_Name
-            if name_detected and not send_New_Name:
-                print("Image is known,"+response)
-                name_detected = False
-
-                client_socket.send(response.encode())
-
-
-            elif not name_detected and not send_New_Name:
-                
-                msg = "Image not found "                
-                client_socket.send(msg.encode())
-            elif name_detected and send_New_Name:
-                name_detected = False
-                send_New_Name = False
-                
-                client_socket.send(response.encode())
-            
+            json_data = json.loads(message)
+            print(json_data)
+            if json_data['known'] == True:
+                Name = json_data['name']
+                client_socket.send(Name.encode())
+            elif json_data['known'] == False:
+                while not New_User:
+                    print("Entering LOOP")
+                    time.sleep(1)
+                client_socket.send(Name.encode())
+                set_Name_deny_False()
     except KeyboardInterrupt:
-        pass
+        client_socket.close()
 
     finally:
         client_socket.close()
 
-
-
-
-
-# def send_message(msg):
-#     client_socket.send(msg.encode())
-# executer = ThreadPoolExecutor()
-# executer.submit(initialize_client())
-# send_message("Testing")
-
-# def InputType():
-#     global expecting_input_detection
-#     return expecting_input_detection
 
 # while True:
 #     msg = input('')

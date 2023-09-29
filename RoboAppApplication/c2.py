@@ -2,7 +2,7 @@ import socket
 import json
 import RazaBot
 client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-server_address = ('192.168.0.105', 12345)
+server_address = ('192.168.16.166', 12345)
 client_socket.connect(server_address)
 
 def process_input(input):

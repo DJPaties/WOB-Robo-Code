@@ -1,35 +1,49 @@
-import socket
 import json
-response1 = {'known': True, 'name': "Mohammad Dghaily"}
-response5 = {'known': True, 'name': "Adnan Abdulla"}
-response2 = {'known': False, 'name': ""}
-response3 = "new_user Mohammad Dghaily"
-response4 = "None of the above"
+import time
+import socket
+from botConnecter import get_New_User_detected
+from botConnecter import set_Name_deny_False
 
-client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-server_address = ('192.168.16.157', 12345)
-client_socket.connect(server_address)
+def initialize_client():
+    
+    try:
 
-try:
-    while True:
-        message = input("Enter a message: ")
-        if message == '1':
-            client_socket.send((json.dumps(response1)).encode())
-        elif message == '2':
-            client_socket.send((json.dumps(response2)).encode())
-        elif message == 'new':
-            client_socket.send(response3.encode())
-        elif message == '4':
-            client_socket.send(response4.encode())
-        elif message == 'name':
-            client_socket.send((json.dumps(response5)).encode())
-        else:
-            client_socket.send(str(message).encode())
+        
+        
+        global client_socket
+        global Name
+        server_ip = '192.168.16.166'
+        server_port = 12345
 
-        response = client_socket.recv(1024).decode()
-        print(response)
-except KeyboardInterrupt:
-    pass
+        # Create a socket object
+        client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-finally:
-    client_socket.close()
+        # Connect to the server
+        server_address = (server_ip, server_port)
+        client_socket.connect(server_address)
+        
+        while True:
+
+            print(" Server is on")
+            message = client_socket.recv(1024).decode()
+            # print(message)
+            if not message:
+                break
+            # response = process_input(str(message))
+            # print("THIS IS THE RESPONSE:"+response)
+            json_data = json.loads(message)
+            if json_data['known'] == True:
+                Name = json_data['name']
+                client_socket.send(Name.encode())
+            elif json_data['known'] == False:
+                # Name = input("Enter the new name")
+                while not get_New_User_detected:
+                    print("Entering LOOP")
+                    time.sleep(1)
+                client_socket.send(Name.encode())
+                set_Name_deny_False()
+    except KeyboardInterrupt:
+        client_socket.close()
+
+    finally:
+        client_socket.close()

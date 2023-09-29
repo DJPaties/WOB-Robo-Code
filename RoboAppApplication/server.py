@@ -1,26 +1,22 @@
 import socket
 import threading
 
-def handle_client(client_socket, client_id, clients):
+def handle_client(client_socket, clients):
     try:
         while True:
             message = client_socket.recv(1024).decode()
             if not message:
                 break
 
-            for other_id, other_socket in clients.items():
-                if other_id != client_id:
+            # Send the message to all connected clients except the sender
+            for other_socket in clients:
+                if other_socket != client_socket:
                     other_socket.send(message.encode())
     except Exception as e:
-        print(f"Error handling client {client_id}: {e}")
+        print(f"Error handling client: {e}")
 
-    del clients[client_id]
+    clients.remove(client_socket)
     client_socket.close()
-    print(f"Connection with client {client_id} closed")
-
-
-
-
 
 def start_server():
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -30,21 +26,20 @@ def start_server():
 
     print("Server started. Waiting for connections...")
 
-    clients = {}
-    client_id = 1
+    connected_clients = []
 
-    while client_id <= 2:
+    while True:
         try:
             client_socket, client_address = server_socket.accept()
-            print(f"Connection established with client {client_id}: {client_address}")
+            print(f"Connection established with client: {client_address}")
 
-            clients[client_id] = client_socket
+            connected_clients.append(client_socket)
 
-            client_thread = threading.Thread(target=handle_client, args=(client_socket, client_id, clients))
+            client_thread = threading.Thread(target=handle_client, args=(client_socket, connected_clients))
             client_thread.start()
-
-            client_id += 1
         except Exception as e:
             print("Error accepting connection:", e)
 
-# start_server()
+if __name__ == "__main__":
+    start_server()
+
