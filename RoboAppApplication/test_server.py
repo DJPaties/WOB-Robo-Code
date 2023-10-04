@@ -1,50 +1,53 @@
 import socket
-import threading
 import json
-def handle_client(client_socket, client_id, clients):
-    try:
-        while True:
-            message = client_socket.recv(1024).decode()
-            if not message:
-                break
+def server():
+    # Define the server host and port
+    host = 'localhost'  # Use 'localhost' for the local machine, or use an IP address
+    port = 12345       # Choose a port number
 
-            for other_id, other_socket in clients.items():
-                if other_id != client_id:
-                    other_socket.send(message.encode())
-    except Exception as e:
-        print(f"Error handling client {client_id}: {e}")
-
-    del clients[client_id]
-    client_socket.close()
-    print(f"Connection with client {client_id} closed")
-
-
-
-
-
-def start_server():
+    # Create a socket object
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    server_address = ('0.0.0.0', 12345)
-    server_socket.bind(server_address)
-    server_socket.listen()
 
-    print("Server started. Waiting for connections...")
+    # Bind the socket to the host and port
+    server_socket.bind((host, port))
 
-    clients = {}
-    client_id = 1
+    # Listen for incoming connections
+    server_socket.listen(5)
 
-    while client_id <= 2:
+    print(f"Server is listening on {host}:{port}")
+
+    while True:
+        # Accept a connection from a client
+        client_socket, client_address = server_socket.accept()
+        
+        print(f"Accepted connection from {client_address}")
+        
         try:
-            client_socket, client_address = server_socket.accept()
-            print(f"Connection established with client {client_id}: {client_address}")
-
-            clients[client_id] = client_socket
-
-            client_thread = threading.Thread(target=handle_client, args=(client_socket, client_id, clients))
-            client_thread.start()
-
-            client_id += 1
+            while True:
+                # Receive data from the client
+                print("Waiting for data")
+                data = client_socket.recv(1024).decode('utf-8')
+            
+                if data:
+                    print(f"Received JSON data from client: {data}")
+                    
+                    # Parse the received JSON data
+                    received_json = json.loads(data)
+                    
+                    # Check if the received JSON contains a "known" key
+                    if received_json['known']:
+                        Name = received_json['name']
+                        print("Received Name is: " + Name)
+                        client_socket.send(Name.encode())
+                    else:
+                        print("Unknown Name")
+                        name = input("Enter Name: ")
+                        client_socket.send(name.encode('utf-8'))
+                else:
+                    print("No data received from the client")
+                    break  # Break out of the loop if no data is received
         except Exception as e:
-            print("Error accepting connection:", e)
-
-start_server()
+            print(f"Error: {str(e)}")
+        finally:
+            # Close the client socket
+            client_socket.close()

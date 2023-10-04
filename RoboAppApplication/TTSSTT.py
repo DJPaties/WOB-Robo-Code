@@ -13,11 +13,18 @@ import speech_recognition as sr
 import wave
 from mutagen.mp3 import MP3
 import server
+import serial
+import json
+from serialSender import mouth, talking_scenario, Ser
+# ser = serial.Serial('COM4', baudrate=115200, timeout=0.1)
+# serialport2 = serial.Serial("COM6",9600,timeout=0.1)
 # import client
 
 class VoiceAssistant:
     def __init__(self):
         # initialize values to work with
+        # self.ser.write("#1P1500#2P1500#3P1500#4P1500#5P1500#6P500#7P1500#8P1500#9P1500#10P1852#11P1367#12P1600#13P1900#14P1076#15P1467#16P1300#17P1500#18P1500#19P1500#20P1500#21P1500#22P1500#23P1500#24P1500#25P1500#26P2500#27P1500#28P1500#29P1500#30P2472#31P1500#32P1500T1000D1000\r\n".encode())
+        # time.sleep(2)
         self.recognizedFace = ""
         self.lang_change = False
         self.detection = False
@@ -28,12 +35,62 @@ class VoiceAssistant:
         self.wake_label = None
         self.generate_button = None
         self.executor = ThreadPoolExecutor()
+        self.serialExecuter = ThreadPoolExecutor()
         self.is_closed = False
         self.root = None
         self.response_message = ""
         self.speech_label = None
         self.lang_code = "ar-LB"
         self.counter = 1
+    #serialsender
+    #mouth arduino control
+    # def mouth(self, delay):
+    #     # Create a JSON object with the 'delayyy' parameter
+    #     data = {'delayyy': delay}  # Change the delay value as needed
+
+    #     try:
+    #             serialized_data = json.dumps(data)
+    #             serialport2.write(serialized_data.encode())
+
+    #             time.sleep(1)  # Wait for 1 second before sending the next data
+    #     except KeyboardInterrupt:
+    #         serialport2.close()
+    #         print("Serial connection closed.")
+
+    # def talking_scenario(self, delay):
+    #     counter=0
+    #     while counter<delay:
+    #         ser.write("#1P1500#2P1500#3P1500#4P1500#5P1500#6P500#7P1500#8P1500#9P1500#10P1852#11P1367#12P1600#13P1567#15P2133#16P1400#17P1500#18P1500#19P1500#20P1500#21P1500#22P1500#23P1500#24P1500#25P1500#26P2500#27P1500#28P1500#29P1500#30P2472#31P1500#32P1500T1000D1000\r\n".encode())
+    #         time.sleep(1)
+    #         counter+=1.2
+    #         print(counter)
+    #         if counter > delay:
+    #             break
+    #         ser.write("#13P1400#15P1867T1000D1000\r\n".encode())
+    #         time.sleep(1)
+    #         counter+=1.2
+    #         print(counter)
+    #         if counter > delay:
+    #             break
+    #         ser.write("#13P1333T1000D1000\r\n".encode())
+    #         time.sleep(1)
+    #         counter+=1.2
+    #         print(counter)
+    #         if counter > delay:
+    #             break
+    #         ser.write("#8P1467#9P1667#10P1856#11P1567#12P2500#13P1733#15P1867#16P1333T1000D1000\r\n".encode())
+    #         time.sleep(1)
+    #         counter+=1.2
+    #         print(counter)
+    #         if counter > delay:
+    #             break
+    #         ser.write("#12P1200#13P1567#15P1967#16P1467#27P1700#28P1467#29P1633T1000D1000\r\n".encode())
+    #         time.sleep(1)
+    #         counter+=1.2
+    #         print(counter)
+    #         if counter > delay:
+    #             break
+
 
     #To reopen microphone
     def open_mic(self):
@@ -68,6 +125,7 @@ class VoiceAssistant:
         #print( "Hey, " + botConnecter.get_Name() + ".")
         self.is_closed = True
         self.executor.shutdown(wait=False)
+        self.serialExecuter.shutdown(wait=False)
         self.root.destroy()
         print("Application closed")
         exit(0)
@@ -78,7 +136,10 @@ class VoiceAssistant:
 
     #WakeUp Word function it detects hey jack then moves on to the tts function
     def wake_check(self):
-
+        servo_command_2 = "#1P1500#2P1500#3P1500#4P1500#5P1500#6P500#7P1500#8P1500#9P1500#10P1852#11P1367#12P1600#13P1900#14P1076#15P1467#16P1300#17P1500#18P1500#19P1500#20P1500#21P1500#22P1500#23P1500#24P1500#25P1500#26P2500#27P1500#28P1500#29P1500#30P2472#31P1500#32P1500T1000D1000\r\n"  # Move servo 2 to position 2000 in 2 seconds
+        # ser.write(servo_command_2.encode())
+        Ser(servo_command_2)
+        # self.write_instruction(ser,"#1P1500#2P1500#3P1500#4P1500#5P1500#6P500#7P1500#8P1500#9P1500#10P1852#11P1367#12P1600#13P1900#14P1076#15P1467#16P1300#17P1500#18P1500#19P1500#20P1500#21P1500#22P1500#23P1500#24P1500#25P1500#26P2500#27P1500#28P1500#29P1500#30P2472#31P1500#32P1500T1000D1000\r\n".encode())
         keyword_path = r'C:\Users\wot\Desktop\RoboAppApplication\Hey-Jack_en_windows_v2_2_0.ppn'
         keyword_path_arabic = "C:/Users/wot/Desktop/RoboAppApplication/مرحبا-جاك_ar_windows_v2_2_0.ppn"
         access_key = '4HceBz+B5ZnPRKTBlanhYjuwZxWZVG5RBuE9V9Fa7FY66pQs0M57MA=='
@@ -165,11 +226,20 @@ class VoiceAssistant:
 
             self.updateface()
             self.lang_change = False
+            print("Before change")
+        
+            print("after wake")
+            servo_command_2 = "#1P1500#2P1500#3P1500#4P1500#5P1500#6P500#7P1500#8P1500#9P1500#10P1852#11P1500#12P1500#13P1500#14P1500#15P2367#16P1500#17P1500#18P1500#19P1500#20P1500#21P1500#22P1500#23P1500#24P1500#25P1500#26P2500#27P1500#28P1500#29P1500#30P2472#31P1500#32P1500T500D500\r\n"
+            time.sleep(1)
+            # ser.write(servo_command_2.encode())
+            Ser(servo_command_2)  
             if len(self.recognizedFace) == 0:
-                self.response_message = "hey,"+ botConnecter.main("name not recognized")
+                # self.ser.write("#1P1500#2P1500#3P1500#4P1500#5P1500#6P500#7P1500#8P1500#9P1500#10P1852#11P1500#12P1500#13P1500#14P1500#15P1500#16P1500#17P1500#18P1500#19P1500#20P1500#21P1500#22P1500#23P1500#24P1500#25P1500#26P2500#27P1500#28P1500#29P1500#30P2472#31P1500#32P1500T1000D1000#1P1500#2P1500#3P1500#4P1500#5P1500#6P500#7P1500#8P1500#9P1500#10P1852#11P1500#12P1500#13P1500#14P1500#15P1500#16P1500#17P1500#18P1500#19P1500#20P1500#21P1500#22P1500#23P1500#24P1500#25P1500#26P2500#27P1500#28P1500#29P1500#30P2472#31P1500#32P1500T1000D1000\r\n")
+                self.response_message = "مرحبا,"+ botConnecter.main("الاسم منو موجود")
                 self.speech_label.config(text=self.response_message)
                 self.tts()
             else:
+             
                 self.response_message = "مرحبا"+self.recognizedFace
                 print( "مرحبا"+self.recognizedFace + ".")
                 self.speech_label.config(text=self.response_message)
@@ -223,12 +293,14 @@ class VoiceAssistant:
                 audio = MP3(filename)
                 
                 print("MP3 audio length is ",audio.info.length)
-                try:
-                    botConnecter.send_delay(float(audio.info.length))
-                except Exception as e:
-                    print(e)
+                # try:
+                #     self.executor.submit(botConnecter.talking_movement(float(audio.info.length)))
+                # except Exception as e:
+                #     print(e)
                 pygame.mixer.music.load(filename)
                 pygame.mixer.music.play()
+                mouth(float(audio.info.length))
+                self.serialExecuter.submit(talking_scenario(audio.info.length)) 
                 while pygame.mixer.music.get_busy():
                     time.sleep(0.2)  # Wait a second before checking again
         
@@ -257,10 +329,7 @@ class VoiceAssistant:
                 with wave.open(filename) as mywav:
                     duration_seconds = mywav.getnframes() / mywav.getframerate()
                     print(f"Length of the WAV file: {duration_seconds:.1f} s")
-                try:    
-                    botConnecter.send_delay(float(duration_seconds))
-                except Exception as e:
-                    print(e)
+
                 pygame.mixer.init()
                 pygame.mixer.music.load('dummy.mp3')
                 files = glob.glob('ar-XA-Standard-*.mp3')
@@ -271,20 +340,28 @@ class VoiceAssistant:
                         print("Error: %s - %s." % (e.filename, e.strerror))
                 filename = 'ar-XA-Standard-B' + str(pygame.time.get_ticks()) + '.wav'
                 with open(filename, 'wb') as out:
-                    out.write(response.audio_content)
+                    out.write(response.audio_content) 
+
                 pygame.mixer.music.load(filename)
+                
                 pygame.mixer.music.play()
+                # try:    
+                #      self.executor.submit(botConnecter.talking_movement(float(duration_seconds)))
+                # except Exception as e:
+                #     print(e) 
+                  
+                mouth(duration_seconds)
+                self.serialExecuter.submit(talking_scenario(duration_seconds))             
                 while pygame.mixer.music.get_busy():
                     time.sleep(0.2)  # Wait a second before checking again
+
         except Exception as e:
             print("Error occured ", e)
         if self.lang_change:
             self.wake_check()
         else:
             self.stt(self.speech_label)
-            # self.wake_check()
-        # if self.response_message == 'denied name':
-        #     botConnecter.main("name not recognized")
+
 
 
 

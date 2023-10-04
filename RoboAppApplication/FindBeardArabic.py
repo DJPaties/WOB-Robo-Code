@@ -48,9 +48,9 @@ def analyze_image(request_from_object):
                 beard_detect = True
                 break
         if beard_detect:
-            print("Yes I can see you have a nice beard.")
+            print("اِي شِفِتْ دَءْنَكْ  و حَسَبْ ما شايِفْ عِنْدَكْ دَءِنْ حِلْوِة.")
         else:
-            print("No i don't see you have a beard or any signs of it.")
+            print("لاءْ  ما شِفِتْ أِنِّو عِندَكْ دَءِنْ أَصلاً")
 
 
 # Capture a frame from the camera

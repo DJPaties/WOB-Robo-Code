@@ -118,7 +118,7 @@ while True:
 
 
                     index = random.randint(0,3)
-                    tts(responses[index] + " "+ number +"Fingers","ar-LB")
+                    tts(responses[index] + " "+ number ,"ar-LB")
         else:
             break
             

@@ -7,10 +7,10 @@ def send_message(msg):
                     "message": msg
                 }
     print("Payload done")
-    r = requests.post('https://8e18-185-127-125-57.ngrok.io/webhooks/rest/webhook', json=payload)
+    r = requests.post('https://9c3a-185-127-125-57.ngrok.io/webhooks/rest/webhook', json=payload)
     print("Request done")
     data = r.json()
-
+    
     # Process the response from the Rasa chatbot
     response = None
     for message in data:
