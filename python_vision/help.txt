@@ -1,0 +1,52 @@
+Set-ExecutionPolicy Unrestricted -Scope Process
+
+#link to every libray python 
+lfd.uci.edu
+
+pip install -r requirements.txt
+
+# first we need to install cmake
+pip install cmake
+
+#to install dlib
+pip install https://pypi.python.org/packages/da/06/bd3e241c4eb0a662914b3b4875fc52dd176a9db0d4a2c915ac2ad8800e9e/dlib-19.7.0-cp36-cp36m-win_amd64.whl#md5=b7330a5b2d46420343fbed5df69e6a3f
+pip install 'C:\Users\Adnan\Desktop\face_venv\Install-dlib-main\dlib-19.22.99-cp310-cp310-win_amd64.whl'
+
+#then install face_recognition
+pip install face_recognition
+
+
+
+
+
+git init
+git add .
+git commit -m "initial commit"
+git remote add origin https://github.com/adnanAbdallah/conversation_robot.git
+git branch -M main
+git push -u origin main
+
+
+
+
+
+opencv-python==4.7.0.72
+numpy==1.23.5
+cmake
+face_recognition==1.3.0
+python-dotenv== 1.0.0
+pyaudio
+google-cloud-speech
+google-cloud-texttospeech
+numpy
+tk
+pygame
+sounddevice
+soundfile
+pvporcupine
+
+ pip install opencv-python==4.2.0.32
+
+
+ git rm -r --cached .
+
