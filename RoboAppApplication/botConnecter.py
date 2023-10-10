@@ -5,39 +5,13 @@ import time
 import subprocess
 from botconnecterTTS import tts
 import serial
+from NameExtract import get_name
 
-# def talking_movement(delay):
-#     counter=0
-#     while counter < delay:
-#         print("Command1")
-#         servo_command="#1P1500#2P1500#3P1500#4P1500#5P1500#6P500#7P1500#8P1500#9P1500#10P1852#11P1367#12P1600#13P1567#14P1449#15P2133#16P1400#17P1500#18P1500#19P1500#20P1500#21P1500#22P1500#23P1500#24P1500#25P1500#26P2500#27P1500#28P1500#29P1500#30P2472#31P1500#32P1500T1000D1000\r\n"
-#         ser.write(servo_command.encode())
-#         time.sleep(0.3)
-#         print("Command2")
-#         servo_command = "#13P1400#14P1110#15P1867T1000D1000\r\n"
-#         ser.write(servo_command.encode())
-#         time.sleep(0.3)
-#         print("Command3")
-#         servo_command = "#13P1333#14P1381T1000D1000\r\n"
-#         ser.write(servo_command.encode())
-#         time.sleep(0.3)
-#         # counter+=1
-#         print("Command4")
-#         servo_command = "#8P1467#9P1667#10P1856#11P1567#12P2500#13P1733#14P873#15P1867#16P1333T1000D1000\r\n"
-#         ser.write(servo_command.encode())
-#         time.sleep(0.3)
-#         print("Command5")
-#         servo_command = "#9P1600#10P1788#12P1067#13P1433#14P1449#15P2033#16P1667T1000D1000\r\n"
-#         ser.write(servo_command.encode())
-#         time.sleep(0.3)
-#         print("Command6")
-#         servo_command = "#12P1200#13P1567#14P1255#15P1967#16P1467#27P1700#28P1467#29P1633T1000D1000\r\n"
-#         ser.write(servo_command.encode())
-#         time.sleep(0.3)
-#         # counter+=1
 
-Name = ""
+
+Name = "Mohammad"
 # Name = "Farah hawwari"
+new_name = ""
 New_User = False
 false_detecion = False
 denied_name = False
@@ -45,10 +19,24 @@ denied_name = False
 
 def get_New_User_detected():
     return New_User    
-    
-def set_get_New_User_detected_False():
-    New_User = False 
+def set_New_user():
+    global New_User
+    New_User = True
+
+# def set_get_New_User_detected_False():
+#     global New_User
+#     New_User = False 
           
+
+def save_new_name(text):
+    temp_name= get_name(text)
+    return temp_name
+
+def set_new_name(new):
+    global new_name
+    new_name = new
+
+
 
 
 def checkForSwitch(msg):
@@ -97,10 +85,10 @@ def main(x):
     print("THE MESSAGE SENT IS",x)
 
     
-    print("recieving the message")
+    # print("recieving the message")
     response1 = RazaBot.send_message(x)
 
-    print("Before IF")
+    # print("Before IF")
     if isinstance(response1,dict):
         
         inputHint = response1.get('inputHint')
@@ -118,12 +106,12 @@ def main(x):
                         "time_value": int(entities["time_value"].split(":")[-1])
                     }
 
-                    print(payload)
+                    # print(payload)
                 elif intent:
                     payload={
                             "intent": intent
                         }
-                    print(payload)
+                    # print(payload)
                 expecting_input_detection = False
             
 
@@ -142,7 +130,7 @@ def main(x):
             global denied_name
             denied_name = True
 
-            print(response1)
+            # print(response1)
         elif response1["intent"] ==  'rock_paper_seaser':
             tts(response1['text'], "en-US") 
             subprocess.run([r"C:/Users/wot/AppData/Local/Programs/Python/Python311/python.exe", "RockPaperScissors.py"], check=True, text=True, shell=True)
@@ -186,8 +174,18 @@ def main(x):
             return "I will stop looking at you now"
         elif response1["intent"] == "conversation":
             return response1['gpt_response']
+        elif response1['intent'] == 'face_vecog':
+            pass
+        elif response1['intent']== "face_vecog_arabic":
+            pass
+        elif response1['intent'] == 'Do':
+            return response1['text']
+        elif response1['intent'] == "byejack":
+            pass
+        elif response1['intent'] == "byejack_arabic":
+            pass
         print(response1)
-        print("before return")
+        # print("before return")
         return response1['text']
         
         
@@ -198,53 +196,6 @@ def main(x):
         return response1
         
         
-
-# def initialize_client():
-    
-#     try:
-#         global client_socket
-#         global Name
-#         server_ip = '192.168.0.3'
-#         server_port = 12345
-
-#         # Create a socket object
-#         client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-
-#         # Connect to the server
-#         server_address = (server_ip, server_port)
-#         client_socket.connect(server_address)
-#         print("before loop")
-#         while True:
-
-#             print(" Server is on")
-#             message = client_socket.recv(1024).decode()
-#             if not message:
-#                 break
-#             json_data = json.loads(message)
-#             print(json_data)
-#             try:
-#                 if json_data['known'] == True:
-#                     Name = json_data['name']
-#                     print("Name recieved: "+ Name)
-#                     client_socket.send(Name.encode())
-#                 else:
-#                 # elif json_data['known'] == False:
-#                     Name=json_data['Name']
-#                     print("Name: "+ Name)
-#                     print("Unknown name")
-#                     while not New_User:
-#                         print("Entering LOOP")
-#                         time.sleep(1)
-#                     client_socket.send(Name.encode())
-#                     set_Name_deny_False()
-#             except ValueError as e:
-#                 print(e)
-#     except KeyboardInterrupt:
-#         client_socket.close()
-
-#     finally:
-#         client_socket.close()
-
 def initialize_client():
     # Define the server host and port
     host = 'localhost'  # Use 'localhost' for the local machine, or use an IP address
@@ -271,6 +222,8 @@ def initialize_client():
             while True:
                 # Receive data from the client
                 global Name
+                global new_name
+                global New_User
                 print("Waiting for data")
                 data = client_socket.recv(1024).decode('utf-8')
             
@@ -290,13 +243,14 @@ def initialize_client():
                         # print("Received Name is: " + Name)
                         # client_socket.send(Name.encode())
                     else:
+                        New_User = False
                         Name=received_json['name']
-                        print("Name: "+ Name)
+                        # print("Name: "+ Name)
                         print("Unknown name")
                         while not New_User:
                             print("Entering LOOP")
                             time.sleep(1)
-                        client_socket.send(Name.encode())
+                        client_socket.send(new_name.encode())
                         set_Name_deny_False()
                             # print("Unknown Name")
                             # name = input("Enter Name: ")

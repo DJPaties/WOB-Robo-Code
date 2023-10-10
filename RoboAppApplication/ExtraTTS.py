@@ -11,7 +11,7 @@ serialExecuter = ThreadPoolExecutor()
 def tts(response_message,lang_code):
 
     print("TTS")
-    os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'text.json'
+    os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'tts.json'
     try:        
         
         client = texttospeech.TextToSpeechClient()
@@ -106,4 +106,4 @@ def tts(response_message,lang_code):
         print("Error occured ", e)
 
 
-# tts("باااي باااي, أِزا بَدَّكْ يانِي رجاع عيِّتلي", 'ar-LB')
+# tts("باااي باااي, أِزا بَدَّكْ يانِي ,رْجَاعْ عيِّطْلي", 'ar-LB')
