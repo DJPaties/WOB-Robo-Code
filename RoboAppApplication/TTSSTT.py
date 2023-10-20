@@ -15,13 +15,12 @@ from mutagen.mp3 import MP3
 import server
 import subprocess
 import threading
-from serialSender import mouth, talking_scenario, Ser
+from serialSender import mouth, talking_scenario
 import ExtraMicrophone
 import ExtraTTS
 import threading
 class VoiceAssistant:
     def __init__(self):
-
         self.recognizedFace = ""
         self.lang_change = False
         self.detection = False
@@ -99,7 +98,7 @@ class VoiceAssistant:
         self.script_thread.start()
         servo_command_2 = "#1P1500#2P1500#3P1500#4P1500#5P1500#6P500#7P1500#8P1500#9P1500#10P1852#11P1367#12P1600#13P1900#14P1076#15P1467#16P1300#17P1500#18P1500#19P1500#20P1500#21P1500#22P1500#23P1500#24P1500#25P1500#26P2500#27P1500#28P1500#29P1500#30P2472#31P1500#32P1500T1000D1000\r\n"  # Move servo 2 to position 2000 in 2 seconds
 
-        Ser(servo_command_2)
+        talking_scenario(5,"any",servo_command_2)
         keyword_path = r'C:\Users\wot\Desktop\RoboAppApplication\Hey-Jack_en_windows_v2_2_0.ppn'
         keyword_path_arabic = "C:/Users/wot/Desktop/RoboAppApplication/مرحبا-جاك_ar_windows_v2_2_0.ppn"
         access_key = '4HceBz+B5ZnPRKTBlanhYjuwZxWZVG5RBuE9V9Fa7FY66pQs0M57MA=='
@@ -187,13 +186,14 @@ class VoiceAssistant:
             self.updateface()
             self.lang_change = False
 
-            servo_command_2 = "#1P1500#2P1500#3P1500#4P1500#5P1500#6P500#7P1500#8P1500#9P1500#10P1852#11P1500#12P1500#13P1500#14P1500#15P2367#16P1500#17P1500#18P1500#19P1500#20P1500#21P1500#22P1500#23P1500#24P1500#25P1500#26P2500#27P1500#28P1500#29P1500#30P2472#31P1500#32P1500T500D500\r\n"
+            servo_command_2 = "#1P1500#2P1500#3P1500#4P1500#5P1500#6P500#7P1500#8P1500#9P1500#10P1852#11P1500#12P1500#13P1500#14P1500#15P2367#16P1500#17P1500#18P1500#19P1500#20P1500#21P2200#22P2200#23P2200#24P2200#25P2200#26P2500#27P1500#28P1500#29P1500#30P2472#31P1500#32P1500T500D500\r\n"
             time.sleep(1)
             # ser.write(servo_command_2.encode())
-            Ser(servo_command_2)  
+            # Ser(servo_command_2)  
+            talking_scenario(5,"any",servo_command_2)
             if len(self.recognizedFace) == 0:
                 self.getNewName = True
-                self.response_message = " مرحبا شو أِسْمَكْ"
+                self.response_message = " مرحبَا, شو أِسْمَكْ"
                 self.speech_label.config(text=self.response_message)
                 self.tts()
 
@@ -263,7 +263,7 @@ class VoiceAssistant:
                 pygame.mixer.music.play()
                 mouth(float(audio.info.length))
                 # self.executor.submit(talking_scenario(audio.info.length))
-                ttsThread = threading.Thread(target=talking_scenario, args=(audio.info.length,))
+                ttsThread = threading.Thread(target=talking_scenario, args=(audio.info.length,"talking","any"))
                 ttsThread.start()
                 while pygame.mixer.music.get_busy():
                     time.sleep(0.15)  # Wait a second before checking again
@@ -316,7 +316,7 @@ class VoiceAssistant:
                   
                 mouth(duration_seconds)
                 # self.serialExecuter.submit(talking_scenario(duration_seconds))
-                ttsThreadArabic = threading.Thread(target=talking_scenario, args=(duration_seconds,))
+                ttsThreadArabic = threading.Thread(target=talking_scenario, args=(duration_seconds,"talking","any"))
                 ttsThreadArabic.start()
                              
                 while pygame.mixer.music.get_busy():

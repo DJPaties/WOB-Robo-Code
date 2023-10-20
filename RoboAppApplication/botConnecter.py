@@ -6,10 +6,10 @@ import subprocess
 from botconnecterTTS import tts
 import serial
 from NameExtract import get_name
+from serialSender import mouth, talking_scenario
 
 
-
-Name = "Mohammad"
+Name = ""
 # Name = "Farah hawwari"
 new_name = ""
 New_User = False
@@ -91,30 +91,120 @@ def main(x):
     # print("Before IF")
     if isinstance(response1,dict):
         
-        inputHint = response1.get('inputHint')
-        if inputHint:
-            if response1['inputHint'] == 'acceptingInput':
+        # inputHint = response1.get('inputHint')
+        # if inputHint:
+        #     if response1['inputHint'] == 'acceptingInput':
 
-                intent = response1.get('intent')
-                entities = response1.get('entities')
+        #         intent = response1.get('intent')
+        #         entities = response1.get('entities')
 
-                if intent and entities:
-                    payload = {
-                        "intent": intent,
-                        "side": entities["side"],
-                        "degree_value": entities["degree_value"],
-                        "time_value": int(entities["time_value"].split(":")[-1])
-                    }
+        #         if intent and entities:
+        #             payload = {
+        #                 "intent": intent,
+        #                 "side": entities["side"],
+        #                 "degree_value": entities["degree_value"],
+        #                 "time_value": int(entities["time_value"].split(":")[-1])
+        #             }
 
-                    # print(payload)
-                elif intent:
-                    payload={
-                            "intent": intent
-                        }
-                    # print(payload)
-                expecting_input_detection = False
-            
-
+        #             # print(payload)
+        #         elif intent:
+        #             payload={
+        #                     "intent": intent
+        #                 }
+        #             # print(payload)
+        #         expecting_input_detection = False
+        if response1["intent"] == 'raise_hand':
+            tts(response1["text"], "en-US")
+            if response1["entities"]["side"] == "right":
+                servo_commandr = "#1P1500#2P1500#3P1500#4P1500#5P1500#6P500#7P1500#8P1500#9P1500#10P1852#11P1500#12P1500#13P1500#14P1500#15P2367#16P1500#17P1500#18P1500#19P1500#20P1500#21P2200#22P2200#23P2200#24P2200#25P2200#26P2500#27P1500#28P1500#29P2070#30P2472#31P1500#32P1500T500D500\r\n"
+                # serialSender.Ser(servo_commandr)
+                talking_scenario(5,"any",servo_commandr)
+                print("Raised Right")
+            elif response1["entities"]["side"] == "left":
+                servo_commandl = "#1P1500#2P1500#3P1500#4P1500#5P1500#6P500#7P710#8P1460#9P2200#10P1852#11P1500#12P1500#13P1500#14P1500#15P2367#16P1500#17P1500#18P1500#19P1500#20P1500#21P2200#22P2200#23P2200#24P2200#25P2200#26P2500#27P1500#28P1500#29P1500#30P2472#31P1500#32P1500T500D500\r\n"
+                # serialSender.Ser(servo_commandl)
+                talking_scenario(5,"any",servo_commandl)
+                print("Raised Left")
+            else:
+                servo_commandb = "#1P1500#2P1500#3P1500#4P1500#5P1500#6P500#7P710#8P1460#9P2200#10P1852#11P1500#12P1500#13P1500#14P1500#15P2367#16P1500#17P1500#18P1500#19P1500#20P1500#21P2200#22P2200#23P2200#24P2200#25P2200#26P2500#27P1500#28P1500#29P2240#30P2472#31P1500#32P1500T500D500\r\n"
+                # serialSender.Ser(servo_commandb)
+                talking_scenario(5,"any",servo_commandb)
+                print("Raised both")
+            time.sleep(5)
+            reset_command = "#1P1500#2P1500#3P1500#4P1500#5P1500#6P500#7P1500#8P1500#9P1500#10P1852#11P1500#12P1500#13P1500#14P1500#15P2367#16P1500#17P1500#18P1500#19P1500#20P1500#21P2200#22P2200#23P2200#24P2200#25P2200#26P2500#27P1500#28P1500#29P1500#30P2472#31P1500#32P1500T500D500\r\n"
+            # serialSender.Ser(reset_command)
+            talking_scenario(5,"any",reset_command)
+            return "Im tired I will put my arms down now."
+        elif response1["intent"] == 'raise_hand_ar':
+            tts(response1["text"], "ar-LB")
+            if response1["entities"]["side"] == "right":
+                servo_commandr = "#1P1500#2P1500#3P1500#4P1500#5P1500#6P500#7P1500#8P1500#9P1500#10P1852#11P1500#12P1500#13P1500#14P1500#15P2367#16P1500#17P1500#18P1500#19P1500#20P1500#21P2200#22P2200#23P2200#24P2200#25P2200#26P2500#27P1500#28P1500#29P2070#30P2472#31P1500#32P1500T500D500\r\n"
+                # serialSender.Ser(servo_commandr)
+                talking_scenario(5,"any",servo_commandr)
+                print("Raised Right")
+            elif response1["entities"]["side"] == "left":
+                servo_commandl = "#1P1500#2P1500#3P1500#4P1500#5P1500#6P500#7P710#8P1460#9P2200#10P1852#11P1500#12P1500#13P1500#14P1500#15P2367#16P1500#17P1500#18P1500#19P1500#20P1500#21P2200#22P2200#23P2200#24P2200#25P2200#26P2500#27P1500#28P1500#29P1500#30P2472#31P1500#32P1500T500D500\r\n"
+                # serialSender.Ser(servo_commandl)
+                talking_scenario(5,"any",servo_commandl)
+                print("Raised Left")
+            else:
+                servo_commandb = "#1P1500#2P1500#3P1500#4P1500#5P1500#6P500#7P710#8P1460#9P2200#10P1852#11P1500#12P1500#13P1500#14P1500#15P2367#16P1500#17P1500#18P1500#19P1500#20P1500#21P2200#22P2200#23P2200#24P2200#25P2200#26P2500#27P1500#28P1500#29P2240#30P2472#31P1500#32P1500T500D500\r\n"
+                # serialSender.Ser(servo_commandb)
+                talking_scenario(5,"any",servo_commandb)
+                print("Raised both")
+            time.sleep(5)
+            reset_command = "#1P1500#2P1500#3P1500#4P1500#5P1500#6P500#7P1500#8P1500#9P1500#10P1852#11P1500#12P1500#13P1500#14P1500#15P2367#16P1500#17P1500#18P1500#19P1500#20P1500#21P2200#22P2200#23P2200#24P2200#25P2200#26P2500#27P1500#28P1500#29P1500#30P2472#31P1500#32P1500T500D500\r\n"
+            # serialSender.Ser(reset_command)
+            talking_scenario(5,"any",reset_command)
+            return "حَنَزِّلْ إيدَيِّ هَلّْلَءْ لأَنّي تْعِبِتْ." 
+        elif response1["intent"] == "take selfie":
+            tts(response1['text'],"en-US")
+            selfie_command = "#1P1500#2P1500#3P1500#4P1500#5P1500#6P500#7P1500#8P1500#9P1500#10P1852#11P1500#12P1500#13P1500#14P1500#15P2367#16P1500#17P1500#18P1500#19P1500#20P1500#21P600#22P600#23P2200#24P2200#25P600#26P2500#27P2240#28P880#29P1790#30P2482#31P1500#32P1500T500D500\r\n"
+            # serialSender.Ser(selfie_command)
+            talking_scenario(5,"any",selfie_command)
+            print("Took selfie")
+            time.sleep(6)
+            reset_command = "#1P1500#2P1500#3P1500#4P1500#5P1500#6P500#7P1500#8P1500#9P1500#10P1852#11P1500#12P1500#13P1500#14P1500#15P2367#16P1500#17P1500#18P1500#19P1500#20P1500#21P2200#22P2200#23P2200#24P2200#25P2200#26P2500#27P1500#28P1500#29P1500#30P2472#31P1500#32P1500T500D500\r\n"
+            # serialSender.Ser(reset_command)
+            talking_scenario(5,"any",reset_command)
+            return "I hope it was a nice selfie send it to me when you can."
+        elif response1["intent"] == "take selfie ar":
+            tts(response1['text'],"ar-LB")
+            selfie_command = "#1P1500#2P1500#3P1500#4P1500#5P1500#6P500#7P1500#8P1500#9P1500#10P1852#11P1500#12P1500#13P1500#14P1500#15P2367#16P1500#17P1500#18P1500#19P1500#20P1500#21P600#22P600#23P2200#24P2200#25P600#26P2500#27P2240#28P880#29P1790#30P2482#31P1500#32P1500T500D500\r\n"
+            # serialSender.Ser(selfie_command)
+            talking_scenario(5,"any",selfie_command)
+            print("Took selfie")
+            time.sleep(6)
+            reset_command = "#1P1500#2P1500#3P1500#4P1500#5P1500#6P500#7P1500#8P1500#9P1500#10P1852#11P1500#12P1500#13P1500#14P1500#15P2367#16P1500#17P1500#18P1500#19P1500#20P1500#21P2200#22P2200#23P2200#24P2200#25P2200#26P2500#27P1500#28P1500#29P1500#30P2472#31P1500#32P1500T500D500\r\n"
+            # serialSender.Ser(reset_command)
+            talking_scenario(5,"any",reset_command)
+            return "أكيد الصُورى حَتْكُونْ حِلْوِ لأَنُّو أَنَا فِيَا. بْعَتْلِي الصُورَى عَلْ خَاصْ"
+        elif response1["intent"] == "greeting":
+            tts(response1["text"],"en-US")
+            greet_command = "#1P1500#2P1500#3P1500#4P1500#5P1500#6P500#7P500#8P1500#9P1430#P1902#11P1500#12P1500#13P1500#14P1500#15P2367#16P1500#17P1500#18P1500#19P2500#20P1500#21P2200#22P2200#23P1000#24P1000#25P2200#26P2500#27P1817#28P1030#29P1820#30P2192#31P1500#32P1500T500D500\r\n"
+            # serialSender.Ser(greet_command)
+            talking_scenario(5,"any",greet_command)
+            return "Nice to meet you"
+        elif response1["intent"] == "greeting_ar":
+            tts(response1["text"],"ar-LB")
+            greet_command = "#1P1500#2P1500#3P1500#4P1500#5P1500#6P500#7P500#8P1500#9P1430#P1902#11P1500#12P1500#13P1500#14P1500#15P2367#16P1500#17P1500#18P1500#19P2500#20P1500#21P2200#22P2200#23P1000#24P1000#25P2200#26P2500#27P1817#28P1030#29P1820#30P2192#31P1500#32P1500T500D500\r\n"
+            # serialSender.Ser(greet_command)
+            talking_scenario(5,"any",greet_command)
+            return "تْشَرّْرَفِتْ فِيْكْ حَبِيْبِيْ"
+        elif response1['intent'] == "like":
+            tts(response1['text'],"en-US")
+            like_command = "#1P1500#2P1500#3P1500#4P1500#5P1500#6P500#7P1500#8P1500#9P1500#10P1852#11P1500#12P1500#13P1500#14P1500#15P2367#16P1500#17P1500#18P1500#19P1500#20P1500#21P500#22P500#23P500#24P500#25P2200#26P2500#27P2150#28P1500#29P1620#30P2472#31P1500#32P1500T500D500\r\n"
+            # serialSender.Ser(like_command)
+            talking_scenario(5,"any",like_command)
+            time.sleep(3)
+            return "Nice Like"
+        elif response1['intent'] == "like_ar":
+            tts(response1['text'],"ar-LB")
+            like_command = "#1P1500#2P1500#3P1500#4P1500#5P1500#6P500#7P1500#8P1500#9P1500#10P1852#11P1500#12P1500#13P1500#14P1500#15P2367#16P1500#17P1500#18P1500#19P1500#20P1500#21P500#22P500#23P500#24P500#25P2200#26P2500#27P2150#28P1500#29P1620#30P2472#31P1500#32P1500T500D500\r\n"
+            # serialSender.Ser(like_command)
+            talking_scenario(5,"any",like_command)
+            time.sleep(3)
+            return "حِلُوْ"
         elif response1["intent"] == 'new_user':
             global New_User
             global Name
@@ -134,11 +224,11 @@ def main(x):
         elif response1["intent"] ==  'rock_paper_seaser':
             tts(response1['text'], "en-US") 
             subprocess.run([r"C:/Users/wot/AppData/Local/Programs/Python/Python311/python.exe", "RockPaperScissors.py"], check=True, text=True, shell=True)
-            return "Nice Game I had fun playin with you"
+            return "I had fun playin with you"
         elif response1["intent"] ==  'rock_arabic':
             tts(response1['text'], "ar-LB") 
             subprocess.run([r"C:/Users/wot/AppData/Local/Programs/Python/Python311/python.exe", "RockPaperScissorsArabic.py"], check=True, text=True, shell=True)
-            return "لِّعْبِهْ حِلوِى  تْسَلِّيْتْ فِيَا"
+            return "لِّعْبِهْ حِلوَى. اتْسَلّيْنا فِيَا"
         elif response1["intent"] == "finger_count":
             tts(response1['text'],"en-US") 
             subprocess.run([r"C:/Users/wot/AppData/Local/Programs/Python/Python311/python.exe", "FingerCounter.py"], check=True, text=True, shell=True)
@@ -146,15 +236,18 @@ def main(x):
         elif response1["intent"] == "finger_count_arabic":
             tts(response1['text'],"ar-LB") 
             subprocess.run([r"C:/Users/wot/AppData/Local/Programs/Python/Python311/python.exe", "FingerCounterArabic.py"], check=True, text=True, shell=True)
-            return "ماشِيْ حَوَءِّفْ  شوفْ أَصابِيعَكْ"
+            return "ماشِيْ حَوَئّْئِفْ عِدْ أَصابِيعَكْ"
         elif response1["intent"] ==  'object_detection':
             tts(response1['text'],"en-US") 
             subprocess.run([r"C:/Users/wot/AppData/Local/Programs/Python/Python311/python.exe", "object_tracking.py"], check=True, text=True, shell=True)
-            return "Okay I'm stopping counting your finger"
+            # return " "
+            return "Correct me if i didn't see the object correctly"
         elif response1["intent"] ==  'object_detection_arabic':
             tts(response1['text'],"ar-LB") 
             subprocess.run([r"C:/Users/wot/AppData/Local/Programs/Python/Python311/python.exe", "object_tracking_ar.py"], check=True, text=True, shell=True)
-            return "Okay I'm stopping counting your finger"
+            # return ""
+            return "خَبِّرني إِزَا شِفِتْ شِي غَلَط"
+
         elif response1["intent"] ==  'mimic_my_hand':
             tts(response1['text'],"en-US") 
             subprocess.run([r"C:/Users/wot/AppData/Local/Programs/Python/Python311/python.exe", "handTrackingModule.py"], check=True, text=True, shell=True)    
@@ -162,18 +255,48 @@ def main(x):
         elif response1["intent"] ==  'mimic_my_hand_ar':
             tts(response1['text'],"ar-LB") 
             subprocess.run([r"C:/Users/wot/AppData/Local/Programs/Python/Python311/python.exe", "handTrackingModuleAR.py"], check=True, text=True, shell=True)    
-            return "ماشي حَوَءِّفْ  تَءْليدْ أِيْدَكْ"
+            return "ماشي حَوَئّْئِفْ  تَئْليدْ إِيْدَكْ"
         elif response1["intent"] ==  'beard_detection_arabic':
             tts(response1['text'],"ar-LB") 
             subprocess.run([r"C:/Users/wot/AppData/Local/Programs/Python/Python311/python.exe", "FindBeardArabic.py"], check=True, text=True, shell=True)    
             # return "ماشي حَوَءِّفْ  تَءْليدْ أِيْدَكْ"
-            return "شُو هَلْ مَنزَرْ لِأِدَّامِيْ"
-        elif response1["intent"] ==  'beard_detection_':
+            return "شُو هَلْ مَنْظَرْ لِأِدَّامِيْ"
+        elif response1["intent"] ==  'beard_detection':
             tts(response1['text'],"en-US") 
             subprocess.run([r"C:/Users/wot/AppData/Local/Programs/Python/Python311/python.exe", "FindBeardArabic.py"], check=True, text=True, shell=True)    
-            return "I will stop looking at you now"
+            return "You look ugly."
         elif response1["intent"] == "conversation":
             return response1['gpt_response']
+        elif response1['intent'] == "dance":
+            tts(response1["text"],"en-US")
+            subprocess.run([r"C:/Users/wot/AppData/Local/Programs/Python/Python311/python.exe", "dance.py"], check=True, text=True, shell=True)    
+            return "I hope you like my ammazing dance"
+        elif response1['intent'] == "dance_ar":
+            tts(response1["text"],"ar-LB")
+            subprocess.run([r"C:/Users/wot/AppData/Local/Programs/Python/Python311/python.exe", "dance.py"], check=True, text=True, shell=True)    
+            return "بِشَرَفَكْ, عَجْبِتَكْ شِي رَئِصْتِي"
+        elif response1['intent'] == "distance":
+            tts(response1["text"],"en-US")
+            subprocess.run([r"C:/Users/wot/AppData/Local/Programs/Python/Python311/python.exe", "detect_distance.py"], check=True, text=True, shell=True)    
+            return "I will stop calculating distance"
+        elif response1['intent'] == "distance_arabic":
+            tts(response1["text"],"ar-LB")
+            subprocess.run([r"C:/Users/wot/AppData/Local/Programs/Python/Python311/python.exe", "detect_distance_ar.py"], check=True, text=True, shell=True)    
+            return "ماشي"
+        elif response1['intent'] == "intent_count_ar":
+            tts(response1["text"],"ar-LB")
+            subprocess.run([r"C:/Users/wot/AppData/Local/Programs/Python/Python311/python.exe", "count7_ar.py"], check=True, text=True, shell=True)    
+            return "سَهْلِ كانِتْ"
+        elif response1['intent'] == "intent_count":
+            tts(response1["text"],"en-US")
+            subprocess.run([r"C:/Users/wot/AppData/Local/Programs/Python/Python311/python.exe", "count7.py"], check=True, text=True, shell=True)    
+            return "It was Easy"
+        elif response1['intent'] == "intent_not_count":
+            subprocess.run([r"C:/Users/wot/AppData/Local/Programs/Python/Python311/python.exe", "notcount.py"], check=True, text=True, shell=True)    
+            return response1['text']
+        elif response1['intent'] == "intent_not_count_ar":
+            subprocess.run([r"C:/Users/wot/AppData/Local/Programs/Python/Python311/python.exe", "notcount_ar.py"], check=True, text=True, shell=True)    
+            return response1['text']
         elif response1['intent'] == 'face_vecog':
             pass
         elif response1['intent']== "face_vecog_arabic":

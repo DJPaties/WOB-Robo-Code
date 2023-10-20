@@ -1,122 +1,58 @@
-import os
-from google.cloud import texttospeech
-import pygame
-import glob
+import serial
+import json
 import time
-from mutagen.mp3 import MP3
-import wave
-from concurrent.futures import ThreadPoolExecutor
-from serialSender import mouth, talking_scenario, Ser
+ser = serial.Serial('COM3', baudrate=115200, timeout=0.1)
+serialport2 = serial.Serial("COM6",9600,timeout=0.1)
 
-serialExecuter = ThreadPoolExecutor()
+def mouth(delay):
+        # Create a JSON object with the 'delayyy' parameter
+        data = {'delayyy': delay}  # Change the delay value as needed
 
-def tts(response_message, lang_code, emotion=None,shout=False):
+        try:
+                serialized_data = json.dumps(data)
+                serialport2.write(serialized_data.encode())
 
-    print("TTS")
-    os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'tts.json'
-    try:        
-        client = texttospeech.TextToSpeechClient()
-        print("Client created successfully.")
-    except Exception as e:
-        print("Error:", str(e))
-    print("TTS")
+                time.sleep(1)  # Wait for 1 second before sending the next data
+        except KeyboardInterrupt:
+            serialport2.close()
+            print("Serial connection closed.")
 
-    # Adjust pitch, speed, or SSML tags based on emotion
-    if emotion == "happy":
-        # Increase pitch and speed for happiness
-        response_message = f'<speak><prosody rate="fast" pitch="+10%">{response_message}</prosody></speak>'
-    elif emotion == "angry":
-        # Increase pitch, speed, and volume for anger
-        response_message = f'<speak><prosody rate="slow" pitch="+20%" volume="+6dB">{response_message}</prosody></speak>'
-        if shout:
-            # If shouting, increase the volume further
-            response_message = f'<speak><prosody rate="slow" pitch="+50%" volume="+20dB">{response_message}</prosody></speak>'
-    elif emotion == "laugh":
-        # Add laughter sound or text
-        response_message = f'<speak>{response_message} Ha Ha Ha!</speak>'
+def talking_scenario(delay):
+    counter=0
+    while counter<delay:
+        ser.write("#1P1500#2P1500#3P1500#4P1500#5P1500#6P500#7P1500#8P1500#9P1500#10P1852#11P1367#12P1600#13P1567#15P2133#16P1400#17P1500#18P1500#19P1500#20P1500#21P1500#22P1500#23P1500#24P1500#25P1500#26P2500#27P1500#28P1500#29P1500#30P2472#31P1500#32P1500T1000D1000\r\n".encode())
+        time.sleep(1)
+        counter+=1.1
+        # print(counter)
+        if counter > delay:
+            break
+        ser.write("#13P1400#15P1867T1000D1000\r\n".encode())
+        time.sleep(1)
+        counter+=1.1
+        # print(counter)
+        if counter > delay:
+            break
+        ser.write("#13P1333T1000D1000\r\n".encode())
+        time.sleep(1)
+        counter+=1.1
+        # print(counter)
+        if counter > delay:
+            break
+        ser.write("#8P1467#9P1667#10P1856#11P1567#12P2500#13P1733#15P1867#16P1333T1000D1000\r\n".encode())
+        time.sleep(1)
+        counter+=1.1
+        # print(counter)
+        if counter > delay:
+            break
+        ser.write("#12P1200#13P1567#15P1967#16P1467#27P1700#28P1467#29P1633T1000D1000\r\n".encode())
+        time.sleep(1)
+        counter+=1.1
+        # print(counter)
+        if counter > delay:
+            break
+    print("end Move")
 
-    text = '<speak>' + response_message + '</speak>'
-    synthesis_input = texttospeech.SynthesisInput(ssml=text)
+def Ser(server_command):
+    ser.write(server_command.encode())
 
-    try:
-        if lang_code == "en-US":
-            # English TTS code
-            voice = texttospeech.VoiceSelectionParams(
-                language_code=lang_code,
-                ssml_gender=texttospeech.SsmlVoiceGender.MALE,
-            )
-            audio_config = texttospeech.AudioConfig(
-                audio_encoding=texttospeech.AudioEncoding.MP3,
-            )
-            response = client.synthesize_speech(
-                input=synthesis_input, voice=voice, audio_config=audio_config,
-            )
-            filename = 'audio.mp3'
-            with open(filename, 'wb') as out:
-                out.write(response.audio_content)
-            pygame.mixer.init()
-            pygame.mixer.music.load('dummy.mp3')
-            files = glob.glob('audio*.mp3')
-            for f in files:
-                try:
-                    os.remove(f)
-                except OSError as e:
-                    print("Error: %s - %s." % (e.filename, e.strerror))
-            filename = 'audio' + str(pygame.time.get_ticks()) + '.mp3'
-            with open(filename, 'wb') as out:
-                out.write(response.audio_content)
-            audio = MP3(filename)
-            print("MP3 audio length is ", audio.info.length)
-            pygame.mixer.music.load(filename)
-            pygame.mixer.music.play()
-            mouth(float(audio.info.length))
-            serialExecuter.submit(talking_scenario(audio.info.length))
-            while pygame.mixer.music.get_busy():
-                time.sleep(0.2)  # Wait a second before checking again
-        else:
-            # Arabic TTS code
-            name = "ar-XA-Standard-B"
-            text_input = texttospeech.SynthesisInput(text=response_message)
-            voice_params = texttospeech.VoiceSelectionParams(
-                language_code="ar-XA", name=name
-            )
-            audio_config = texttospeech.AudioConfig(audio_encoding=texttospeech.AudioEncoding.LINEAR16)
-            response = client.synthesize_speech(
-                input=text_input,
-                voice=voice_params,
-                audio_config=audio_config,
-            )
-            filename = f"botConnecterarabic.wav"
-            print(filename)
-            with open(filename, "wb") as out:
-                out.write(response.audio_content)
-                print(f'Generated speech saved to "{filename}"')
-            with wave.open(filename) as mywav:
-                duration_seconds = mywav.getnframes() / mywav.getframerate()
-                print(f"Length of the WAV file: {duration_seconds:.1f} s")
-            pygame.mixer.init()
-            pygame.mixer.music.load('dummy.mp3')
-            files = glob.glob('botConnecterarabic*.mp3')
-            for f in files:
-                try:
-                    os.remove(f)
-                except OSError as e:
-                    print("Error: %s - %s." % (e.filename, e.strerror))
-            filename = 'botConnecterarabic' + str(pygame.time.get_ticks()) + '.wav'
-            with open(filename, 'wb') as out:
-                out.write(response.audio_content)
-            pygame.mixer.music.load(filename)
-            pygame.mixer.music.play()
-            mouth(duration_seconds)
-            serialExecuter.submit(talking_scenario(duration_seconds))
-            while pygame.mixer.music.get_busy():
-                time.sleep(0.2)  # Wait a second before checking again
-    except Exception as e:
-        print("Error occurred ", e)
 
-# Example usage:
-tts("Hello, I am happy!", 'en-US', emotion="happy")
-tts("I am angry right now.", 'en-US', emotion="angry")
-tts("I am. angry. right. now.", 'en-US', emotion="angry", shout=True)
-# tts("أناا بَلَّشِتْ. عصِّبْ كْتِيرْ هلّا.", 'ar-LB', emotion="angry", shout=True)
-tts("That's really funny!", 'en-US', emotion="laugh")

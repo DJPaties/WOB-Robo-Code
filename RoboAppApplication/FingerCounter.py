@@ -108,7 +108,7 @@ while True:
                 newUpcount = upCount
                 responses = ["Now I can see", "You are holding up", "These are",""]
                 index = random.randint(0,3)
-                tts(responses[index] + " "+ str(upCount) +"Fingers")
+                tts(responses[index] + " "+ str(upCount) +"Fingers","en-US")
         else:
             break
             

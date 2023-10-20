@@ -13,7 +13,7 @@ player_score=0
 
 def end_game():
     write_instruction(serialport,"#1P1500#2P1500#3P1500#4P1500#5P1500#6P500#7P1500#8P1500#9P1500#10P1852#11P1500#12P1500#13P2333#14P1500#15P1500#16P1500#17P1500#18P1500#19P1500#20P1500#21P1500#22P1500#23P1500#24P1500#25P1500#26P2500#27P1500#28P1500#29P1500#30P2472#31P1500#32P1500T1000D1000#1P1500#2P1500#3P1500#4P1500#5P1500#6P500#7P1500#8P1500#9P1500#10P1852#11P1500#12P1500#13P2333#14P1500#15P1500#16P1500#17P1500#18P1500#19P1500#20P1500#21P1500#22P1500#23P1500#24P1500#25P1500#26P2500#27P1500#28P1500#29P1500#30P2472#31P1500#32P1500T1000D1000\r\n")
-    tts(f"End of game your score is {player_score}. My score is  {robot_score}. Nice Game!")
+    tts(f"End of game, your score is {player_score}. My score is  {robot_score}. Nice Game!")
     exit(0)
 
 def movement_scenario(option):
@@ -199,17 +199,17 @@ while True:
         msg = [pinky_finger, ring_finger,middle_finger,pointer_finger,thumb_finger]
         #        21             22             23         24             25   
         # cv2.putText(image, str(msg), (150,150), cv2.FONT_HERSHEY_PLAIN, 4, (0,255,0), 6)
-        code = ""
-        counter = 21
-        for i in msg:
-            if i == 1:
-                value = 500
-            else:
-                value = 2500
+        # code = ""
+        # counter = 21
+        # for i in msg:
+        #     if i == 1:
+        #         value = 2300
+        #     else:
+        #         value = 550
             
-            code+=f"#{counter}P{value}"
-            counter+=1
-        code+= "T1000D1000\r\n"
+        #     code+=f"#{counter}P{value}"
+        #     counter+=1
+        # code+= "T1000D1000\r\n"
         # print(code)
         
         # print("OLD CODE:", old_code)

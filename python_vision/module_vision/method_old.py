@@ -11,6 +11,7 @@ from module_vision.add_new_face import add_new_face
 import threading
 import socket
 import json
+import time
 # from  module_vision.send_receive_socket  import send_name_socket ,receive_socket
 
 load_dotenv()
@@ -51,7 +52,7 @@ def start (encoding_list , ip_address , port):
     fontScale = 1.5
     fontcolor = (0, 255, 0)  # Green color in BGR format
     lineThickness = 2
-    cap = cv2.VideoCapture(0)
+    cap = cv2.VideoCapture(1)
     cap.set(3,720)
     cap.set(4,1280)
     
@@ -177,9 +178,11 @@ def start (encoding_list , ip_address , port):
                     # # text=most_frequent_face
                     print("THIS IS THE new Face:", new_face)
                     print("FACE RECOGNIZED IS :", most_frequent_face)
+                    time.sleep(1)
                     if new_face != most_frequent_face:
                         # text = most_frequent_face
                         new_face = most_frequent_face
+                        
                         try:
                                 # send_name_socket(ip_address,port,text,True ,client_socket=client_socket)
                                 jn = {'known': True, "name": new_face}
@@ -259,12 +262,15 @@ def start (encoding_list , ip_address , port):
                         # name = text 
                         # reopen the camera and add new user
                         myListId,encodListKnown=add_new_face(name=name
-                                     ,folder_path=os.path.join('image',name)
-                                     ,encoding_file=os.getenv("ENCODE_FILE")
-                                     ,number_image=4)                        
-                        
+                                    #  ,folder_path=os.path.join('image',name)
+                                    , folder_path= "C:/Users/wot/Desktop/python_vision/image/"+name
+                                    #  ,encoding_file=os.getenv("ENCODE_FILE")
+                                    ,encoding_file='C:/Users/wot/Desktop/python_vision/encoding/EncodeFile.p'
+                                     ,number_image=7)                        
+                        exit(0)
                         #reopen the main camera in the main
-                        cap = cv2.VideoCapture(int( os.getenv("MY_CAMERA") ))
+                        # cap = cv2.VideoCapture(int( os.getenv("MY_CAMERA") ))
+                        cap = cv2.VideoCapture(0)
                         count_to_add_face+=1
 
                         cap.set(3,720)

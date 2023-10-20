@@ -9,3 +9,4 @@ def load_encoded_file(file_name):
     print("encod File loaded..")
     # print(listId)
     return my_list
+

@@ -20,7 +20,7 @@ with open('names.json', 'r') as json_file:
     object_names = data['object_names']
 
 def analyze_image():
-    file_name = 'sample.jpg'
+    file_name = 'sample.png'
     image_path = os.path.join('', file_name)
 
     with io.open(image_path, 'rb') as image_file:
@@ -34,7 +34,7 @@ def analyze_image():
 
     mobile_names = ["mobile phone","telephone","smartphone", "telephony","communication device","portable communications device"]
     cup_names = ["cup","mug"]
-    bottles = ["Plastic bottle","bottle"]
+    bottles = ["plastic bottle","bottle","Plastic bottle"]
     try:
 
         print("Entered Loop")
@@ -55,14 +55,14 @@ def analyze_image():
                 if cup_count>0:
                     pass
                 else:
-                    detected_objects += "كِبَّاية , "
+                    detected_objects += "كِبَّايَى , "
                 cup_count+=1
             elif label.description.lower()  in bottles:
-                
+                print(label.description.lower())
                 if bottles_count>0:
                     pass
                 else:
-                    detected_objects += "ءَنِّينةْ , "
+                    detected_objects += "ءَنِّينِى , "
                 bottles_count+=1
             elif matching_objects:
                 print(f"User input '{label.description}' matches the object: '{matching_objects[0]}'")
@@ -74,4 +74,4 @@ def analyze_image():
     except ValueError:
         print(ValueError)
 
-# analyze_image("FindBeard")
+# analyze_image()

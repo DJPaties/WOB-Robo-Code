@@ -3,12 +3,12 @@ import mediapipe as mp
 import pvporcupine
 import pyaudio
 import numpy as np
-from TTS import tts
 from concurrent.futures import ThreadPoolExecutor
 import serial
+from serialSender import talking_scenario
 executor = ThreadPoolExecutor()
 exit_flag = True
-serialport=serial.Serial("COM3",115200,timeout=0.1)
+# serialport=serial.Serial("COM3",115200,timeout=0.1)
 detection = False
 def wake_check():
     global exit_flag
@@ -89,8 +89,10 @@ def write_instruction(serialport,instruction):
         print(e)
 
 print('reset moves')
-write_instruction(serialport,"#1P1500#2P1500#3P1500#4P1500#5P1500#6P500#7P1500#8P1500#9P1500#10P1852#11P1500#12P1500#13P2333#14P1500#15P1500#16P1500#17P1500#18P1500#19P1500#20P1500#21P1500#22P1500#23P1500#24P1500#25P1500#26P2500#27P1500#28P1500#29P1500#30P2472#31P1500#32P1500T1000D1000#1P1500#2P1500#3P1500#4P1500#5P1500#6P500#7P1500#8P1500#9P1500#10P1852#11P1500#12P1500#13P2333#14P1500#15P1500#16P1500#17P1500#18P1500#19P1500#20P1500#21P1500#22P1500#23P1500#24P1500#25P1500#26P2500#27P1500#28P1500#29P1500#30P2472#31P1500#32P1500T1000D1000\r\n")
-
+# write_instruction(serialport,"#1P1500#2P1500#3P1500#4P1500#5P1500#6P500#7P1500#8P1500#9P1500#10P1852#11P1500#12P1500#13P2333#14P1500#15P1500#16P1500#17P1500#18P1500#19P1500#20P1500#21P1500#22P1500#23P1500#24P1500#25P1500#26P2500#27P1500#28P1500#29P1500#30P2472#31P1500#32P1500T1000D1000\r\n")
+# Ser("#1P1500#2P1500#3P1500#4P1500#5P1500#6P500#7P1500#8P1500#9P1500#10P1852#11P1500#12P1500#13P2333#14P1500#15P1500#16P1500#17P1500#18P1500#19P1500#20P1500#21P1500#22P1500#23P1500#24P1500#25P1500#26P2500#27P1500#28P1500#29P1500#30P2472#31P1500#32P1500T1000D1000\r\n")
+reset_moves = "#1P1500#2P1500#3P1500#4P1500#5P1500#6P500#7P1500#8P1500#9P1500#10P1852#11P1500#12P1500#13P2333#14P1500#15P1500#16P1500#17P1500#18P1500#19P1500#20P1500#21P1500#22P1500#23P1500#24P1500#25P1500#26P2500#27P1500#28P1500#29P1500#30P2472#31P1500#32P1500T1000D1000\r\n"
+talking_scenario(5,"any",reset_moves)
 while True:
     success, image = cap.read()
     image_height = image.shape[0]
@@ -141,9 +143,9 @@ while True:
             counter = 21
             for i in msg:
                 if i == 1:
-                    value = 500
+                    value = 2300
                 else:
-                    value = 2500
+                    value = 550
                 
                 code+=f"#{counter}P{value}"
                 counter+=1
@@ -155,7 +157,9 @@ while True:
             if old_code != code:
                 # print("Not same make same")
                 old_code = code
-                write_instruction(serialport,code)
+                # write_instruction(serialport,code)
+                # Ser(code)
+                talking_scenario(5,"any",code)
         else:
             
             exit(0)
@@ -163,4 +167,3 @@ while True:
 
     cv2.imshow("Finger detection :", image)
     cv2.waitKey(1)
-

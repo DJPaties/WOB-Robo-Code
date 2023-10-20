@@ -6,7 +6,7 @@ import time
 from mutagen.mp3 import MP3
 import wave
 from concurrent.futures import ThreadPoolExecutor
-from serialSender import mouth, talking_scenario, Ser
+from serialSender import mouth, talking_scenario
 serialExecuter = ThreadPoolExecutor()
 def tts(response_message,lang_code):
 
@@ -56,7 +56,7 @@ def tts(response_message,lang_code):
             pygame.mixer.music.load(filename)
             pygame.mixer.music.play()
             mouth(float(audio.info.length))
-            serialExecuter.submit(talking_scenario(audio.info.length))
+            serialExecuter.submit(talking_scenario(audio.info.length,"talking","any"))
             while pygame.mixer.music.get_busy():
                 time.sleep(0.2)  # Wait a second before checking again
     
@@ -99,7 +99,7 @@ def tts(response_message,lang_code):
             pygame.mixer.music.load(filename)
             pygame.mixer.music.play()
             mouth(duration_seconds)
-            serialExecuter.submit(talking_scenario(duration_seconds))
+            serialExecuter.submit(talking_scenario(duration_seconds,"talking","any"))
             while pygame.mixer.music.get_busy():
                 time.sleep(0.2)  # Wait a second before checking again
     except Exception as e:

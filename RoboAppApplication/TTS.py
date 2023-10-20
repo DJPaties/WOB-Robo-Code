@@ -5,6 +5,7 @@ import glob
 import time
 from mutagen.mp3 import MP3
 import wave
+from serialSender import mouth
 def tts(response_message,lang_code):
 
     print("TTS")
@@ -52,6 +53,7 @@ def tts(response_message,lang_code):
             print("MP3 audio length is ",audio.info.length)
             pygame.mixer.music.load(filename)
             pygame.mixer.music.play()
+            mouth(audio.info.length)
             while pygame.mixer.music.get_busy():
                 time.sleep(0.2)  # Wait a second before checking again
     
@@ -93,8 +95,10 @@ def tts(response_message,lang_code):
                 out.write(response.audio_content)
             pygame.mixer.music.load(filename)
             pygame.mixer.music.play()
+            mouth(duration_seconds)
             while pygame.mixer.music.get_busy():
                 time.sleep(0.2)  # Wait a second before checking again
     except Exception as e:
         print("Error occured ", e)
 
+# tts("Test test","ar-LB")

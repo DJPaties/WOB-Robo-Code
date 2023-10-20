@@ -16,5 +16,6 @@ def show_encod(encoding_file):
     except :
         print(f"error occur") 
 
-show_encod(os.getenv("ENCODE_FILE"))
+# show_encod(os.getenv("ENCODE_FILE"))
+show_encod("C:/Users/wot/Desktop/python_vision/encoding/EncodeFile.p")
 

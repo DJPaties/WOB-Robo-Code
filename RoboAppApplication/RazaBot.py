@@ -6,8 +6,8 @@ def send_message(msg):
                     "sender": "user1",
                     "message": msg
                 }
-    # print("Payload done")
-    r = requests.post('https://291e-185-127-125-57.ngrok.io/webhooks/rest/webhook', json=payload)
+    print("Payload done")
+    r = requests.post('https://9768-185-127-125-57.ngrok.io/webhooks/rest/webhook', json=payload)
     print("Request done")
     data = r.json()
     print(data)
@@ -28,8 +28,8 @@ def send_message(msg):
         print(response)
         return response
 
-while True:
-    msg = input("الاسم منو موجود")
-    print(send_message(msg))    
+# while True:
+#     msg = input("الاسم منو موجود")
+#     print(send_message(msg))    
 
 

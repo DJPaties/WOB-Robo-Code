@@ -20,7 +20,7 @@ with open('names.json', 'r') as json_file:
     object_names = data['object_names']
 
 def analyze_image():
-    file_name = 'sample.jpg'
+    file_name = 'sample.png'
     image_path = os.path.join('', file_name)
 
     with io.open(image_path, 'rb') as image_file:
@@ -73,5 +73,3 @@ def analyze_image():
         tts(x)
     except ValueError:
         print(ValueError)
-
-# analyze_image("FindBeard")
