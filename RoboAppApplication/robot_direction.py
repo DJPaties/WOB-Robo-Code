@@ -64,7 +64,7 @@ def talking_position():
 
 def reset_moves():
     print('reset moves')
-    write_instruction(serialport,"#1P1500#2P1500#3P1500#4P1500#5P1500#6P900#7P942#8P1500#9P1500#10P1500#11P1881#12P1500#13P1500#14P1500#15P1500#16P1500#17P1500#18P1500#19P1500#20P1500#21P1500#22P1500#23P1500#24P1500#25P1500#26P1458#27P900#28P1500#29P1500#30P1500#31P1500#32P1500T500D500\r\n")
+    write_instruction(serialport,"#1P1500#2P1500#3P1500#4P1500#5P1500#6P900#7P942#8P1500#9P1500#10P1500#11P1881#12P1500#13P1500#14P1500#15P1500#16P1500#17P1500#18P1500#19P1500#21P1500#22P1500#23P1500#24P1500#25P1500#26P1458#27P900#28P1500#29P1500#30P1500#31P1500#32P1500T500D500\r\n")
     time.sleep(2)
 
 def hello_function():
@@ -130,13 +130,13 @@ def start_task():
         
         # print('start')
         # #Execution of preset instructions
-        # write_instruction(serialport,"#1P1570#2P1500#3P1500#4P1500#20P1500#21P1500#22P1500#23P1500#24P1500#25P1500T1000D800\r\n")
+        # write_instruction(serialport,"#1P1570#2P1500#3P1500#4P1500#21P1500#22P1500#23P1500#24P1500#25P1500T1000D800\r\n")
         
         # time.sleep(2)
         # print("Moh")
         # write_instruction(serialport,"#1P1768#2P1345#3P2049#4P1768#21P1570#22P1711#23P1627#24P1824#25P2021T1000D800\r\n")
         # time.sleep(4)
-        # write_instruction(serialport,"#1P1570#2P1500#3P1500#4P1500#20P1500#21P1500#22P1500#23P1500#24P1500#25P1500T1000D800\r\n")
+        # write_instruction(serialport,"#1P1570#2P1500#3P1500#4P1500#21P1500#22P1500#23P1500#24P1500#25P1500T1000D800\r\n")
         # time.sleep(4)
         # # #Test for action groups,Group 1 run 3 times
         # # write_instruction(serialport,"G1F3\r\n")

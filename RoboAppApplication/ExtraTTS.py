@@ -55,7 +55,7 @@ def tts(response_message,lang_code):
             print("MP3 audio length is ",audio.info.length)
             pygame.mixer.music.load(filename)
             pygame.mixer.music.play()
-            mouth(float(audio.info.length))
+            # mouth(float(audio.info.length))
             serialExecuter.submit(talking_scenario(audio.info.length,"talking","any"))
             while pygame.mixer.music.get_busy():
                 time.sleep(0.2)  # Wait a second before checking again

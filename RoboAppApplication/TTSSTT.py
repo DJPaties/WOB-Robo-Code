@@ -1,11 +1,11 @@
 import tkinter as tk
 import os
+from concurrent.futures import ThreadPoolExecutor
 import pyaudio
 from google.cloud import texttospeech
 import pygame
 import glob
 import numpy as np
-from concurrent.futures import ThreadPoolExecutor
 import pvporcupine
 import time
 import botConnecter
@@ -19,6 +19,7 @@ from serialSender import mouth, talking_scenario
 import ExtraMicrophone
 import ExtraTTS
 import threading
+import greetings
 class VoiceAssistant:
     def __init__(self):
         self.recognizedFace = ""
@@ -40,6 +41,8 @@ class VoiceAssistant:
         self.counter = 1
         self.script_process = None
         self.script_thread = None
+        self.eye_tracking_process = None
+        self.eye_tracking_thread = None
         self.getNewName = False
 
     def run_face(self):
@@ -50,7 +53,14 @@ class VoiceAssistant:
         if self.script_process:
             self.script_process.terminate()
             # print("closed Face")
-    
+    def run_eye(self):
+        self.eye_tracking_process = subprocess.Popen(["python", "face_detect.py"])
+        self.eye_tracking_process.communicate()
+
+    def close_eye(self):
+        if self.eye_tracking_process:
+            self.eye_tracking_process.terminate()
+            # print("closed Face")
     #To reopen microphone
     def open_mic(self):
         if self.detection:
@@ -95,8 +105,10 @@ class VoiceAssistant:
     #WakeUp Word function it detects hey jack then moves on to the tts function
     def wake_check(self):
         self.script_thread= threading.Thread(target=self.run_face)
+        self.eye_tracking_thread = threading.Thread(target=self.run_eye)
+        self.close_eye()
         self.script_thread.start()
-        servo_command_2 = "#1P1500#2P1500#3P1500#4P1500#5P1500#6P500#7P1500#8P1500#9P1500#10P1852#11P1367#12P1600#13P1900#14P1076#15P1467#16P1300#17P1500#18P1500#19P1500#20P1500#21P1500#22P1500#23P1500#24P1500#25P1500#26P2500#27P1500#28P1500#29P1500#30P2472#31P1500#32P1500T1000D1000\r\n"  # Move servo 2 to position 2000 in 2 seconds
+        servo_command_2 = "#1P500#2P500#3P500#4P700#5P500#6P500#7P1500#8P1500#9P1410#10P1852#11P1367#12P1600#13P2100#14P1076#15P1500#16P1640#17P1500#18P1500#19P1500#21P600#22P600#23P600#24P500#25P800#26P2500#27P1500#28P1500#29P1600#30P2472#31P1500#32P1500T1000D1000\r\n"  # Move servo 2 to position 2000 in 2 seconds
 
         talking_scenario(5,"any",servo_command_2)
         keyword_path = r'C:\Users\wot\Desktop\RoboAppApplication\Hey-Jack_en_windows_v2_2_0.ppn'
@@ -186,11 +198,12 @@ class VoiceAssistant:
             self.updateface()
             self.lang_change = False
 
-            servo_command_2 = "#1P1500#2P1500#3P1500#4P1500#5P1500#6P500#7P1500#8P1500#9P1500#10P1852#11P1500#12P1500#13P1500#14P1500#15P2367#16P1500#17P1500#18P1500#19P1500#20P1500#21P2200#22P2200#23P2200#24P2200#25P2200#26P2500#27P1500#28P1500#29P1500#30P2472#31P1500#32P1500T500D500\r\n"
+            # servo_command_2 = "#1P2200#2P2200#3P2500#4P2500#5P2500#6P500#7P2000#8P1400#9P1500#10P1852#11P1500#12P1500#13P1400#14P1500#15P1500#16P1470#17P1500#18P1500#19P1500#21P2200#22P2200#23P2200#24P2500#25P2200#26P2500#27P1400#28P1500#29P1650#30P2472#31P1500#32P1500T500D500\r\n"
+            
             time.sleep(1)
             # ser.write(servo_command_2.encode())
             # Ser(servo_command_2)  
-            talking_scenario(5,"any",servo_command_2)
+            # talking_scenario(5,"any",servo_command_2)
             if len(self.recognizedFace) == 0:
                 self.getNewName = True
                 self.response_message = " مرحبَا, شو أِسْمَكْ"
@@ -202,10 +215,16 @@ class VoiceAssistant:
                 # self.tts()
             else:
                 self.close_face()
+                # self.eye_tracking_thread.start()
                 self.response_message = "مرحبا"+self.recognizedFace
                 print( "مرحبا"+self.recognizedFace + ".")
+                ExtraTTS.tts(self.response_message,"ar-LB")
+                greet_command = "#1P2500#2P2500#3P2500#4P2500#5P2500#6P500#7P500#8P1500#9P1430#10P1852#11P1500#12P1500#13P1500#14P1500#15P1500#16P1500#17P1500#18P1500#19P2500#21P2200#22P2200#23P2200#24P2060#25P2200#26P2500#27P1667#28P1030#29P1820#30P2192#31P1500#32P1500T500D500\r\n"
+                talking_scenario(5,"any",greet_command)
+                time.sleep(0.5)
+                greetings.hand_shaking()
                 self.speech_label.config(text=self.response_message)
-                self.tts()
+                self.stt(self.speech_label)
  
         
 
@@ -325,7 +344,7 @@ class VoiceAssistant:
         except Exception as e:
             print("Error occured ", e)
         if self.lang_change:
-            self.wake_check()
+            self.stt(self.speech_label)
         else:
             self.stt(self.speech_label)
 

@@ -2,5 +2,9 @@
     "[python]": {
         "editor.defaultFormatter": "ms-python.python"
     },
-    "python.formatting.provider": "none"
+    "python.formatting.provider": "none",
+    "python.analysis.autoImportCompletions": false,
+    "python.analysis.typeCheckingMode": "off",
+    "python.defaultInterpreterPath": "C:/Users/wot/AppData/Local/Programs/Python/Python311/python.exe",
+    "python.languageServer": "Default"
 }

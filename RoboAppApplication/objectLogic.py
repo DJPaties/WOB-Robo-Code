@@ -70,6 +70,6 @@ def analyze_image():
             print({'label': label.description, 'score': label.score})
         x = "I can see:"+ str(detected_objects)
         print("I can see:",detected_objects)
-        tts(x)
+        tts(x, "en-US")
     except ValueError:
         print(ValueError)
