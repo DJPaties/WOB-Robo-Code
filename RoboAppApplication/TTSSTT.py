@@ -105,15 +105,15 @@ class VoiceAssistant:
     #WakeUp Word function it detects hey jack then moves on to the tts function
     def wake_check(self):
         self.script_thread= threading.Thread(target=self.run_face)
-        self.eye_tracking_thread = threading.Thread(target=self.run_eye)
-        self.close_eye()
+        # self.eye_tracking_thread = threading.Thread(target=self.run_eye)
+        # self.close_eye()
         self.script_thread.start()
         servo_command_2 = "#1P500#2P500#3P500#4P700#5P500#6P500#7P1500#8P1500#9P1410#10P1852#11P1367#12P1600#13P2100#14P1076#15P1500#16P1640#17P1500#18P1500#19P1500#21P600#22P600#23P600#24P500#25P800#26P2500#27P1500#28P1500#29P1600#30P2472#31P1500#32P1500T1000D1000\r\n"  # Move servo 2 to position 2000 in 2 seconds
 
         talking_scenario(5,"any",servo_command_2)
         keyword_path = r'C:\Users\wot\Desktop\RoboAppApplication\Hey-Jack_en_windows_v2_2_0.ppn'
         keyword_path_arabic = "C:/Users/wot/Desktop/RoboAppApplication/مرحبا-جاك_ar_windows_v2_2_0.ppn"
-        access_key = '4HceBz+B5ZnPRKTBlanhYjuwZxWZVG5RBuE9V9Fa7FY66pQs0M57MA=='
+        access_key = 'D4zojUoB02lIxhA1Y2PJMIKdJjOw3up4qzmwhXsb1bzQt/OxRoKp3g=='
         model_path = 'C:/Users/wot/Desktop/RoboAppApplication/porcupine_params_ar.pv'
         print("Entered wake check")
         self.detection= False

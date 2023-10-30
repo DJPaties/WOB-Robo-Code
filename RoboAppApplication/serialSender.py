@@ -30,7 +30,7 @@ def talking_scenario(delay, mode,server_command):
             # print(counter)
             if counter > delay:
                 break
-            ser.write("#13P1400#15P1667T1000D1000\r\n".encode())
+            ser.write("#13P1400#15P1500T1000D1000\r\n".encode())
             ser.write(f"#20P{random.choice(eye_positions)}\r\n".encode())
             time.sleep(1)
             counter+=1.1
@@ -43,14 +43,14 @@ def talking_scenario(delay, mode,server_command):
             # print(counter)
             if counter > delay:
                 break
-            ser.write("#8P1467#9P1667#10P1856#11P1567#12P2500#13P1633#15P1667#16P1333T1000D1000\r\n".encode())
+            ser.write("#8P1467#9P1667#10P1856#11P1567#12P2500#13P1633#15P1500#16P1333T1000D1000\r\n".encode())
             ser.write(f"#20P{random.choice(eye_positions)}\r\n".encode())
             time.sleep(1)
             counter+=1.1
             # print(counter)
             if counter > delay:
                 break
-            ser.write("#12P1200#13P1567#15P1800#16P1467#27P1700#28P1467#29P1633T1000D1000\r\n".encode())
+            ser.write("#12P1200#13P1567#15P1500#16P1467#27P1700#28P1467#29P1633T1000D1000\r\n".encode())
             ser.write(f"#20P{random.choice(eye_positions)}\r\n".encode())
             time.sleep(1)
             counter+=1.1

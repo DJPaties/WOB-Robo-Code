@@ -4,7 +4,6 @@ from serialSender import talking_scenario
 import pyk4a
 from pyk4a import Config, PyK4A
 
-
 def main():
     k4a = PyK4A(
         Config(
@@ -33,7 +32,11 @@ def main():
                 radius = 4
                 cv2.circle(capture.color, center, radius, (0, 0, 255), 2)  # Red circle in the center of the face
                 print(center[0])
-                if center[0]>=600:
+                if center[0]>=950:
+                    talking_scenario(5,"any", "#20P1300\r\n")
+                elif center[0]>=800:
+                    talking_scenario(5,"any", "#20P1350\r\n")
+                elif center[0]>=600:
                     talking_scenario(5,"any", "#20P1400\r\n")
                 elif center[0]>=500:
                     talking_scenario(5,"any", "#20P1450\r\n")
