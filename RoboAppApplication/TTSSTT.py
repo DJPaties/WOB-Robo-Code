@@ -20,6 +20,8 @@ import ExtraMicrophone
 import ExtraTTS
 import threading
 import greetings
+import TTS
+
 class VoiceAssistant:
     def __init__(self):
         self.recognizedFace = ""
@@ -46,21 +48,21 @@ class VoiceAssistant:
         self.getNewName = False
 
     def run_face(self):
-        self.script_process = subprocess.Popen(["python", r"C:\Users\wot\Desktop\python_vision\main_old.py"])
+        self.script_process = subprocess.Popen([r"C:\Users\WOB\AppData\Local\Programs\Python\Python38\python.exe", r"C:\Users\WOB\Desktop\WOB-Robo-Code-main\python_vision\main_old.py"])
         self.script_process.communicate()
 
     def close_face(self):
         if self.script_process:
             self.script_process.terminate()
             # print("closed Face")
-    def run_eye(self):
-        self.eye_tracking_process = subprocess.Popen(["python", "face_detect.py"])
-        self.eye_tracking_process.communicate()
+    # def run_eye(self):
+    #     self.eye_tracking_process = subprocess.Popen(["python", "face_detect.py"])
+    #     self.eye_tracking_process.communicate()
 
-    def close_eye(self):
-        if self.eye_tracking_process:
-            self.eye_tracking_process.terminate()
-            # print("closed Face")
+    # def close_eye(self):
+    #     if self.eye_tracking_process:
+    #         self.eye_tracking_process.terminate()
+    #         # print("closed Face")
     #To reopen microphone
     def open_mic(self):
         if self.detection:
@@ -77,12 +79,12 @@ class VoiceAssistant:
             self.lang_code = x
             if self.lang_code == "en-US":
                 self.response_message = "Okay I will speak in english from now on."
-                self.speech_label.config(text="Okay I will speak in english from now on.")
+                #self.speech_label.config(text="Okay I will speak in english from now on.")
                 
               
             elif self.lang_code == "ar-LB":
                 self.response_message = " ماشي حاءحْكي معكْ بالعربي  هَلّْاأْ"
-                self.speech_label.config(text=" ماشي حاءحْكي معكْ بالعربي  هَلّْاأْ")
+                #self.speech_label.config(text=" ماشي حاءحْكي معكْ بالعربي  هَلّْاأْ")
                
             self.lang_change = True
             self.tts()
@@ -108,13 +110,13 @@ class VoiceAssistant:
         # self.eye_tracking_thread = threading.Thread(target=self.run_eye)
         # self.close_eye()
         self.script_thread.start()
-        servo_command_2 = "#1P500#2P500#3P500#4P700#5P500#6P500#7P1500#8P1500#9P1410#10P1852#11P1367#12P1600#13P2100#14P1076#15P1500#16P1640#17P1500#18P1500#19P1500#21P600#22P600#23P600#24P500#25P800#26P2500#27P1500#28P1500#29P1600#30P2472#31P1500#32P1500T1000D1000\r\n"  # Move servo 2 to position 2000 in 2 seconds
+        servo_command_2 = "#1P500#2P500#3P500#4P700#5P500#6P500#7P1500#8P1500#9P1410#10P1852#11P1367#12P1600#13P1500#14P1415#15P1500#17P1500#18P1500#19P1500#21P600#22P600#23P600#24P500#25P800#26P2500#27P1500#28P1500#29P1600#30P2472#31P1500#32P1500T1000D1000\r\n"  # Move servo 2 to position 2000 in 2 seconds
 
         talking_scenario(5,"any",servo_command_2)
-        keyword_path = r'C:\Users\wot\Desktop\RoboAppApplication\Hey-Jack_en_windows_v2_2_0.ppn'
-        keyword_path_arabic = "C:/Users/wot/Desktop/RoboAppApplication/مرحبا-جاك_ar_windows_v2_2_0.ppn"
-        access_key = 'D4zojUoB02lIxhA1Y2PJMIKdJjOw3up4qzmwhXsb1bzQt/OxRoKp3g=='
-        model_path = 'C:/Users/wot/Desktop/RoboAppApplication/porcupine_params_ar.pv'
+        keyword_path = 'C:/Users/WOB/Desktop/WOB-Robo-Code-main/RoboAppApplication/Hey-Jack_en_windows_v2_2_0.ppn'
+        keyword_path_arabic = "C:/Users/WOB/Desktop/WOB-Robo-Code-main/RoboAppApplication/مرحبا-جاك_ar_windows_v2_2_0.ppn"
+        access_key = 'ikoGwaDx0g1+/0GV1e+aqOf5YmGgMC/x4kMBJ/s27qGjRFVDNBeSTA=='
+        model_path = 'C:/Users/WOB/Desktop/WOB-Robo-Code-main/RoboAppApplication/porcupine_params_ar.pv'
         print("Entered wake check")
         self.detection= False
         def audio_callback(in_data, frame_count, time_info, status):
@@ -160,13 +162,13 @@ class VoiceAssistant:
             if len(self.recognizedFace) == 0:
                 self.getNewName = True
                 self.response_message = "hey,"+ botConnecter.main("name not recognized")
-                self.speech_label.config(text=self.response_message)
+                #self.speech_label.config(text=self.response_message)
                 self.tts()
             else:
                 self.close_face()
                 self.response_message = "Hey, " + self.recognizedFace + "."
                 print( "Hey, " + self.recognizedFace + ".")
-                self.speech_label.config(text=self.response_message)
+                #self.speech_label.config(text=self.response_message)
                 self.tts() 
         if self.lang_code == "ar-LB":
             print("language is arabic")
@@ -207,23 +209,23 @@ class VoiceAssistant:
             if len(self.recognizedFace) == 0:
                 self.getNewName = True
                 self.response_message = " مرحبَا, شو أِسْمَكْ"
-                self.speech_label.config(text=self.response_message)
+                #self.speech_label.config(text=self.response_message)
                 self.tts()
 
                 # self.response_message = "مرحبا,"+ botConnecter.main("الاسم منو  موجود")
-                # self.speech_label.config(text=self.response_message)
+                # #self.speech_label.config(text=self.response_message)
                 # self.tts()
             else:
                 self.close_face()
                 # self.eye_tracking_thread.start()
                 self.response_message = "مرحبا"+self.recognizedFace
                 print( "مرحبا"+self.recognizedFace + ".")
-                ExtraTTS.tts(self.response_message,"ar-LB")
-                greet_command = "#1P2500#2P2500#3P2500#4P2500#5P2500#6P500#7P500#8P1500#9P1430#10P1852#11P1500#12P1500#13P1500#14P1500#15P1500#16P1500#17P1500#18P1500#19P2500#21P2200#22P2200#23P2200#24P2060#25P2200#26P2500#27P1667#28P1030#29P1820#30P2192#31P1500#32P1500T500D500\r\n"
+                TTS.tts(self.response_message, "ar-LB")
+                greet_command = "#1P2500#2P2500#3P2500#4P2500#5P2500#6P500#7P500#8P1500#9P1430#10P1852#11P1500#12P1500#13P1500#14P1500#15P1500#17P1500#18P1500#19P2500#21P2200#22P2200#23P2200#24P2060#25P2200#26P2500#27P1667#28P1030#29P1820#30P2192#31P1500#32P1500T1000D1000\r\n"
                 talking_scenario(5,"any",greet_command)
                 time.sleep(0.5)
                 greetings.hand_shaking()
-                self.speech_label.config(text=self.response_message)
+                #self.speech_label.config(text=self.response_message)
                 self.stt(self.speech_label)
  
         
@@ -413,7 +415,7 @@ class VoiceAssistant:
                                 self.response_message = "could not understand audio please repeat and be clear"
                             else:
                                 self.response_message = "مش عم بِفْهَمْ عَلَيْك عيد"
-                            self.speech_label.config(text=self.response_message) 
+                            #self.speech_label.config(text=self.response_message) 
                             print("loop- number 1")   
                             self.counter += 1 
                             self.tts()
@@ -433,12 +435,12 @@ class VoiceAssistant:
                         x="Could not request results from Google Speech Recognition service; {0}".format(e)
                         print(x)
                         self.open_mic()
-                self.speech_label.config(text=self.response_message)
+                #self.speech_label.config(text=self.response_message)
                 self.tts()
     
 
     #this is the Tkinter setup for main interface and the application window
-    def gui_setup(self):
+    # def gui_setup(self):
         self.root = tk.Tk()
         self.screen_width = self.root.winfo_screenwidth()
         self.screen_height = self.root.winfo_screenheight()
@@ -465,10 +467,10 @@ class VoiceAssistant:
     #Tاread theruns multiple functions at once
     def run(self):
         future = self.executor.submit(server.start_server)
-        future3 = self.executor.submit(self.gui_setup)
+        # future3 = self.executor.submit(self.gui_setup)
         future4 = self.executor.submit(botConnecter.initialize_client)
         future2 = self.executor.submit(self.wake_check)
-        return future,future2, future3, future4
+        return future,future2, future4
         
 
 #this starts the application

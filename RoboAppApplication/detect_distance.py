@@ -1,6 +1,5 @@
 import cv2
 import numpy as np
-import pyautogui
 import pyk4a
 from helpers import colorize
 from pyk4a import Config, PyK4A
@@ -20,9 +19,8 @@ def main():
 
     def wake_check():
         
-        keyword_path_arabic = "C:/Users/wot/Desktop/RoboAppApplication/stopArabic.ppn"
-        access_key = '+VvLL7ztuNRvOkGOd6ou3qjp3t7emg4tBUuyTkChlQjOZL6ugCLblw=='
-        model_path = 'C:/Users/wot/Desktop/RoboAppApplication/porcupine_params_ar.pv'
+        keyword_path_arabic = "C:/Users/WOB/Desktop/WOB-Robo-Code-main/RoboAppApplication/stop_mimick.ppn"
+        access_key = 'ycOHjWyJmmQzo+uUtbWwCiuYQkzLIfHCfj5G+ZaSCPJcUBF10i0/TQ=='
         print("language is arabic")
         def audio_callback(in_data, frame_count, time_info, status):
             pcm = np.frombuffer(in_data, dtype=np.int16)
@@ -39,7 +37,7 @@ def main():
             return None, pyaudio.paContinue
 
 
-        handle = pvporcupine.create(keyword_paths=[keyword_path_arabic], access_key=access_key,model_path=model_path)
+        handle = pvporcupine.create(keyword_paths=[keyword_path_arabic], access_key=access_key)
         pa = pyaudio.PyAudio()
 
         audio_stream = pa.open(
@@ -112,7 +110,7 @@ def main():
 
             if message != new_message:
                 message = new_message
-                tts(new_message,"en-LB")
+                tts(new_message,"en-US")
             # key = cv2.waitKey(10)
             # if key != -1:
             #     cv2.destroyAllWindows()
