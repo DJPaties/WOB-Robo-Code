@@ -263,9 +263,9 @@ def start (encoding_list , ip_address , port):
                         # reopen the camera and add new user
                         myListId,encodListKnown=add_new_face(name=name
                                     #  ,folder_path=os.path.join('image',name)
-                                    , folder_path= "C:/Users/wot/Desktop/python_vision/image/"+name
+                                    , folder_path= "C:/Users/WOB/Desktop/WOB-Robo-Code-main/python_vision/image"+name
                                     #  ,encoding_file=os.getenv("ENCODE_FILE")
-                                    ,encoding_file='C:/Users/wot/Desktop/python_vision/encoding/EncodeFile.p'
+                                    ,encoding_file='C:/Users/WOB/Desktop/WOB-Robo-Code-main/python_vision/encoding/EncodeFile.p'
                                      ,number_image=7)                        
                         exit(0)
                         #reopen the main camera in the main

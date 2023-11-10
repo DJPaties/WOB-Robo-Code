@@ -86,6 +86,8 @@ while True:
     if multiLandMarks:
         handList = []
         for handLms in multiLandMarks:
+            print(handLms)
+            
             mpDraw.draw_landmarks(image, handLms, mp_Hands.HAND_CONNECTIONS)
             for idx, lm in enumerate(handLms.landmark):
               h, w, c = image.shape

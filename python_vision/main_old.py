@@ -12,7 +12,7 @@ load_dotenv()
 
 #load the pre-encoded file
 # encoding_list=load_encoded_file(os.getenv("ENCODE_FILE"))
-encoding_list=load_encoded_file("C:/Users/wot/Desktop/python_vision/encoding/EncodeFile.p")
+encoding_list=load_encoded_file("C:/Users/WOB/Desktop/WOB-Robo-Code-main/python_vision/encoding/EncodeFile.p")
 # encoding_list =['adnan']
 print("encoding...")
 

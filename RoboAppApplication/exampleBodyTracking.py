@@ -2,16 +2,18 @@ import cv2
 import json
 import pykinect_azure as pykinect
 import time
-from serialSender import talking_scenario
-
+from serialSender2 import head_movement
+import serial
 global signal
 signal = True
-
+# if __name__ == "__main__":
 def set_signal(boolean):
     global signal
     signal = boolean
 
-# if __name__ == "__main__":
+
+
+
 
 def start_eye():
 	# Initialize the library, if the library is not found, add the library path as argument
@@ -31,11 +33,11 @@ def start_eye():
 
 	cv2.namedWindow('Depth image with skeleton',cv2.WINDOW_NORMAL)
 	global code
-	code = ""
+	code = "#30P1500\r\n"
 	global new_code
 	new_code = ""
 	global face_code
-	face_code = ""
+	face_code = "#16P1500T500D500\r\n"
 	while True:	
 
 		# Get capture
@@ -62,92 +64,94 @@ def start_eye():
 				x = body_frame.get_body(0)
 				x_pos = (x.get_joint_info()['head']['positionx'])
 				y_pos = (x.get_joint_info()['head']['position y'])
-				print(x_pos,y_pos)
+				# print(x_pos,y_pos)
 				if x_pos>800:
 					#1300 eye
 					#1600 head
-					new_code = "#20P1300\r\n"
-					face_code = "#16P1600T500D500\r\n"
+					new_code = "#30P1300\r\n"
+					face_code = "#16P1700T500D500\r\n"
 					
 				elif x_pos>700:
 					#1360 eye
 					#1570 head
-					new_code = "#20P1360\r\n"
-					face_code = "#16P1570T500D500\r\n"
+					new_code = "#30P1360\r\n"
+					face_code = "#16P1650T500D500\r\n"
 					
 				elif x_pos>600:
 					#1390
 					#1560
-					new_code = "#20P1390\r\n"
-					face_code = "#16P1560T500D500\r\n"
+					new_code = "#30P1390\r\n"
+					face_code = "#16P1590T500D500\r\n"
 					
 				elif x_pos>500:
 					#1390
 					#1550
-					new_code = "#20P1390\r\n"
-					face_code = "#16P1550T500D500\r\n"
+					new_code = "#30P1390\r\n"
+					face_code = "#16P1570T500D500\r\n"
 					
 				elif x_pos>300:
 					#1440 eye
 					#1520 head
-					new_code = "#20P1440\r\n"
-					face_code = "#16P1520T500D500\r\n"
+					new_code = "#30P1440\r\n"
+					face_code = "#16P1540T500D500\r\n"
 					
 				elif x_pos>200:
 					#1480 eye
 					#1520 head
-					new_code = "#20P1480\r\n"
+					new_code = "#30P1480\r\n"
 					face_code = "#16P1520T500D500\r\n"
 					
 
 				elif x_pos>0:
 					#1520 eye
 					#1500 head
-					new_code = "#20P1520\r\n"
+					new_code = "#30P1520\r\n"
 					face_code = "#16P1500T500D500\r\n"
 					
 				elif x_pos>-200:
 					#1520 eye
 					#1470 head
-					new_code = "#20P1200\r\n"
+					new_code = "#30P1200\r\n"
 					face_code = "#16P1470T500D500\r\n"
 					
 				elif x_pos>-300:
 					#1560 eye
 					#1450 head
-					new_code = "#20P1560\r\n"
+					new_code = "#30P1560\r\n"
 					face_code = "#16P1450T500D500\r\n"
 					
 				elif x_pos>-500:
 					#1610
 					#1420
-					new_code = "#20P1610\r\n"
+					new_code = "#30P1610\r\n"
 					face_code = "#16P1420T500D500\r\n"
 					
 				elif x_pos>-600:
 					#1610
 					#1420
-					new_code = "#20P1610\r\n"
-					face_code = "#16P1420T500D500\r\n"
+					new_code = "#30P1610\r\n"
+					face_code = "#16P1370T500D500\r\n"
 					
 				elif x_pos>-700:
 					#1640 eye
 					#1410 head
-					new_code = "#20P1640\r\n"
-					face_code = "#16P1410T500D500\r\n"
+					new_code = "#30P1640\r\n"
+					face_code = "#16P1350T500D500\r\n"
 					
 				elif x_pos>-800:
 					#1700 eye
 					#1400 head
-					new_code = "#20P1700\r\n"
-					face_code = "#16P1400T500D500\r\n"
+					new_code = "#30P1700\r\n"
+					face_code = "#16P1300T500D500\r\n"
 				
 				if new_code != code:
+					print("Code:", code)
+					print("Face code,", face_code)
 					code = new_code
 					try:
-						talking_scenario(5, 'any', new_code)
+						head_movement(code)
 						time.sleep(0.2)
-						talking_scenario(5, 'any', face_code)
+						head_movement(face_code)
 						# time.sleep(0.1)
 					except ValueError as e:
 						print(e)
@@ -168,3 +172,5 @@ def start_eye():
 		# Press q key to stop
 		if cv2.waitKey(1) == ord('q'):  
 			break
+
+start_eye()

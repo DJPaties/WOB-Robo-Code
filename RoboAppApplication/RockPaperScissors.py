@@ -120,11 +120,11 @@ def determine_winner(player_choice, npc_choice):
     elif player_choice == "paper":
         if npc_choice == "scissors":
             tts("I win! You chose paper and  I chose scissors.", "en-US")
-            player_score+=1
+            robot_score+=1
             return "NPC win!"  
         else:
             tts("YOU WIN! I chose rock and you chose paper.", "en-US")
-            robot_score+=1
+            player_score+=1
             return "YOU wins!"
         # return "You win!" if npc_choice == "rock" else "NPC wins!"
     elif player_choice == "scissors":
@@ -188,6 +188,7 @@ while True:
     if multiLandMarks:
         handList = []
         for handLms in multiLandMarks:
+            
             mpDraw.draw_landmarks(image, handLms, mp_Hands.HAND_CONNECTIONS)
             for idx, lm in enumerate(handLms.landmark):
               h, w, c = image.shape

@@ -7,12 +7,17 @@ nltk.download('punkt')
 nltk.download('maxent_ne_chunker')
 nltk.download('words')
 translator = Translator()
-def get_name(sentence):    
-
-    if "إسمي" in sentence:
-        print(" Found")
+def get_name(sentence,languagecode):    
+    if languagecode == "en-US":
+        if "My name is" in sentence:
+            pass
+        else:
+            sentence= "My name is "+sentence
     else:
-        sentence = "اسمي " + sentence
+        if "إسمي" in sentence:
+            print(" Found")
+        else:
+            sentence = "اسمي " + sentence
     translation = translator.translate(sentence, src='ar', dest='en')
     translated =  translation.text
     # input_sentence = "my name is ahmad ibrahim"

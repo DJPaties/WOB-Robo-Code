@@ -7,31 +7,28 @@ from serialSender import talking_scenario
 from botconnecterTTS import tts
 from NameExtract import get_name
 import RazaBot
-import exampleBodyTracking
+# import exampleBodyTracking
 
 # eye_tracking_process = None
 
 
 def run_eye():
-    run_thread()
-#     global eye_tracking_process
-#     eye_tracking_process = subprocess.Popen(["python", "viewer_eyes.py"])
-#     eye_tracking_process.communicate()
+    # run_thread()
+    global eye_tracking_process
+    eye_tracking_process = subprocess.Popen(["python", "exampleBodyTracking.py"])
+    eye_tracking_process.communicate()
 
 
 def close_eye():
-    exampleBodyTracking.set_signal(False)
-#     if eye_tracking_process:
-#         eye_tracking_process.terminate()
+    if eye_tracking_process:
+        eye_tracking_process.terminate()
 
 def run_thread():
-    exampleBodyTracking.set_signal(True)
-    threa = threading.Thread(target=exampleBodyTracking.start_eye)
+
+    threa = threading.Thread(target=run_eye)
     threa.start()
     threa = None
-#     eye_tracking_thread = threading.Thread(target=viewer_eyes.main)
-#     eye_tracking_thread.start()
-#     eye_tracking_thread = None
+
 
 # Name = ""
 Name = "Mohammad"
@@ -39,7 +36,7 @@ new_name = ""
 New_User = False
 false_detecion = False
 denied_name = False
-# name_callback_update = None
+
 run_thread()
 
 def get_New_User_detected():
@@ -49,10 +46,6 @@ def get_New_User_detected():
 def set_New_user():
     global New_User
     New_User = True
-
-# def set_get_New_User_detected_False():
-#     global New_User
-#     New_User = False
 
 
 def save_new_name(text):
@@ -408,9 +401,7 @@ def initialize_client():
                         Name = received_json['name']
                         print("Name recieved: " + Name)
                         client_socket.send(Name.encode())
-                        # Name = received_json['name']
-                        # print("Received Name is: " + Name)
-                        # client_socket.send(Name.encode())
+
                     else:
                         New_User = False
                         Name = received_json['name']
@@ -421,9 +412,7 @@ def initialize_client():
                             time.sleep(1)
                         client_socket.send(new_name.encode())
                         set_Name_deny_False()
-                        # print("Unknown Name")
-                        # name = input("Enter Name: ")
-                        # client_socket.send(name.encode('utf-8'))
+
                 else:
                     print("No data received from the client")
                     break  # Break out of the loop if no data is received
@@ -433,4 +422,3 @@ def initialize_client():
             # Close the client socket
             client_socket.close()
 
-# main("قلد ايدي")
