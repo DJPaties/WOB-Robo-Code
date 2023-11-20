@@ -97,7 +97,7 @@ class VoiceAssistant:
     def wake_check(self):
         self.script_thread= threading.Thread(target=self.run_face)
         self.script_thread.start()
-        servo_command_2 = "#1P2500#2P2500#3P2500#4P2500#5P2500#6P500#7P500#8P1500#9P1410#10P1852#11P1367#12P1600#13P1500#14P1415#15P1500#16P1500#17P1500#18P1500#19P1500#20P1500#21P2200#22P2200#23P2200#24P2200#25P2200#26P2500#27P1200#28P1500#29P1600#30P2472#31P1500#32P1500T1000D1000\r\n"  # Move servo 2 to position 2000 in 2 seconds
+        servo_command_2 = "#1P2500#2P2500#3P2500#4P2500#5P2500#6P500#7P500#8P1500#9P1410#10P1852#11P1367#12P1600#13P1200#14P1415#15P1500#16P1500#17P1500#18P1500#19P1500#20P1500#21P2200#22P2200#23P2200#24P2200#25P2200#26P2500#27P1200#28P1500#29P1600#30P2472#31P1500#32P1500T1000D1000\r\n"  # Move servo 2 to position 2000 in 2 seconds
 
         talking_scenario(5,"any",servo_command_2)
         keyword_path = 'C:/Users/WOB/Desktop/WOB-Robo-Code-main/RoboAppApplication/Hey-Jack_en_windows_v2_2_0.ppn'
@@ -211,6 +211,7 @@ class VoiceAssistant:
                 talking_scenario(5,"any",greet_command)
                 time.sleep(0.5)
                 greetings.hand_shaking("ar-LB")
+                print("done wake")
                 self.stt(self.speech_label)
  
         
@@ -311,9 +312,9 @@ class VoiceAssistant:
                 pygame.mixer.music.load(filename)
                 pygame.mixer.music.play()   
                 mouth(duration_seconds)
-                ttsThreadArabic = threading.Thread(target=talking_scenario, args=(duration_seconds,"talking","any"))
-                ttsThreadArabic.start()
-                             
+                # ttsThreadArabic = threading.Thread(target=talking_scenario, args=(duration_seconds,"talking","any"))
+                # ttsThreadArabic.start()
+                talking_scenario(duration_seconds,"talking","any")
                 while pygame.mixer.music.get_busy():
                     time.sleep(0.15)  # Wait a second before checking again
 
@@ -381,18 +382,18 @@ class VoiceAssistant:
 
                     
                     except sr.UnknownValueError:
-                        if self.counter == 1:
+                        # if self.counter == 1:
                             
-                            if self.lang_code == "en-US":
-                                self.response_message = "could not understand audio please repeat and be clear"
-                            else:
-                                self.response_message = "مش عم بِفْهَمْ عَلَيْك عيد"
-                            #self.speech_label.config(text=self.response_message) 
-                            print("loop- number 1")   
-                            self.counter += 1 
-                            self.tts()
+                        #     if self.lang_code == "en-US":
+                        #         self.response_message = "could not understand audio please repeat and be clear"
+                        #     else:
+                        #         self.response_message = "مش عم بِفْهَمْ عَلَيْك عيد"
+                        #     #self.speech_label.config(text=self.response_message) 
+                        #     print("loop- number 1")   
+                        #     self.counter += 1 
+                        #     self.tts()
                             
-                        elif self.counter <= 7:
+                        if self.counter <= 7:
                             print("opened mic again")
                             self.counter += 1
                             self.stt(self.speech_label)

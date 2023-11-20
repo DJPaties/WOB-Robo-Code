@@ -6,6 +6,7 @@ import numpy as np
 from concurrent.futures import ThreadPoolExecutor
 import serial
 from serialSender import talking_scenario
+import torch
 executor = ThreadPoolExecutor()
 exit_flag = True
 # serialport=serial.Serial("COM3",115200,timeout=0.1)
@@ -68,20 +69,7 @@ old_code=""
 
 
 
-def write_instruction(serialport,instruction):
-    # print("try")
-    try:
-        serialport.write(instruction.encode("utf-8"))
-        # print("2")
-        while True:
-            print("loop")
-            str=serialport.readall().decode("utf-8")
-            
-            break
-        # print("instruction execution successful for:")
-        print(instruction)
-    except Exception as e:
-        print(e)
+
 
 print('reset moves')
 # write_instruction(serialport,"#1P1500#2P1500#3P1500#4P1500#5P1500#6P500#7P1500#8P1500#9P1500#10P1852#11P1500#12P1500#13P2333#14P1500#15P1500#16P1500#17P1500#18P1500#19P1500#21P1500#22P1500#23P1500#24P1500#25P1500#26P2500#27P1500#28P1500#29P1500#30P2472#31P1500#32P1500T1000D1000\r\n")

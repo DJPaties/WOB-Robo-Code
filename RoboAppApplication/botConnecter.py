@@ -110,45 +110,66 @@ def main(x):
 
     if isinstance(response1, dict):
         
-        if response1["intent"] == 'raise_hand':
-            tts(response1["text"], "en-US")
-            if response1["entities"]["side"] == "right":
-                servo_commandr = "#1P2500#2P2432#3P2367#4P2367#5P2400#6P500#7P1500#8P1500#9P1500#10P1852#11P1500#12P1500#13P1500#14P1500#15P1500#17P1500#18P1500#19P1500#21P2200#22P2200#23P2200#24P2500#25P2200#26P2500#27P1200#28P1500#29P2251#30P2472#31P1500#32P1500T500D500\r\n"
+        # if response1["intent"] == 'raise_hand':
+        #     tts(response1["text"], "en-US")
+        #     if response1["entities"]["side"] == "right":
+        #         servo_commandr = "#1P2500#2P2432#3P2367#4P2367#5P2400#6P500#7P1500#8P1500#9P1500#10P1852#11P1500#12P1500#13P1500#14P1500#15P1500#17P1500#18P1500#19P1500#21P2200#22P2200#23P2200#24P2500#25P2200#26P2500#27P1200#28P1500#29P2251#30P2472#31P1500#32P1500T500D500\r\n"
+        #         # serialSender.Ser(servo_commandr)
+        #         talking_scenario(5, "any", servo_commandr)
+        #         print("Raised Right")
+        #     elif response1["entities"]["side"] == "left":
+        #         servo_commandl = "#1P2333#2P2398#3P2400#4P2367#5P2400#6P500#7P710#8P1460#9P2220#10P1852#11P1500#12P1500#13P1500#14P1500#15P1500#17P1500#18P1500#19P1500#21P2200#22P2200#23P2200#24P2500#25P2200#26P2500#27P1500#28P1500#29P1500#30P2472#31P1500#32P1500T500D500\r\n"
+        #         # serialSender.Ser(servo_commandl)
+        #         talking_scenario(5, "any", servo_commandl)
+        #         print("Raised Left")
+        #     else:
+        #         servo_commandb = "#1P2500#2P2500#3P2500#4P2500#5P2500#6P500#7P710#8P1460#9P2200#10P1852#11P1500#12P1500#13P1500#14P1500#15P1500#17P1500#18P1500#19P1500#21P2200#22P2200#23P2200#24P2500#25P2200#26P2300#27P1223#28P1500#29P2160#30P2472#31P1500#32P1500T500D500\r\n"
+        #         # serialSender.Ser(servo_commandb)
+        #         talking_scenario(5, "any", servo_commandb)
+        #         print("Raised both")
+        #     time.sleep(5)
+        #     reset_command = "#1P2200#2P2200#3P2500#4P2500#5P2500#6P500#7P2000#8P1400#9P1500#10P1852#11P1500#12P1500#13P1400#14P1500#15P1500#16P1470#17P1500#18P1500#19P1500#21P2200#22P2200#23P2200#24P2500#25P2200#26P2500#27P1400#28P1500#29P1650#30P2472#31P1500#32P1500T500D500\r\n"
+        #     # serialSender.Ser(reset_command)
+        #     talking_scenario(5, "any", reset_command)
+        #     return "Im tired I will put my arms down now."
+        # elif response1["intent"] == 'raise_hand_ar':
+        #     tts(response1["text"], "ar-LB")
+        #     if response1["entities"]["side"] == "right":
+        #         servo_commandr = "#1P2500#2P2432#3P2367#4P2367#5P2400#6P500#7P1500#8P1500#9P1500#10P1852#11P1500#12P1500#13P1500#14P1500#15P1500#17P1500#18P1500#19P1500#21P2200#22P2200#23P2200#24P2500#25P2200#26P2500#27P1200#28P1500#29P2251#30P2472#31P1500#32P1500T500D500\r\n"
+        #         # serialSender.Ser(servo_commandr)
+        #         talking_scenario(5, "any", servo_commandr)
+        #         print("Raised Right")
+        #     elif response1["entities"]["side"] == "left":
+        #         servo_commandl = "#1P2333#2P2398#3P2400#4P2367#5P2400#6P500#7P710#8P1460#9P2220#10P1852#11P1500#12P1500#13P1500#14P1500#15P1500#17P1500#18P1500#19P1500#21P2200#22P2200#23P2200#24P2500#25P2200#26P2500#27P1500#28P1500#29P1500#30P2472#31P1500#32P1500T500D500\r\n"
+        #         # serialSender.Ser(servo_commandl)
+        #         talking_scenario(5, "any", servo_commandl)
+        #         print("Raised Left")
+        #     else:
+        #         servo_commandb = "#1P2500#2P2500#3P2500#4P2500#5P2500#6P500#7P710#8P1460#9P2200#10P1852#11P1500#12P1500#13P1500#14P1500#15P1500#17P1500#18P1500#19P1500#21P2200#22P2200#23P2200#24P2500#25P2200#26P2300#27P1223#28P1500#29P2160#30P2472#31P1500#32P1500T500D500\r\n"
+        #         # serialSender.Ser(servo_commandb)
+        #         talking_scenario(5, "any", servo_commandb)
+        #         print("Raised both")
+        #     time.sleep(5)
+        #     reset_command = "#1P2200#2P2200#3P2500#4P2500#5P2500#6P500#7P2000#8P1400#9P1500#10P1852#11P1500#12P1500#13P1400#14P1500#15P1500#16P1470#17P1500#18P1500#19P1500#21P2200#22P2200#23P2200#24P2500#25P2200#26P2500#27P1400#28P1500#29P1650#30P2472#31P1500#32P1500T500D500\r\n"
+        #     # serialSender.Ser(reset_command)
+        #     talking_scenario(5, "any", reset_command)
+        #     return "حَنَزِّلْ إيدَيِّ هَلّْلَءْ لأَنّي تْعِبِتْ."
+        
+        if response1['intent']=="right_hand_ar":
+            servo_commandr = "#1P2500#2P2432#3P2367#4P2367#5P2400#6P500#7P1500#8P1500#9P1500#10P1852#11P1500#12P1500#13P1500#14P1500#15P1500#17P1500#18P1500#19P1500#21P2200#22P2200#23P2200#24P2500#25P2200#26P2500#27P1200#28P1500#29P2251#30P2472#31P1500#32P1500T500D500\r\n"
                 # serialSender.Ser(servo_commandr)
-                talking_scenario(5, "any", servo_commandr)
-                print("Raised Right")
-            elif response1["entities"]["side"] == "left":
-                servo_commandl = "#1P2333#2P2398#3P2400#4P2367#5P2400#6P500#7P710#8P1460#9P2220#10P1852#11P1500#12P1500#13P1500#14P1500#15P1500#17P1500#18P1500#19P1500#21P2200#22P2200#23P2200#24P2500#25P2200#26P2500#27P1500#28P1500#29P1500#30P2472#31P1500#32P1500T500D500\r\n"
-                # serialSender.Ser(servo_commandl)
-                talking_scenario(5, "any", servo_commandl)
-                print("Raised Left")
-            else:
-                servo_commandb = "#1P2500#2P2500#3P2500#4P2500#5P2500#6P500#7P710#8P1460#9P2200#10P1852#11P1500#12P1500#13P1500#14P1500#15P1500#17P1500#18P1500#19P1500#21P2200#22P2200#23P2200#24P2500#25P2200#26P2300#27P1223#28P1500#29P2160#30P2472#31P1500#32P1500T500D500\r\n"
-                # serialSender.Ser(servo_commandb)
-                talking_scenario(5, "any", servo_commandb)
-                print("Raised both")
+            talking_scenario(5, "any", servo_commandr)
+            print("Raised Right")
             time.sleep(5)
             reset_command = "#1P2200#2P2200#3P2500#4P2500#5P2500#6P500#7P2000#8P1400#9P1500#10P1852#11P1500#12P1500#13P1400#14P1500#15P1500#16P1470#17P1500#18P1500#19P1500#21P2200#22P2200#23P2200#24P2500#25P2200#26P2500#27P1400#28P1500#29P1650#30P2472#31P1500#32P1500T500D500\r\n"
             # serialSender.Ser(reset_command)
             talking_scenario(5, "any", reset_command)
-            return "Im tired I will put my arms down now."
-        elif response1["intent"] == 'raise_hand_ar':
-            tts(response1["text"], "ar-LB")
-            if response1["entities"]["side"] == "right":
-                servo_commandr = "#1P2500#2P2432#3P2367#4P2367#5P2400#6P500#7P1500#8P1500#9P1500#10P1852#11P1500#12P1500#13P1500#14P1500#15P1500#17P1500#18P1500#19P1500#21P2200#22P2200#23P2200#24P2500#25P2200#26P2500#27P1200#28P1500#29P2251#30P2472#31P1500#32P1500T500D500\r\n"
+            return "حَنَزِّلْ إيدَيِّ هَلّْلَءْ لأَنّي تْعِبِتْ."
+        elif response1['intent']=="left_hand_ar":
+            servo_commandl = "#1P2333#2P2398#3P2400#4P2367#5P2400#6P500#7P710#8P1460#9P2220#10P1852#11P1500#12P1500#13P1500#14P1500#15P1500#17P1500#18P1500#19P1500#21P2200#22P2200#23P2200#24P2500#25P2200#26P2500#27P1500#28P1500#29P1500#30P2472#31P1500#32P1500T500D500\r\n"
                 # serialSender.Ser(servo_commandr)
-                talking_scenario(5, "any", servo_commandr)
-                print("Raised Right")
-            elif response1["entities"]["side"] == "left":
-                servo_commandl = "#1P2333#2P2398#3P2400#4P2367#5P2400#6P500#7P710#8P1460#9P2220#10P1852#11P1500#12P1500#13P1500#14P1500#15P1500#17P1500#18P1500#19P1500#21P2200#22P2200#23P2200#24P2500#25P2200#26P2500#27P1500#28P1500#29P1500#30P2472#31P1500#32P1500T500D500\r\n"
-                # serialSender.Ser(servo_commandl)
-                talking_scenario(5, "any", servo_commandl)
-                print("Raised Left")
-            else:
-                servo_commandb = "#1P2500#2P2500#3P2500#4P2500#5P2500#6P500#7P710#8P1460#9P2200#10P1852#11P1500#12P1500#13P1500#14P1500#15P1500#17P1500#18P1500#19P1500#21P2200#22P2200#23P2200#24P2500#25P2200#26P2300#27P1223#28P1500#29P2160#30P2472#31P1500#32P1500T500D500\r\n"
-                # serialSender.Ser(servo_commandb)
-                talking_scenario(5, "any", servo_commandb)
-                print("Raised both")
+            talking_scenario(5, "any", servo_commandl)
+            print("Raised Right")
             time.sleep(5)
             reset_command = "#1P2200#2P2200#3P2500#4P2500#5P2500#6P500#7P2000#8P1400#9P1500#10P1852#11P1500#12P1500#13P1400#14P1500#15P1500#16P1470#17P1500#18P1500#19P1500#21P2200#22P2200#23P2200#24P2500#25P2200#26P2500#27P1400#28P1500#29P1650#30P2472#31P1500#32P1500T500D500\r\n"
             # serialSender.Ser(reset_command)
@@ -346,6 +367,8 @@ def main(x):
             subprocess.run([r"C:/Users/WOB/AppData/Local/Programs/Python/Python311/python.exe",
                            "notcount_ar.py"], check=True, text=True, shell=True)
             run_thread()
+            return response1['text']
+        else:
             return response1['text']
         print(response1)
         # print("before return")

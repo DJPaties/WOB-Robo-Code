@@ -96,16 +96,16 @@ def main():
             if depth_data > 2000:
                 print("Over 2 meters far")
                 new_message = "لْمَسَافِى بَيْنِيْ وُ بَيْنَكْ, أَكْتَرْ مِنْ مِتْرَيْنْ"
-            elif 2000>depth_data and depth_data>1500:
+            elif 1980>depth_data and depth_data>1500:
                 print("Between 1.5 to 2 meters")  
                 new_message = "لْمَسَافِى بَيْنِيْ وُ بَيْنَكْ, بِيْنْ لْمِتِرَيْنْ وُ مِتْرُ وْ نُصْ"
-            elif 1500>depth_data and depth_data>1000:
+            elif 1480>depth_data and depth_data>1000:
                 print("Between 1.5 and 1 meters")
                 new_message = "لْمَسَافِى بَيْنِيْ وُ بَيْنَكْ, بِيْنْ لْمِتِرْ وُ مِتْرُ وْ نُصْ"
-            elif 1000>depth_data and depth_data>500:
+            elif 980>depth_data and depth_data>500:
                 print("Between 0.5 to 1 meter far")
                 new_message = "لْمَسَافِى بَيْنِيْ وُ بَيْنَكْ, بِيْنْ نُصْ مِتِرْ وَ مِتِرْ"
-            elif 500>depth_data:
+            elif 480>depth_data:
                 print("Your too close to me stay back")
                 new_message = "إِنْتَ أَرِيْبْ مِنِّيْ زْيَادِى عَنْ لْزُومْ, بَعِّدْ عَنِّي"
 

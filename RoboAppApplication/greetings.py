@@ -4,7 +4,7 @@ from serialSender import talking_scenario
 import time
 def hand_shaking(langauge_code):
     print("Entered welcome scenario")
-    ser = serial.Serial("COM11", 9600)
+    ser = serial.Serial("COM3   ", 9600)
     msg = None
     counter = 0
     hang_greet_counter = 0
