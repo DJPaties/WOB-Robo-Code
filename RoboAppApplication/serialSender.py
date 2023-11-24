@@ -4,7 +4,7 @@ import time
 import serial
 
 def mouth(delay):
-        serialport2 = serial.Serial("COM6",9600)
+        serialport2 = serial.Serial("COM13",9600)
         # Create a JSON object with the 'delayyy' parameter
         
         data = {'delay': delay}  # Change the delay value as needed

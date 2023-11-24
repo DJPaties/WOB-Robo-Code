@@ -186,7 +186,7 @@ def main(x):
             # serialSender.Ser(reset_command)
             talking_scenario(5, "any", reset_command)
             return "I hope it was a nice selfie send it to me when you can."
-        elif response1["intent"] == "take selfie ar":
+        elif response1["intent"] == "selfie_ar":
             tts(response1['text'], "ar-LB")
             selfie_command = "#1P2500#2P2500#3P2500#4P2500#5P2500#6P500#7P1500#8P1500#9P1500#10P1852#11P1500#12P1500#13P1500#14P1500#15P1500#17P1500#18P1500#19P1500#21P600#22P600#23P2200#24P2500#25P600#26P2500#27P2240#28P780#29P1790#30P2482#31P1500#32P1500T500D500\r\n"
             # serialSender.Ser(selfie_command)
@@ -297,7 +297,7 @@ def main(x):
             print("done mimick")
             run_thread()
             return "ماشي حَوَئّْئِفْ  تَئْليدْ إِيْدَكْ"
-        elif response1["intent"] == 'beard_detection_arabic':
+        elif response1["intent"] == 'beard_ar':
             tts(response1['text'], "ar-LB")
             close_eye()
             subprocess.run([r"C:/Users/WOB/AppData/Local/Programs/Python/Python311/python.exe",
@@ -342,7 +342,7 @@ def main(x):
                            "detect_distance_ar.py"], check=True, text=True, shell=True)
             run_thread()
             return "ماشي"
-        elif response1['intent'] == "intent_count_ar":
+        elif response1['intent'] == "count_ar":
             tts(response1["text"], "ar-LB")
             close_eye()
             subprocess.run([r"C:/Users/WOB/AppData/Local/Programs/Python/Python311/python.exe",
@@ -362,7 +362,7 @@ def main(x):
                            "notcount.py"], check=True, text=True, shell=True)
             run_thread()
             return response1['text']
-        elif response1['intent'] == "intent_not_count_ar":
+        elif response1['intent'] == "not_count_ar":
             close_eye()
             subprocess.run([r"C:/Users/WOB/AppData/Local/Programs/Python/Python311/python.exe",
                            "notcount_ar.py"], check=True, text=True, shell=True)
