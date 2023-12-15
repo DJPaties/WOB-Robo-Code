@@ -1,14 +1,14 @@
 from openai import OpenAI
 # import os
 client = OpenAI(
-    api_key="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"
+    api_key="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"
 )
 def chat(message):
     completion = client.chat.completions.create(
         # model="gpt-4",
         model="gpt-3.5-turbo",
         messages=[
-        {"role": "system", "content": "You try to respond with the short answer without sybmols."},
+        {"role": "system", "content": "You try to respond with short answer without sybmols."},
         {"role": "user", "content": message}
     ]
     )

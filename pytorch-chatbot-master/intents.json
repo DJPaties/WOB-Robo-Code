@@ -2,6 +2,33 @@
   
   "intents": [
     {
+      "tag": "color_detection_ar",
+      "patterns": [
+        "بدي ورجيك هلا شيء وانت قل لي شو لونه",
+        "فيك تقول لي شو لونه هيدا",
+        "شو لونه هيدا",
+        "شو هيدا اللون"
+      
+      ],
+      "responses": [
+          "طَيِّبْ حُتِّلِّ الّونْ، وَخَلِّيْنَا نْشُوفْ إِزَا بَعْرِفُ."
+    ]
+    },
+    {
+      "tag": "textDetection-ar",
+      "patterns": [
+        "شوفي مكتوب هان",
+        "شوفي مكتوب هون",
+        "فيك تقرا هاالكلمة",
+        "فيك تشوف شو مكتوب هون",
+        "فيك تقرا شو مكتوب"
+      
+      ],
+      "responses": [
+          "هَاتْ لَاشُوفْ إِزَا حَأَعْرِفْ إِئْرَهَ"
+    ]
+    },
+    {
       "tag": "thanks_ar",
       "patterns": [
         "شكرًا على مساعدتك",
@@ -520,6 +547,36 @@
     ],
       "responses": [
         "Alright see you later."
+      ]
+    },
+    {
+      "tag": "textDetection",
+      "patterns": ["Can you read what is written here",
+                  "Can you read this word",
+                  "what is this word",
+                  "Can you understand what this says",
+                  "Are you able to read this text",
+                  "Do you know what this word says"
+    ],
+      "responses": [
+        "Hmm let's see if I can read this"
+      ]
+    },
+    {
+      "tag": "color_detection",
+      "patterns": ["Can you see what is this color",
+                  "What is this color",
+                  "Name this",
+                  "Sam what is this color",
+                  "Sam name this color",
+                  "Can you tell me the name of this color",
+                  "tell the name of this color"
+    ],
+      "responses": [
+        "Let's see if i can name the color you want",
+        "Let's see the color then ",
+        "Show me the color to have a look at it",
+        "Let me have a look at the color"
       ]
     }
   ]

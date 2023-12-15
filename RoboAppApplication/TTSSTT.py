@@ -1,4 +1,3 @@
-import tkinter as tk
 import os
 from concurrent.futures import ThreadPoolExecutor
 import pyaudio
@@ -39,7 +38,7 @@ class VoiceAssistant:
         self.root = None
         self.response_message = ""
         self.speech_label = None
-        self.lang_code = "ar-LB"
+        self.lang_code = "en-US"
         self.counter = 1
         self.script_process = None
         self.script_thread = None
@@ -54,12 +53,12 @@ class VoiceAssistant:
     def close_face(self):
         if self.script_process:
             self.script_process.terminate()
-    #To reopen microphone
-    def open_mic(self):
-        if self.detection:
-            self.generate_button.invoke()
-        else:
-            print("Machine is idle")
+    # #To reopen microphone
+    # def open_mic(self):
+    #     if self.detection:
+    #         self.generate_button.invoke()
+    #     else:
+    #         print("Machine is idle")
 
     #Check For language
     def selectLangauge(self, msg):
@@ -97,12 +96,12 @@ class VoiceAssistant:
     def wake_check(self):
         self.script_thread= threading.Thread(target=self.run_face)
         self.script_thread.start()
-        servo_command_2 = "#1P2500#2P2500#3P2500#4P2500#5P2500#6P500#7P500#8P1500#9P1410#10P1852#11P1367#12P1600#13P1200#14P1415#15P1500#16P1500#17P1500#18P1500#19P1500#20P1500#21P2200#22P2200#23P2200#24P2200#25P2200#26P2500#27P1200#28P1500#29P1600#30P2472#31P1500#32P1500T1000D1000\r\n"  # Move servo 2 to position 2000 in 2 seconds
+        servo_command_2 = "#1P2500#2P2500#3P2500#4P2500#5P2500#6P500#7P500#8P1500#9P1410#10P1762#11P1367#12P1600#13P1200#14P1415#15P1500#16P1500#17P1500#18P1500#19P1500#20P1500#21P2200#22P2200#23P2200#24P2200#25P2200#26P2500#27P600#28P1500#29P1600#30P2472#31P1500#32P1500T1000D1000\r\n"  # Move servo 2 to position 2000 in 2 seconds
 
         talking_scenario(5,"any",servo_command_2)
         keyword_path = 'C:/Users/WOB/Desktop/WOB-Robo-Code-main/RoboAppApplication/Hey-Jack_en_windows_v2_2_0.ppn'
         keyword_path_arabic = "C:/Users/WOB/Desktop/WOB-Robo-Code-main/RoboAppApplication/مرحبا-جاك_ar_windows_v2_2_0.ppn"
-        access_key = 'ikoGwaDx0g1+/0GV1e+aqOf5YmGgMC/x4kMBJ/s27qGjRFVDNBeSTA=='
+        access_key = 'KT8J7GHX3ohRwP3c/W/TyovUX0ceYDL0g8U01PTb3q7ARhHDOgYD9w=='
         model_path = 'C:/Users/WOB/Desktop/WOB-Robo-Code-main/RoboAppApplication/porcupine_params_ar.pv'
         print("Entered wake check")
         self.detection= False
@@ -115,7 +114,7 @@ class VoiceAssistant:
             
             return None, pyaudio.paContinue
 
-
+        print("test")
         if self.lang_code == "en-US":
 
             handle = pvporcupine.create(keyword_paths=[keyword_path], access_key=access_key)
@@ -157,7 +156,7 @@ class VoiceAssistant:
                 self.response_message = "Hey, " + self.recognizedFace + "."
                 print( "Hey, " + self.recognizedFace + ".")
                 TTS.tts(self.response_message, "en-US")
-                greet_command = "#1P2500#2P2500#3P2500#4P2500#5P2500#6P500#7P500#8P1500#9P1430#10P1852#11P1500#12P1500#13P1300#14P1500#15P1500#17P1500#18P1500#19P2500#21P2200#22P2200#23P2200#24P2060#25P2200#26P2500#27P1667#28P1030#29P1820#30P2192#31P1500#32P1500T1000D1000\r\n"
+                greet_command = "#1P2500#2P2500#3P2500#4P2500#5P2500#6P500#7P500#8P1500#9P1430#10P1852#11P1500#12P1500#13P1500#14P1500#15P1500#16P1510#17P1500#18P1500#19P2500#20P1510#21P2200#22P2200#23P2200#24P2200#25P2400#26P2500#27P933#28P1200#29P1820#30P2192#31P1500#32P1500T500D500\r\n"
                 talking_scenario(5,"any",greet_command)
                 time.sleep(0.5)
                 greetings.hand_shaking(self.lang_code)
@@ -207,7 +206,7 @@ class VoiceAssistant:
                 self.response_message = "مرحبا"+self.recognizedFace
                 print( "مرحبا"+self.recognizedFace + ".")
                 TTS.tts(self.response_message, "ar-LB")
-                greet_command = "#1P2500#2P2500#3P2500#4P2500#5P2500#6P500#7P500#8P1500#9P1430#10P1852#11P1500#12P1500#13P1500#14P1500#15P1500#16P1510#17P1500#18P1500#19P2500#20P1510#21P2200#22P2200#23P2200#24P2200#25P2000#26P2500#27P1500#28P1400#29P1820#30P2192#31P1500#32P1500T500D500\r\n"
+                greet_command = "#1P2500#2P2500#3P2500#4P2500#5P2500#6P500#7P500#8P1500#9P1430#10P1852#11P1500#12P1500#13P1500#14P1500#15P1500#16P1510#17P1500#18P1500#19P2500#20P1510#21P2200#22P2200#23P2200#24P2200#25P2400#26P2500#27P933#28P1200#29P1820#30P2192#31P1500#32P1500T500D500\r\n"
                 talking_scenario(5,"any",greet_command)
                 time.sleep(0.5)
                 greetings.hand_shaking("ar-LB")
@@ -359,14 +358,17 @@ class VoiceAssistant:
                         text = r.recognize_google(audio, language=self.lang_code)
                         print("You said:", text)
                         self.selectLangauge(text)
+                        # print(self.getNewName)
                         if self.getNewName:
-                            new_name = botConnecter.save_new_name(text)
+                            print("entering the get name")
+                            new_name = botConnecter.save_new_name(text, self.lang_code)
                             print("New NAME IS ")
                             if self.lang_code == "ar-LB":
-                                # self.tts("أَكِيدْ اِسْمَكْ " + new_name)
-                                ExtraTTS.tts(f"أَكِيدْ اِسْمَكْ {new_name}" ,"ar-LB")
-                                confirmation = ExtraMicrophone.stt()
+                                # ExtraTTS.tts(f"أَكِيدْ اِسْمَكْ {new_name}" ,"ar-LB")
+                                # confirmation = ExtraMicrophone.stt(self.lang_code)
+                                confirmation = True
                                 if confirmation:
+                                    
                                     botConnecter.set_new_name(new_name)
                                     botConnecter.set_New_user()
                                     self.getNewName = False
@@ -374,6 +376,18 @@ class VoiceAssistant:
                                     self.tts()
                                 else:
                                     self.response_message = "رْجاعْ أُلِّيْ اِسْمَكْ"
+                                    self.tts()
+                            else:
+                                ExtraTTS.tts(f"Are you sure your name is {new_name}" ,"en-US")
+                                confirmation = ExtraMicrophone.stt(self.lang_code,"en-US")
+                                if confirmation:
+                                    botConnecter.set_new_name(new_name)
+                                    botConnecter.set_New_user()
+                                    self.getNewName = False
+                                    self.response_message = "Hello"+ new_name
+                                    self.tts()
+                                else:
+                                    self.response_message = "What's your name again"
                                     self.tts()
                         else:
                             self.response_message = botConnecter.main(text) 
@@ -407,7 +421,7 @@ class VoiceAssistant:
                     except sr.RequestError as e:
                         x="Could not request results from Google Speech Recognition service; {0}".format(e)
                         print(x)
-                        self.open_mic()
+                        # self.open_mic()
                 #self.speech_label.config(text=self.response_message)
                 self.tts()
     

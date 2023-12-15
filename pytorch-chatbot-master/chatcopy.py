@@ -9,6 +9,8 @@ from flask import Flask, request
 import time
 from sentence_transformers import SentenceTransformer, util
 import chatgpt
+import serial
+
 
 app = Flask(__name__)
 global run_once
@@ -27,21 +29,45 @@ with open(json_path, 'r',encoding='utf-8') as file:
 # for intent in data['intents']:
 #     all_patterns.extend(intent['patterns'])
 # print(all_patterns)
-all_patterns = ['شكرًا على مساعدتك', 'شكرًا', 'شكرًا جزيلاً لك', 'أنت الأفضل', 'قل لي نكتة', 'عطيني نكتة', 'اعطيني نكته', 
-                'تعا ناخد سلفي', 'تعال ناخد سيلفي', 'فيك تعمل لايك', 'عمول لايك', 'عمال لايك', 'علّي أيدك اليمين', 'ارفع أيدك اليمين', 
-                'علي ايدك اليمين', 'علّي أيدك الشمال', 'علّي أيدك اليسار', 'علي ايدك لشمال', 'ارفع أيدك الشمال', 'ارفع أيدك اليسار',
-                'علي ايدك', 'ارفع أيدك', 'قلدني', 'عمال متلي', 'ماسك بأيدي', 'هل تعرف هذا الشيء', 'شو في بأيدي', 'أدي المسافة بيني وبينك', 
-                ' أديش المسافة بيني وبينك', 'أديش ببعد عنك', 'يلا نلعب جاك', 'وقت اللعب يا جاك', 'حان وقت لعبة الحجر والمقص والورق', 'ما رأيك في لحيتي',
-                'شو رأيك بدقني حلوى', 'دقني حلوة شي', 'كم إصبعًا لدي مرفوع', 'كم أصبع أنا رافع', 'هل يمكنك عد الأصابع التي أرفعها', 'خمسة زائد سبعة',
-                'سبعة زائد خمسة', '5 + 7', 'ثلاثة زائد أربعة', 'أربعة زائد ثلاثة', '4 + 3', 'أنا مش منيح', 'أنا مني منيح', 'مني بخير', 'الحمد لله',
-                'منيح', 'أنا منيح', 'تمام لحمدلله', 'كنت حابة أبقى معك أكتر بس خلصت المقابلة ونبسطت أنو تعرفت عليك وعلى الأشياءالحلوة لي بتعمل',
-                'نبسطت معنا اليوم ', 'فيك تعرف العالم لي قدامك', 'فيك تتعرف على العالم', 'شو فيك تفرجينا بعد زيادة', 'شو فيك تفرجينا بعد',
-                'قلتلي أنو فيك تلعب معي', 'خبرتني أنو فينا نلعب أدمك', 'طيب مين المبرمجين لي شتغلو عليك', 'مين المبرمجين لي عملوك',
-                'عرفنا على الناس لي برمجوك', 'عرفنا على الناس اللي برمج', 'ناس اللي برمج', 'طيب مين هيدول العالم فيك تعرفناعليهون',
-                'مين هيدول العالم', 'عرفنا على العالم', 'طيب ما قلتلنا كيف أقدرت تصي       ير تعمل هيك', 'كيف أقدرت تصير تعمل هيك',
-                'طيب شو حنبلش نشوف', 'شو حنشوف', 'طيب شو حانبلش نشوف', 'عرفنا عن حالك', 'مين أنت', 'أنت مين', 'شو جاي تعمل اليوم',
-                'شو بدك تورجينا', 'شو حاتعمل اليوم', 'شو حاتفرجينا اليوم', 'مرحبا كيفك', 'كيفك', 'Hi', 'Hey', 'How are you', 'Is anyone there?', 
-                'Hello', 'Good day', 'Bye', 'See you later', 'Goodbye']
+all_patterns = ["بدي ورجيك هلا شيء وانت قل لي شو لونه","فيك تقول لي شو لونه هيدا","شو لونه هيدا", "شو هيدا اللون"'شوفي مكتوب هان', 
+                'شوفي مكتوب هون', 'فيك تقرا هاالكلمة', 'فيك تشوف شو مكتوب هون', 'فيك تقرا شو مكتوب', 'شكرًا على مساعدتك', 
+                'شكرًا', 'شكرًا جزيلاً لك', 'أنت الأفضل', 'قل لي نكتة', 'عطيني نك   كتة', 'اعطيني نكته', 'تعا ناخد سلفي', 'تعال ناخد سيلفي', 
+                'فيك تعمل لايك', 'عمول لايك', 'عمال لايك', 'علّي أيدك اليمين', 'ارفع أيدك اليمين', 'علي ايدك اليمين', 'علّي أيدك الشمال', 
+                'علّي أيدك اليسار', 'علي ايدك لشمال', 'ارفع أيدك الشمال', 'ارفع أيدك اليسار', 'علي ايدك', 'ارفع أيدك', 'قلدني', 'عمال متلي', 
+                'ماسك بأيدي', 'هل تعرف هذا الشيء', 'شو في بأيدي', 'أدي المسافة بيني وبينك', ' أديش المسافة بيني وبينك', 'أديش ببعد عنك', 
+                'يلا نلعب جاك', 'وقت اللعب يا جاك', 'حان وقت لعبة الحجر والمقص والورق', 'ما رأيك في لحيتي', 'شو رأيك بدقني حلوى', 
+                'دقني حلوة شي', 'كم إصبعًا لدي ممرفوع', 'كم أصبع أنا رافع', 'هل يمكنك عد الأصابع التي أرفعها', 'خمسة زائد سبعة',
+                'سبعة زائد خمسة', '5 + 7', 'ثلاثة زائد أربعة', 'أربعة زائد ثلاثة', '4 + 3', 'أنا مش منيح', 'أنا مني منيح', 'مني بخير', 
+                'الحمد لله', 'منيح', 'أنا منيح', 'تمام لحمدلله',
+                'كنت حابة أبقى معك أكتر بس خلصت المقابلة ونبسطت أنو تعرفت عليك وعلى الأشياءالحلوة لي بتعمل', 'نبسطت معنا اليوم ', 
+                'فيك تعرف العالم لي قدامك', 'فيك تتعرف على العالم', 'شو فيك تفرجينا بعد زيادة', 'شو فيك تفرجينا بعد', 
+                'قلتلي أنو فيك تلعب معي', 'خبرتني أنو فينا نلعب أدمك', 'طيب مين المبرمجين لي شتغلو عليك', 'مين المبرمجين لي عملوك', 
+                'عرفنا على الناس لي برمجوك', 'عرفنا على الناس اللي برمج', 'ناس اللي برمج', 'مين المبرمجين اللي اشتغلوا عليك', 
+                'طيب مين هيدول العالم فيك تعرفناعليهون', 'مين هيدول العالم', 'عرفنا على العالم', 'طيب ما قلتلنا كيف أقدرت تصير تعمل هيك',
+                'كيف أقدرت تصير تعمل هيك', 'طيب شو حنبلش نشوف', 'شو حنشوف', 'طيب شو حانبلش نشوف', 'عرفنا عن حالك', 'مين أنت', 'أنت مين', 
+                'شو جاي تعمل اليوم', 'شو بدك تورجينا', 'شو حاتعمل اليوم', 'شو حاتفرجينا اليوم', 'مرحبا كيفك', 'كيفك', 'Hi', 'Hey', 
+                'How are you', 'Is anyone there?', 'Hello', 'Good day', 'Bye', 'See you later', 'Goodbye', "Jack isn't it", 
+                'Alright jack, how tall are you', 'how tall are you', 'what is your height', "that's the perfect height for a man", 
+                'perfect height for a man', 'you have a perfect height', 'wow you are tall', "that's why I'm pleased to have you here jack",
+                'I know you are perfect that is why im pleased to have you here', 'I am pleased to have you here', 
+                "seems like you've got special abilities, what can you do Jack", 'its like you got special abilites',
+                'What can you do Jack', 'So what are the services', 'What services do you provide', 'What can you provide for us services', 
+                'Sure, I can hear that', 'I can for sure hear that', 'I can hear that for sure', 'I see you laugh, so do you have feelings', 
+                'So do you have feelings', 'If you can laugh then you have feelings right', 'Well seems like there are a lot of technologies in there',
+                'It seems like you have lot of technology in you', 'It seems like you have lot of technology in there', 
+                'you have lot of technology in there', 'I see you have lots of techology', "so you've got some opinions about humans",
+                'Opinion on humans', 'have you ever been in a relationship with humans', 'did you have relationship with humans', 
+                'relationship with humans', "You said you don't have feelings though, how is that", "you just told me you didn't have feelings",
+                "how can't feel how is that", "you're so funny Jack, can you tell us what you usually do in your day", 
+                'what you usually do in your day', 'tell us how do you spend your day', 'how do you usually spend your day', 
+                "You've got a lot of self-confidence, who has taught you this too", 'you are confident who taught you this.', 
+                'who taught you that confidence', 'Thats actually correct, I would like to thank World of Business team', 
+                'Thank you World of business for making Jack', 'Thanks for World of Business for this masterpiece', 
+                'sure man, enjoy your time', 'Go ahead enjoy your time', 'Go ahead have fun', 'Can you read what is written here',
+                'Can you read this word', 'what is this word', 'Can you understand what this says', 'Are you able to read this text',
+                'Do you know what this word says',"Can you see what is this color","What is this color","Name this","Sam what is this color",
+                "Sam name this color","Can you tell me the name of this color","tell the name of this color"
+]
 #load the comparison model
 api_token ="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"
 API_URL = "https://api-inference.huggingface.co/models/sentence-transformers/paraphrase-MiniLM-L6-v2"
@@ -162,6 +188,11 @@ def receive_message():
 
 # if run_once:
 #     receive_message()
+
+
+    
+
+
 
 if __name__ == '__main__':
     app.run(port=5000)

@@ -14,8 +14,8 @@ from encoding.load_encoded_file import load_encoded_file
 
 ## this function is to add encoding face to the encoding file
 def add_to_encod( selected_folder):
-        encoding_file="C:/Users/wot/Desktop/python_vision/encoding/EncodeFile.p"
-        main_folder='C:/Users/wot/Desktop/python_vision/image'  
+        encoding_file="C:/Users/WOB/Desktop/WOB-Robo-Code-main/python_vision/encoding/EncodeFile.p" #C:\Users\WOB\Desktop\WOB-Robo-Code-main\python_vision\encoding\EncodeFile.p
+        main_folder='C:/Users/WOB/Desktop/WOB-Robo-Code-main/python_vision/image'  #C:\Users\WOB\Desktop\WOB-Robo-Code-main\python_vision\image
         print("encoding to last starting....")
         extra_encoding_list=[]
         #this function only add all the image from all folder to a list of image and also add the id(name= folder/name.img) to a other list

@@ -5,13 +5,14 @@ import pyaudio
 import numpy as np
 from multiprocessing import Process, Event
 from serialSender import talking_scenario
+import time 
 
 detection = False
 
 def wake_check(exit_event):
     global detection
     keyword_path = 'C:/Users/WOB/Desktop/WOB-Robo-Code-main/RoboAppApplication/stop_mimick.ppn'
-    access_key = 'ycOHjWyJmmQzo+uUtbWwCiuYQkzLIfHCfj5G+ZaSCPJcUBF10i0/TQ=='
+    access_key = 'KT8J7GHX3ohRwP3c/W/TyovUX0ceYDL0g8U01PTb3q7ARhHDOgYD9w=='
     print("Entered stop check")
 
     def audio_callback(in_data, frame_count, time_info, status):
@@ -54,7 +55,7 @@ def wake_check(exit_event):
     exit(-1)
 
 print('reset moves')
-reset_moves = "#1P2500#2P2500#3P2500#4P2500#5P2500#6P500#7P1500#8P1500#9P1500#10P1852#11P1500#12P1500#13P1500#14P1500#15P1500#16P1500#17P1500#18P1500#19P1500#21P2200#22P2200#23P2200#24P2200#25P2200#26P2500#27P1860#28P1660#29P1780#30P2472#31P1500#32P1500T1000D1000\r\n"
+reset_moves = "#1P2500#2P2500#3P2500#4P2500#5P2500#6P500#7P933#8P1500#9P1500#10P1852#11P1367#12P1600#13P1100#14P1415#15P1500#16P1500#17P1500#18P1500#19P1500#20P1500#21P2200#22P2200#23P2200#24P2200#25P2200#26P2500#27P1040#28P1500#29P1860#30P2472#31P1500#32P1500T500D500\r\n"
 talking_scenario(5, "any", reset_moves)
 
 def start(exit_event):
@@ -116,18 +117,27 @@ def start(exit_event):
                 code = ""
                 counter = 21
                 for i in msg:
-                    if i == 1:
-                        value = 2200
+                    if counter ==22 or  counter == 24 or counter == 25:
+                        if i == 1:
+                            value = 2400
+                        else:
+                            value = 600
+                    
                     else:
-                        value = 750
+                        if i == 1:
+                            value = 2400
+                        else:
+                            value = 600
 
                     code += f"#{counter}P{value}"
                     counter += 1
                 code += "T500D500\r\n"
 
                 if old_code != code:
+                    print(code)
                     old_code = code
                     talking_scenario(5, "any", code)
+                    time.sleep(0.5)
             else:
                 print("broken")
                 break

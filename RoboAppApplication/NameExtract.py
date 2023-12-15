@@ -2,26 +2,29 @@ from googletrans import Translator
 import re
 import nltk
 from nltk import word_tokenize, pos_tag, ne_chunk 
-nltk.download('punkt')
 
+nltk.download('punkt')
 nltk.download('maxent_ne_chunker')
 nltk.download('words')
+nltk.download('averaged_perceptron_tagger')
 translator = Translator()
 def get_name(sentence,languagecode):    
     if languagecode == "en-US":
         if "My name is" in sentence:
             pass
         else:
-            sentence= "My name is "+sentence
+            translated= "My name is "+sentence
     else:
         if "إسمي" in sentence:
             print(" Found")
         else:
             sentence = "اسمي " + sentence
-    translation = translator.translate(sentence, src='ar', dest='en')
-    translated =  translation.text
+    
+        translation = translator.translate(sentence, src='ar', dest='en')
+        translated =  translation.text
+    # print(sentence)
     # input_sentence = "my name is ahmad ibrahim"
-    print(translated)
+        
     tokens = word_tokenize(translated)
 
     tagged_tokens = pos_tag(tokens)
@@ -39,6 +42,6 @@ def get_name(sentence,languagecode):
 # while True:
 #     inp = input("")
 #     print(get_name(inp))
-# get_name("عبد فواز")
+# get_name("عبد فواز","ar-LB")
 
 

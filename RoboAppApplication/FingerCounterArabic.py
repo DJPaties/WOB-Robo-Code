@@ -12,7 +12,7 @@ exit_flag = True
 def wake_check():
     global exit_flag
     keyword_path_arabic = "C:/Users/WOB/Desktop/WOB-Robo-Code-main/RoboAppApplication/stopArabic.ppn"
-    access_key = 'ycOHjWyJmmQzo+uUtbWwCiuYQkzLIfHCfj5G+ZaSCPJcUBF10i0/TQ=='
+    access_key = 'KT8J7GHX3ohRwP3c/W/TyovUX0ceYDL0g8U01PTb3q7ARhHDOgYD9w=='
     model_path = 'C:/Users/WOB/Desktop/WOB-Robo-Code-main/RoboAppApplication/porcupine_params_ar.pv'
     print("language is arabic")
     def audio_callback(in_data, frame_count, time_info, status):

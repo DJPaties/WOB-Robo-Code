@@ -2,9 +2,10 @@ import cv2
 import json
 import pykinect_azure as pykinect
 import time
-from serialSender2 import head_movement
+# from serialSender2 import head_movement
 import serial
 global signal
+import requests
 signal = True
 # if __name__ == "__main__":
 def set_signal(boolean):
@@ -12,6 +13,19 @@ def set_signal(boolean):
     signal = boolean
 
 
+
+# ser2 = serial.Serial('COM19', baudrate=9600, timeout=0.1)
+
+# def head_movement(command):
+#     ser2.write(command.encode())
+#     print("executed cOMMAND")
+def send_message(msg):
+    # print(msg)
+    
+    url = 'http://127.0.0.1:50001/command'
+    data = {'message': msg}
+    requests.post(url, json=data)
+    
 
 
 
@@ -33,11 +47,11 @@ def start_eye():
 
 	cv2.namedWindow('Depth image with skeleton',cv2.WINDOW_NORMAL)
 	global code
-	code = "#1P1500\r\n"
+	code = "#1P1500"
 	global new_code
 	new_code = ""
 	global face_code
-	face_code = "#2P1500T500D500\r\n"
+	face_code = "#2P1500T500"
 	while True:	
 
 		# Get capture
@@ -68,90 +82,90 @@ def start_eye():
 				if x_pos>800:
 					#1300 eye
 					#200 head
-					new_code = "#1P1300\r\n"
-					face_code = "#2P1700T500D500\r\n"
+					new_code = "#1P1300T500\r\n"
+					face_code = "#2P1700T500"
 					
-				elif x_pos>700:
-					#1360 eye
-					#1570 head
-					new_code = "#1P1360\r\n"
-					face_code = "#2P1650T500D500\r\n"
+				# elif x_pos>700:
+				# 	#1360 eye
+				# 	#1570 head
+				# 	new_code = "#1P1360T500\r\n"
+				# 	face_code = "#2P1650T500"
 					
 				elif x_pos>600:
 					#1390
 					#1560
-					new_code = "#1P1390\r\n"
-					face_code = "#2P1590T500D500\r\n"
+					new_code = "#1P1390T500\r\n"
+					face_code = "#2P1590T500"
 					
 				elif x_pos>500:
 					#1390
 					#1550
-					new_code = "#1P1390\r\n"
-					face_code = "#2P1570T500D500\r\n"
+					new_code = "#1P1390T500\r\n"
+					face_code = "#2P1570T500"
 					
 				elif x_pos>300:
 					#1440 eye
 					#1520 head
-					new_code = "#1P1440\r\n"
-					face_code = "#2P1540T500D500\r\n"
+					new_code = "#1P1440T500\r\n"
+					face_code = "#2P1540T500"
 					
 				elif x_pos>200:
 					#1480 eye
 					#1520 head
-					new_code = "#1P1480\r\n"
-					face_code = "#2P1520T500D500\r\n"
+					new_code = "#1P1480T500\r\n"
+					face_code = "#2P1520T500"
 					
 
 				elif x_pos>0:
 					#1520 eye
 					#1500 head
-					new_code = "#1P1520\r\n"
-					face_code = "#2P1500T500D500\r\n"
+					new_code = "#1P1520T500\r\n"
+					face_code = "#2P1500T500"
 					
 				elif x_pos>-200:
 					#1520 eye
 					#1470 head
-					new_code = "#1P1540\r\n"
-					face_code = "#2P1470T500D500\r\n"
+					new_code = "#1P1540T500\r\n"
+					face_code = "#2P1470T500"
 					
 				elif x_pos>-300:
 					#1560 eye
 					#1450 head
-					new_code = "#1P1560\r\n"
-					face_code = "#2P1450T500D500\r\n"
+					new_code = "#1P1560T500\r\n"
+					face_code = "#2P1450T500"
 					
 				elif x_pos>-500:
 					#210
 					#1420
-					new_code = "#1P1610\r\n"
-					face_code = "#2P1420T500D500\r\n"
+					new_code = "#1P1610T500\r\n"
+					face_code = "#2P1420T500"
 					
 				elif x_pos>-600:
 					#210
 					#1420
-					new_code = "#1P1610\r\n"
-					face_code = "#2P1370T500D500\r\n"
+					new_code = "#1P1610T500\r\n"
+					face_code = "#2P1370T500"
 					
 				elif x_pos>-700:
 					#240 eye
 					#1410 head
-					new_code = "#1P1640\r\n"
-					face_code = "#2P1350T500D500\r\n"
+					new_code = "#1P1640T500\r\n"
+					face_code = "#2P1350T500"
 					
 				elif x_pos>-800:
 					#1700 eye
 					#1400 head
-					new_code = "#1P1700\r\n"
-					face_code = "#2P1300T500D500\r\n"
+					new_code = "#1P1700T500\r\n"
+					face_code = "#2P1300T500"
 				
 				if new_code != code:
 					# print("Code:", code)
 					# print("Face code,", face_code)
 					code = new_code
 					try:
-						head_movement(code)
-						time.sleep(0.2)
-						head_movement(face_code)
+						send_message(code)
+						time.sleep(0.4)
+						# head_movement(face_code)
 						# time.sleep(0.1)
 					except ValueError as e:
 						print(e)

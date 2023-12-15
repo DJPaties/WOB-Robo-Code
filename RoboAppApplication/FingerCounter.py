@@ -12,7 +12,7 @@ exit_flag = True
 def wake_check():
     global exit_flag
     keyword_path = 'C:/Users/WOB/Desktop/WOB-Robo-Code-main/RoboAppApplication/stop_mimick.ppn'
-    access_key = 'ycOHjWyJmmQzo+uUtbWwCiuYQkzLIfHCfj5G+ZaSCPJcUBF10i0/TQ=='
+    access_key = 'KT8J7GHX3ohRwP3c/W/TyovUX0ceYDL0g8U01PTb3q7ARhHDOgYD9w=='
 
     print("Entered stop check")
     # detection= False
