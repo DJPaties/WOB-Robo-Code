@@ -40,7 +40,7 @@ def main():
     time.sleep(1)
 
     # Get the first frame
-    first_frame = None
+    # first_frame = None
 
     while frame_count < 50:
         capture = k4a.get_capture()
@@ -77,6 +77,7 @@ def main():
     k4a.stop()
     cv2.destroyAllWindows()
     random_answsers = ["I can see ", "I think this is ","HHMMM is that ", "I guess it is  "," this is ","That's"]
+
     random_choice = random.choice(random_answsers)
     msg = random_choice + most_common_color
     tts(msg, "en-US")

@@ -19,8 +19,8 @@ def main():
 
     def wake_check():
         
-        keyword_path_arabic = "C:/Users/WOB/Desktop/WOB-Robo-Code-main/RoboAppApplication/stopArabic.ppn"
-        access_key = 'KT8J7GHX3ohRwP3c/W/TyovUX0ceYDL0g8U01PTb3q7ARhHDOgYD9w=='
+        keyword_path_arabic = "C:/Users/WOB/Desktop/WOB-Robo-Code-main/RoboAppApplication/SamStopar.ppn"
+        access_key = 'zBapjwgbd0M1f7jDBHxkKG52DLToh8gCLuo06ffIom43uhFNJhLPpw=='
         model_path = 'C:/Users/WOB/Desktop/WOB-Robo-Code-main/RoboAppApplication/porcupine_params_ar.pv'
         print("language is arabic")
         def audio_callback(in_data, frame_count, time_info, status):

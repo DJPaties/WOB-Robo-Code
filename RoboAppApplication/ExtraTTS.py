@@ -7,7 +7,7 @@ from mutagen.mp3 import MP3
 import wave
 from concurrent.futures import ThreadPoolExecutor
 from serialSender import mouth, talking_scenario
-serialExecuter = ThreadPoolExecutor()
+# serialExecuter = ThreadPoolExecutor()
 def tts(response_message,lang_code):
 
     print("TTS")
@@ -55,10 +55,10 @@ def tts(response_message,lang_code):
             print("MP3 audio length is ",audio.info.length)
             pygame.mixer.music.load(filename)
             pygame.mixer.music.play()
-            # mouth(float(audio.info.length))
-            serialExecuter.submit(talking_scenario(audio.info.length,"talking","any"))
+            mouth(float(audio.info.length))
+            # serialExecuter.submit(talking_scenario(audio.info.length,"talking","any"))
             while pygame.mixer.music.get_busy():
-                time.sleep(0.2)  # Wait a second before checking again
+                time.sleep(0.15)  # Wait a second before checking again
     
     #if lamguage is arabic then a whole new process is written 
         else:
@@ -98,12 +98,12 @@ def tts(response_message,lang_code):
                 out.write(response.audio_content)
             pygame.mixer.music.load(filename)
             pygame.mixer.music.play()
-            #mouth(duration_seconds)
-            serialExecuter.submit(talking_scenario(duration_seconds,"talking","any"))
+            mouth(duration_seconds)
+            # serialExecuter.submit(talking_scenario(duration_seconds,"talking","any"))
             while pygame.mixer.music.get_busy():
                 time.sleep(0.2)  # Wait a second before checking again
     except Exception as e:
         print("Error occured ", e)
 
 
-# tts("Bye Bye habeebe Samir Abed El Karim Fawwaz", 'ar-LB')
+# tts("Bye Bye Mohammad Dghaily", 'ar-LB')

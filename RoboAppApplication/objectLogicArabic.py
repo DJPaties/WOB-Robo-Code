@@ -33,6 +33,7 @@ def analyze_image():
 
 
     mobile_names = ["mobile phone","telephone","smartphone", "telephony","communication device","portable communications device"]
+    display_electronic=["display device","electronic device"]
     cup_names = ["cup","mug"]
     bottles = ["plastic bottle","bottle","Plastic bottle"]
     try:
@@ -41,6 +42,7 @@ def analyze_image():
         telephone_count = 0
         cup_count = 0
         bottles_count = 0
+        display_electronic_counter=0
         for label in response_label.label_annotations:
             matching_objects = [obj for obj in object_names if label.description.lower() == obj.lower()]
             if label.description.lower()  in mobile_names:
@@ -64,6 +66,13 @@ def analyze_image():
                 else:
                     detected_objects += "ءَنِّينِى , "
                 bottles_count+=1
+            elif label.description.lower()  in display_electronic:
+                print(label.description.lower())
+                if display_electronic_counter>0:
+                    pass
+                else:
+                    detected_objects += " شي من إلكترونيات ,  "
+                display_electronic_counter+=1
             elif matching_objects:
                 print(f"User input '{label.description}' matches the object: '{matching_objects[0]}'")
                 detected_objects += label.description + ", "

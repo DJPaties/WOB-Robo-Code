@@ -19,8 +19,8 @@ def main():
 
     def wake_check():
         
-        keyword_path_arabic = "C:/Users/WOB/Desktop/WOB-Robo-Code-main/RoboAppApplication/stop_mimick.ppn"
-        access_key = 'KT8J7GHX3ohRwP3c/W/TyovUX0ceYDL0g8U01PTb3q7ARhHDOgYD9w=='
+        keyword_path_arabic = "C:/Users/WOB/Desktop/WOB-Robo-Code-main/RoboAppApplication/SamStop.ppn"
+        access_key = 'zBapjwgbd0M1f7jDBHxkKG52DLToh8gCLuo06ffIom43uhFNJhLPpw=='
         print("language is arabic")
         def audio_callback(in_data, frame_count, time_info, status):
             pcm = np.frombuffer(in_data, dtype=np.int16)

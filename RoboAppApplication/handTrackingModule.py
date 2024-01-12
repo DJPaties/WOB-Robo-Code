@@ -11,8 +11,8 @@ detection = False
 
 def wake_check(exit_event):
     global detection
-    keyword_path = 'C:/Users/WOB/Desktop/WOB-Robo-Code-main/RoboAppApplication/stop_mimick.ppn'
-    access_key = 'KT8J7GHX3ohRwP3c/W/TyovUX0ceYDL0g8U01PTb3q7ARhHDOgYD9w=='
+    keyword_path = 'C:/Users/WOB/Desktop/WOB-Robo-Code-main/RoboAppApplication/SamStop.ppn'
+    access_key = 'zBapjwgbd0M1f7jDBHxkKG52DLToh8gCLuo06ffIom43uhFNJhLPpw=='
     print("Entered stop check")
 
     def audio_callback(in_data, frame_count, time_info, status):
@@ -135,7 +135,7 @@ def start(exit_event):
 
                 if old_code != code:
                     print(code)
-                    old_code = code
+                    old_code = code 
                     talking_scenario(5, "any", code)
                     time.sleep(0.5)
             else:

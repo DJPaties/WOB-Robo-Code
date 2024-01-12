@@ -36,11 +36,11 @@ class Joint:
 		return K4ABT_JOINT_NAMES[self.id]
 
 	def to_dict(self):
-		if self.name == "head":
-			self.message = {
-				'positionx': self.position.x,
-				'position y': self.position.y
-			}
+		# if self.name == "head":
+		self.message = {
+			'positionx': self.position.x,
+			'position y': self.position.y
+		}
 		return self.message
 	def __str__(self):
 		"""Print the current settings and a short explanation"""

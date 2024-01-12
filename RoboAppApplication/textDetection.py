@@ -5,8 +5,17 @@ import pyk4a
 from pyk4a import Config, PyK4A
 import cv2
 import numpy as np
-from TTS import tts
 import time
+import os
+from google.cloud import texttospeech
+import pygame
+import glob
+import time
+from mutagen.mp3 import MP3
+import wave
+from concurrent.futures import ThreadPoolExecutor
+from serialSender import talking_scenario
+serialExecuter = ThreadPoolExecutor()
 # Page segmentation modes: 
 # O Orientation and script detection (OSD) only
 # 1 Automatic page segmentation with OSD. ‘
@@ -30,6 +39,63 @@ import time
 # 3   Default, based on what is available
 
 # tesseract imagename outputbase [-l lang] [--oem ocrenginemode] [--psm pagesegmode] [configfiles...]
+
+def tts(response_message,lang_code):
+
+    print("TTS")
+    os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'tts.json'
+    try:        
+        
+        client = texttospeech.TextToSpeechClient()
+        print("Client created successfully.")
+    except Exception as e:
+        print("Error:", str(e))
+    print("TTS")
+    text = '<speak>'+""+response_message+""+'</speak>'
+    synthesis_input = texttospeech.SynthesisInput(ssml=text)
+    
+    try:
+        if lang_code == "en-US":
+            voice = texttospeech.VoiceSelectionParams(
+            language_code=lang_code ,
+            ssml_gender=texttospeech.SsmlVoiceGender.MALE,
+        )
+            audio_config = texttospeech.AudioConfig(
+                        audio_encoding=texttospeech.AudioEncoding.MP3,
+                    )
+            response = client.synthesize_speech(
+                        input=synthesis_input, voice=voice, audio_config=audio_config,
+                    )
+
+
+            filename = 'audioText.mp3'
+            with open(filename, 'wb') as out:
+                out.write(response.audio_content)
+            pygame.mixer.init()
+            pygame.mixer.music.load('dummy.mp3')
+            files = glob.glob('audioText*.mp3')
+            for f in files:
+                try:
+                    os.remove(f)
+                except OSError as e:
+                    print("Error: %s - %s." % (e.filename, e.strerror))
+            filename = 'audioText' + str(pygame.time.get_ticks()) + '.mp3'
+            with open(filename, 'wb') as out:
+                out.write(response.audio_content)
+            audio = MP3(filename)
+            
+            print("MP3 audio length is ",audio.info.length)
+            pygame.mixer.music.load(filename)
+            pygame.mixer.music.play()
+            # mouth(float(audio.info.length))
+            serialExecuter.submit(talking_scenario(audio.info.length,"talking","any"))
+            while pygame.mixer.music.get_busy():
+                time.sleep(0.2)  # Wait a second before checking again
+    
+
+    except Exception as e:
+        print("Error occured ", e)
+
 
 
 def main():
@@ -80,7 +146,7 @@ def findText():
     accumalated_text = ""
     amount_ofBoxes = len(data['text'])
     for i in range(amount_ofBoxes):
-        if float(data['conf'][i])>60:
+        if float(data['conf'][i])>80:
             print(data['text'][i], data['conf'][i])
             accumalated_text += f"{data['text'][i]} "
         # box = box.split(" ")

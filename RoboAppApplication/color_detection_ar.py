@@ -8,15 +8,15 @@ import pandas as pd
 from collections import Counter
 from TTS import tts
 import random
-color_data = pd.read_csv('wikipedia_x11_colors.csv')
+color_data = pd.read_csv('arabiccolorsexcel.csv')
 
 def get_color_name(b, g, r):
     # Find the closest match based on Euclidean distance
     color_data['distance'] = ((color_data['Red (8 bit)'] - r) ** 2 + (color_data['Green (8 bit)'] - g) ** 2 + (color_data['Blue (8 bit)'] - b) ** 2) ** 0.5
-    closest_color = color_data.loc[color_data['distance'].idxmin(), 'Name']
-    closest_color = closest_color.split("!")
+    closest_color = color_data.loc[color_data['distance'].idxmin(), 'Arabic Name']
+    # closest_color = closest_color.split("!")
     
-    return closest_color[-1]
+    return closest_color
 
 
 
@@ -76,12 +76,13 @@ def main():
 
     k4a.stop()
     cv2.destroyAllWindows()
-    random_answsers = ["I can see ", "I think this is ","HHMMM is that ", "I guess it is  "," this is ","That's"]
+    random_answsers = ["انا شايف  ", "يِمْكِنْ هَيْدَا ","هِمْمْمْ يِمْكِنْ هَيْدَا ", "بِعْتِئِدْ, حَسَبْ خِبِرْتِي.  "]
     random_choice = random.choice(random_answsers)
     msg = random_choice + most_common_color
-    tts(msg, "en-US")
+    tts(msg, "ar-LB")
     # tts(" ","en-US")
     # return msg  
     
 if __name__ == "__main__":
     main()
+#"Slate Gray (Dark) !Dark Slate Gray"," رْمَادِيِ  غَامِقْ","#2F4F4F","47","79","79","180","25","25"

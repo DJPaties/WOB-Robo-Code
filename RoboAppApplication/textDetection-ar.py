@@ -5,8 +5,74 @@ import pyk4a
 from pyk4a import Config, PyK4A
 import cv2
 import numpy as np
-from TTS import tts
 import time
+import os
+from google.cloud import texttospeech
+import pygame
+import glob
+import time
+from mutagen.mp3 import MP3
+import wave
+from concurrent.futures import ThreadPoolExecutor
+from serialSender import mouth, talking_scenario
+serialExecuter = ThreadPoolExecutor()
+def tts(response_message,lang_code):
+
+    print("TTS")
+    os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'tts.json'
+    try:        
+        
+        client = texttospeech.TextToSpeechClient()
+        print("Client created successfully.")
+    except Exception as e:
+        print("Error:", str(e))
+    print("TTS")
+    text = '<speak>'+""+response_message+""+'</speak>'
+    synthesis_input = texttospeech.SynthesisInput(ssml=text)
+    
+    try:
+            name = "ar-XA-Standard-B"
+            text_input = texttospeech.SynthesisInput(text=response_message)
+            voice_params = texttospeech.VoiceSelectionParams(
+                language_code="ar-XA", name=name
+            )
+            audio_config = texttospeech.AudioConfig(audio_encoding=texttospeech.AudioEncoding.LINEAR16)
+
+            response = client.synthesize_speech(
+                input=text_input,
+                voice=voice_params,
+                audio_config=audio_config,
+            )
+            
+
+            filename = f"audioTextar.wav"
+            print(filename)
+            with open(filename, "wb") as out:
+                out.write(response.audio_content)
+                print(f'Generated speech saved to "{filename}"')
+            with wave.open(filename) as mywav:
+                duration_seconds = mywav.getnframes() / mywav.getframerate()
+                print(f"Length of the WAV file: {duration_seconds:.1f} s")
+            pygame.mixer.init()
+            pygame.mixer.music.load('dummy.mp3')
+            files = glob.glob('audioTextar*.mp3')
+            for f in files:
+                try:
+                    os.remove(f)
+                except OSError as e:
+                    print("Error: %s - %s." % (e.filename, e.strerror))
+            filename = 'audioTextar' + str(pygame.time.get_ticks()) + '.wav'
+            with open(filename, 'wb') as out:
+                out.write(response.audio_content)
+            pygame.mixer.music.load(filename)
+            pygame.mixer.music.play()
+            #mouth(duration_seconds)
+            serialExecuter.submit(talking_scenario(duration_seconds,"talking","any"))
+            while pygame.mixer.music.get_busy():
+                time.sleep(0.2)  # Wait a second before checking again
+    except Exception as e:
+        print("Error occured ", e)
+
 # Page segmentation modes: 
 # O Orientation and script detection (OSD) only
 # 1 Automatic page segmentation with OSD. ‘
@@ -32,47 +98,47 @@ import time
 # tesseract imagename outputbase [-l lang] [--oem ocrenginemode] [--psm pagesegmode] [configfiles...]
 
 
-# def main():
-#     k4a = PyK4A(
-#         Config(
-#             color_resolution=pyk4a.ColorResolution.RES_720P,
-#             depth_mode=pyk4a.DepthMode.NFOV_UNBINNED,
-#             synchronized_images_only=True,
-#         )
-#     )
-#     k4a.start()
+def main():
+    k4a = PyK4A(
+        Config(
+            color_resolution=pyk4a.ColorResolution.RES_720P,
+            depth_mode=pyk4a.DepthMode.NFOV_UNBINNED,
+            synchronized_images_only=True,
+        )
+    )
+    k4a.start()
 
-#     # getters and setters directly get and set on device
-#     k4a.whitebalance = 4500
-#     assert k4a.whitebalance == 4500
-#     k4a.whitebalance = 4510
-#     assert k4a.whitebalance == 4510
-#     time.sleep(1)
+    # getters and setters directly get and set on device
+    k4a.whitebalance = 4500
+    assert k4a.whitebalance == 4500
+    k4a.whitebalance = 4510
+    assert k4a.whitebalance == 4510
+    time.sleep(1)
 
-#     # Get the first frame
-#     first_frame = None
+    # Get the first frame
+    first_frame = None
 
-#     while 1:
-#         capture = k4a.get_capture()
-#         if first_frame is None and np.any(capture.color):
-#             first_frame = capture.color[100:500, 200:700, :3]
+    while 1:
+        capture = k4a.get_capture()
+        if first_frame is None and np.any(capture.color):
+            first_frame = capture.color[100:500, 200:700, :3]
         
-#         if np.any(capture.color):
-#             cv2.imshow("k4a", capture.color[:, :, :3])
+        if np.any(capture.color):
+            cv2.imshow("k4a", capture.color[:, :, :3])
             
-#             cv2.destroyAllWindows()
-#             break
+            cv2.destroyAllWindows()
+            break
 
-#     k4a.stop()
+    k4a.stop()
 
-#     # Do something with the first frame (e.g., save it)
-#     if first_frame is not None:
-#         cv2.imwrite("sample-text.jpg", first_frame)
-#         findText()
+    # Do something with the first frame (e.g., save it)
+    if first_frame is not None:
+        cv2.imwrite("sample-text.jpg", first_frame)
+        findText()
 
 def findText():
     language = r"ara"
-    myconfig = r"--psm 6 --oem 3"
+    myconfig = r"--psm 11 --oem 3"
     img = cv2.imread("sample-text.jpg")
     height,width, _ = img.shape
     # boxes = pytesseract.image_to_boxes(img, config=myconfig, output_type=Output.DICT)
@@ -99,5 +165,5 @@ def findText():
 
 
 if __name__ == "__main__":
-    # main()
-    findText()
+    main()
+    # findText()

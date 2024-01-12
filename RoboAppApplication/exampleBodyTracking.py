@@ -21,7 +21,6 @@ def set_signal(boolean):
 #     print("executed cOMMAND")
 def send_message(msg):
     # print(msg)
-    
     url = 'http://127.0.0.1:50001/command'
     data = {'message': msg}
     requests.post(url, json=data)
@@ -114,8 +113,6 @@ def start_eye():
 					#1520 head
 					new_code = "#1P1480T500\r\n"
 					face_code = "#2P1520T500"
-					
-
 				elif x_pos>0:
 					#1520 eye
 					#1500 head
