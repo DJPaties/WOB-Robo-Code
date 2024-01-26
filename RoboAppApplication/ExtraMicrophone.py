@@ -47,7 +47,8 @@ def stt(languageCode):
         except sr.UnknownValueError:
             #TODO here in future time is where will we implement the sleep function that turns microphoneoff
             # when there is no one talking to him
-            stt('ar-LB')
+            x = stt(languageCode)
+            return x
 
             
         except sr.RequestError as e:

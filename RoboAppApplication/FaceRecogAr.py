@@ -11,26 +11,10 @@ import pvporcupine
 import numpy as np
 from multiprocessing import Process, Event, Manager, Lock
 import ExtraTTS
-
-
+import string
+import os
+import random
 name_frame_lock = Lock()
-
-
-def capture_and_save_screenshot(sfr,frame, filename):
-    # Create a copy of the frame to avoid modifying the original frame
-    frame_copy = frame.copy()
-
-    # Detect Faces
-    face_locations, face_names = sfr.detect_known_faces(frame_copy)
-    for face_loc, name in zip(face_locations, face_names):
-        y1, x2, y2, x1 = face_loc[0], face_loc[1], face_loc[2], face_loc[3]
-
-        # Draw rectangles on the copy of the frame
-        # cv2.rectangle(frame_copy, (x1, y1), (x2, y2), (0, 0, 200), 4)
-
-    # Save the copy without rectangles
-    cv2.imwrite(filename, frame_copy)
-
 
 
 def start(known_names,exit_event,get_frame, name_frame):
@@ -57,17 +41,44 @@ def start(known_names,exit_event,get_frame, name_frame):
         #         current_value = name_frame.value.decode('utf-8')
         #     capture_and_save_screenshot(sfr,frame, f"images/{current_value}.jpg")
         #     get_frame.value = False
+        # if get_frame.value:
+        #     with name_frame_lock:
+        #         current_value = name_frame.value.decode('utf-8')
+        #     # Capture the screenshot without using a separate function
+        #     frame_copy = frame.copy()
+        #     face_locations, _ = sfr.detect_known_faces(frame_copy)
+        #     for face_loc in face_locations:
+        #         y1, x2, y2, x1 = face_loc[0], face_loc[1], face_loc[2], face_loc[3]
+        #         # cv2.rectangle(frame_copy, (x1, y1), (x2, y2), (0, 0, 200), 4)
+        #     cv2.imwrite(f"images/{current_value}.jpg", frame_copy)
+        #     get_frame.value = False
         if get_frame.value:
             with name_frame_lock:
                 current_value = name_frame.value.decode('utf-8')
-            # Capture the screenshot without using a separate function
+            # Capture the screenshot only around detected faces
             frame_copy = frame.copy()
             face_locations, _ = sfr.detect_known_faces(frame_copy)
             for face_loc in face_locations:
                 y1, x2, y2, x1 = face_loc[0], face_loc[1], face_loc[2], face_loc[3]
-                # cv2.rectangle(frame_copy, (x1, y1), (x2, y2), (0, 0, 200), 4)
-            cv2.imwrite(f"images/{current_value}.jpg", frame_copy)
-            get_frame.value = False
+                # Adjust the margin to include more or less of the surrounding area
+                margin = 20
+                y1 = max(0, y1 - margin)
+                x1 = max(0, x1 - margin)
+                y2 = min(frame_copy.shape[0], y2 + margin)
+                x2 = min(frame_copy.shape[1], x2 + margin)
+                # Crop the frame around the detected face
+                face_frame = frame_copy[y1:y2, x1:x2]
+                # Save the cropped frame to an image file
+                # cv2.imwrite(f"images/{current_value}.jpg", face_frame)
+                file_path=f"images/{current_value}.jpg"
+                if os.path.exists(file_path):
+                    characters = string.ascii_letters + string.digits
+                    characters =  ''.join(random.choice(characters) for _ in range(3))
+                    cv2.imwrite(f"images/{characters}-{current_value}.jpg",face_frame)
+                else:
+                    cv2.imwrite(f"images/{current_value}.jpg", face_frame)
+                get_frame.value = False 
+
 
         cv2.imshow("Frame", frame)
 
@@ -83,7 +94,7 @@ def get_input(exit_event,known_names, get_frame, name_frame):
     # while True:
     keyword_path_arabic = "C:/Users/WOB/Desktop/WOB-Robo-Code-main/RoboAppApplication/HeySamar.ppn"
 
-    access_key = 'zBapjwgbd0M1f7jDBHxkKG52DLToh8gCLuo06ffIom43uhFNJhLPpw=='
+    access_key = 'hnVEQNTuN7caCisx8/8byB5z3xT1zsJ+ANs/NuVK2ZLWO9WNAJThdQ=='
     model_path = 'C:/Users/WOB/Desktop/WOB-Robo-Code-main/RoboAppApplication/porcupine_params_ar.pv'
     print("Entered wake check")
     detection= False
@@ -131,8 +142,11 @@ def get_input(exit_event,known_names, get_frame, name_frame):
             reply_message = ""
             count_unknown = known_names.count('Unknown')
             new_known_list = [item for item in known_names if item != 'Unknown']
-            for n in new_known_list:
-                reply_message += f"{n},و"
+            for index, n in enumerate(new_known_list):
+                if index == len(new_known_list) - 1:
+                    reply_message += f"{n}"
+                else:
+                    reply_message += f"{n},و"
             if count_unknown >=2: 
                 reply_message+= "في أَشْخاَصْ مَا بَعْرِفَ. بِتْعَرَّفْ عَلَيَ لَمَّا نْكُونْ لَحالْنَا."
             elif count_unknown == 1:
@@ -142,8 +156,15 @@ def get_input(exit_event,known_names, get_frame, name_frame):
             reply_message = " حبيبي  شو اسمك؟"
             print(reply_message)
             ExtraTTS.tts(reply_message,"ar-LB")
-            check_name = name_frame.value.decode('utf-8')
-            while not check_name:
+            # while not check_name:
+            msg = ExtraMicrophone.stt('ar-LB')
+            name= NameExtract.get_name(msg,"ar-LB")
+            with name_frame_lock:
+                name_frame.value = name.encode('utf-8')
+                check_name = name_frame.value.decode('utf-8')
+            print(name,"CHECK NAME",check_name)
+            while not name:
+                ExtraTTS.tts("عفوا ما فِهِمِتْ عَلِيْكْ.","ar-LB")
                 msg = ExtraMicrophone.stt('ar-LB')
                 name= NameExtract.get_name(msg,"ar-LB")
                 with name_frame_lock:

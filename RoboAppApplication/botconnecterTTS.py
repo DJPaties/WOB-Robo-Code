@@ -106,4 +106,4 @@ def tts(response_message,lang_code):
         print("Error occured ", e)
 
 
-# tts("باااي باااي, أِزا بَدَّكْ يانِي رجاع عيِّتلي", 'ar-LB')
+# tts("Sameer Fawwaz is a big and strong boy", 'en-US')

@@ -15,13 +15,14 @@ def get_name(sentence,languagecode):
         else:
             translated= "My name is "+sentence
     else:
-        if "إسمي" in sentence:
+        if "إسمي" in sentence or "أنا اسمي" in sentence:
             print(" Found")
         else:
             sentence = "اسمي " + sentence
     
         translation = translator.translate(sentence, src='ar', dest='en')
         translated =  translation.text
+        print(translated)
     # print(sentence)
     # input_sentence = "my name is ahmad ibrahim"
         
@@ -38,10 +39,20 @@ def get_name(sentence,languagecode):
                 name = ' '.join([word for word, tag in entity.leaves()])
                 names.append(name)
     print(names)
+    if names == []:
+        names = ''
+        if not names:
+            print("YES")
+        return ""
     return names[0]
 # while True:
 #     inp = input("")
 #     print(get_name(inp))
 # get_name("عبد فواز","ar-LB")
+
+
+# get_name(" أنا اسمي محمد دغيلي","ar-LB")
+
+
 
 

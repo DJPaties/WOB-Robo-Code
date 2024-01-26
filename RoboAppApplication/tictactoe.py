@@ -6,8 +6,6 @@ from helperstictactoe import check_turn, check_for_win, draw_board
 import random
 import time
 from ExtraTTS import tts
-import speech_recognition as sr
-
 executor = ThreadPoolExecutor()
 image = cv2.imread("blackscreen.png")
 msg = ""
@@ -15,6 +13,7 @@ options_O = []
 options_X = []
 global endgame
 endgame = False
+import speech_recognition as sr 
 
 tts("Let's play. You are X and I am O.","en-US")
 tts(" Start","en-US")

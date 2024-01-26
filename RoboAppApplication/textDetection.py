@@ -121,7 +121,7 @@ def main():
     while 1:
         capture = k4a.get_capture()
         if first_frame is None and np.any(capture.color):
-            first_frame = capture.color[100:500, 200:700, :3]
+            first_frame = capture.color[100:500, 400:1000, :3]
         
         if np.any(capture.color):
             cv2.imshow("k4a", capture.color[:, :, :3])

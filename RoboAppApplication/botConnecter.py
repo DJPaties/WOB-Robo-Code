@@ -6,6 +6,7 @@ import subprocess
 from serialSender import talking_scenario
 from botconnecterTTS import tts
 import random
+import namewrong_ar
 # import cv2
 # from keras.models import load_model
 import main_video
@@ -389,6 +390,21 @@ def main(x):
                 detect_gender_webcam.detect_gender("ar-LB")
                 run_thread()
                 return "I hope i was able tp recognize you"
+            elif response1["intent"] == "namewrong_ar":
+                close_eye()
+                tts(response1['text','ar-LB'])
+                namewrong_ar.NameNew("ar-LB")
+                time.sleep(0.5)
+                run_thread()
+                return "ان شَاللهْ اتْزَكَّرَكْ ومَا ارْجَعْ خَرْبِطْ فِيْكْ"
+            elif response1["intent"] == "namewrong":
+                close_eye()
+                tts(response1['text','en-US'])
+                namewrong_ar.NameNew("en-US")
+                time.sleep(0.5)
+                run_thread()
+                return "I hope i will not mistaken you for someone else again"
+                
             else:
                 return response1['text']
             print(response1)

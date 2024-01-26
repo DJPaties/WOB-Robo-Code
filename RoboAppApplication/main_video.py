@@ -7,7 +7,7 @@ from ExtraTTS import tts
 import random
 # Encode faces from a folder
 sfr = SimpleFacerec()
-classifier = load_model(r"C:\Users\WOB\Desktop\final version\final versoin\emtion_detector_tss\model.h5")
+classifier = load_model("model.h5")
 face_classifier = cv2.CascadeClassifier(
     r"C:\Users\WOB\Desktop\WOB-Robo-Code-main\RoboAppApplication\haarcascade_frontalface_default.xml"
 )
