@@ -48,10 +48,13 @@ class VoiceAssistant:
         # self.script_process = subprocess.Popen([r"C:\Users\WOB\AppData\Local\Programs\Python\Python38\python.exe", r"C:\Users\WOB\Desktop\WOB-Robo-Code-main\python_vision\main_old.py"])
         # self.script_process.communicate()
         if self.lang_code == "en-US":
-            self.script_process = subprocess.Popen([r"python", r"FaceRecog.py"])
+            # self.script_process = subprocess.Popen([r"python", r"FaceRecog.py"])
+            
+            self.script_process = subprocess.Popen([r"c:/Users/WOB/Desktop/WOB-Robo-Code-main/FaceREcognition/venv/Scripts/python.exe", r"c:/Users/WOB/Desktop/WOB-Robo-Code-main/FaceREcognition/UsingFrames.py"])
+            
             self.script_process.communicate()
         else:
-            self.script_process = subprocess.Popen([r"python", r"FaceRecogAr.py"])
+            self.script_process = subprocess.Popen([r"c:/Users/WOB/Desktop/WOB-Robo-Code-main/FaceREcognition/venv/Scripts/python.exe", r"c:/Users/WOB/Desktop/WOB-Robo-Code-main/FaceREcognition/UsingFramesAr.py"])
             self.script_process.communicate()
 
     def close_face(self):
@@ -221,12 +224,12 @@ class VoiceAssistant:
     #             self.stt(self.speech_label)
  
     def wake_check(self):
-        servo_command_2 = "#1P2467#2P2500#3P2400#4P2100#5P2300#6P500#7P500#8P1500#9P1410#10P1762#11P1367#12P1600#13P1200#14P1415#15P1500#16P1500#17P1500#18P1500#19P1500#20P1500#21P2200#22P2200#23P2200#24P2200#25P2200#26P2500#27P600#28P1500#29P1600#30P2472#31P1500#32P1500T1000D1000\r\n"  # Move servo 2 to position 2000 in 2 seconds
+        servo_command_2 = "#1P2500#2P2500#3P2500#4P1900#5P1500#6P1570#7P1486#8P1500#9P1842#10P1380#11P1500#12P1900#13P1540#14P1540#15P2140#16P1200#17P1500#18P1500#19P1500#20P1500#21P2340#22P2420#23P2340#24P2380#25P2500#26P1360#27P1500#28P1660#29P2500#30P1500#31P1500#32P1500T500D500\r\n"  # Move servo 2 to position 2000 in 2 seconds
         talking_scenario(5,"any",servo_command_2)
         self.run_face()
         time.sleep(0.5)
         botConnecter.run_thread()
-        greet_command = "#1P2500#2P2500#3P2500#4P2500#5P2500#6P500#7P500#8P1500#9P1430#10P1852#11P1500#12P1500#13P1500#14P1500#15P1500#16P1510#17P1500#18P1500#19P2500#20P1510#21P2200#22P2200#23P2200#24P2200#25P2400#26P2500#27P933#28P1200#29P1820#30P2192#31P1500#32P1500T500D500\r\n"
+        greet_command = "#1P2500#2P2500#3P2500#4P1900#5P1500#6P830#7P1476#8P1440#9P1842#10P1380#11P1500#12P1900#13P2500#14P1540#15P2140#16P1200#17P1500#18P1500#19P1500#20P1500#21P2340#22P2420#23P2340#24P2380#25P2500#26P1350#27P1700#28P1660#29P2500#30P1500#31P1500#32P1500T500D500\r\n"
         talking_scenario(5,"any",greet_command)
         greetings.hand_shaking(self.lang_code)
         self.stt(self.speech_label)

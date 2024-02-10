@@ -2,12 +2,54 @@
   
   "intents": [
     {
+      "tag": "namewrong_ar",
+      "patterns":["سام هيدا مش اسمي","هيدا مش اسمي"
+],
+      "responses": [
+       "أُفْ، عَنْجَد, دَئيئَ بَسْ","فَكَّرْتَكْ حَدَا تَانِ","خَرْبَطِتْ بَيْنَكْ وَبْيْنْ حَدَا تَانِي"
+      ]
+    },
+    {
+      "tag": "gender_ar",
+      "patterns":["أنا شاب ولا بنات","أنا صبي ولا بنت"," سام أنا شاب ولا بنات","سام أنا صبي ولا بنت","شو للجندر تعوله","شو الجندر تعوله سام","سام شو الجندر تعوله"
+],
+      "responses": [
+       " وْئَافْ إِدَّامِي لَأَعْرِفْ"
+      ]
+    },
+    {
+      "tag": "mood_ar",
+      "patterns":["فيك تشوف تعابير وجه","فيك تشوف تعابير وجهي"
+],
+      "responses": [
+        "يَلَّا حُطْ وِجَّكْ لَ شُوفْ تَعَبِيرُ"
+      ]
+    },
+    {
+      "tag": "multiple_body_tracking_ar",
+      "patterns":["فيك تركز على إيدي",
+      "هات نشوف اذا  فيك تركزعلى ما أقول",
+      "هات نشوف اذا  فيك تركزعلي ",
+      "سام خلينا نشوف تركيزك",
+      "سام، يلا نلعب لعبة التركيز"
+],
+      "responses": [
+        "عَطِينِي دَئِيئَة لَأِلْقِ نَزْرَا مْنِيحَ عَلِيْكْ",
+        "خَلّيني جَهِّزْ عيُوني أَوّلْ شِي",
+        "خَلّيني جَهِّزْ حَالي،  بَعْدِينْ إِِلّلِي عَشُو رَكِّزْ.",
+        "خَلّيني جَهِّزْ حَالي،  بَعْدِينْ إِِلّلِي عَشُو رَكِّزْ إزا إِيدْ اليمين أو شْمَالْ أو الراسْ"
+      ]
+    },
+    {
       "tag": "color_detection_ar",
       "patterns": [
         "بدي ورجيك هلا شيء وانت قل لي شو لونه",
         "فيك تقول لي شو لونه هيدا",
         "شو لونه هيدا",
-        "شو هيدا اللون"
+        "شو هيدا اللون",
+        "ممكن تحكيلي شو لونو",
+        "اعطيني لونو، بدي اعرف",
+        "اعطيني لونو"
       
       ],
       "responses": [
@@ -133,7 +175,8 @@
       "patterns": [
         "أدي المسافة بيني وبينك",
         " أديش المسافة بيني وبينك",
-        "أديش ببعد عنك"
+        "أديش ببعد عنك",
+        "قديه مسافه بيني وبينك"
       ],
       "responses": [
         "عَطِينِي دَءِيءَةْ لَءِحْسِبْ المَسافِةْ"
@@ -274,10 +317,11 @@
         "عرفنا على الناس لي برمجوك",
         "عرفنا على الناس اللي برمج",
         "ناس اللي برمج",
-        "مين المبرمجين اللي اشتغلوا عليك"
+        "مين المبرمجين اللي اشتغلوا عليك",
+        "مين المبرمجين اللي اشتغلوا على كام"
       ],
       "responses": [
-        "جون بيير هُوِّ لْمُرْشِدْ الروحِ لِلْفَريءْ.بَاشْ مُهَنْدِسْ أَحْمَدْ إِبْراهيمْ لِي ضَلُّو يِفِكْ وْيْرَكِّبْ فِيّيِ.سوزَانْ علُّوش و سمير حِجَازِي لِي بَرْمَجُونِي وعَلَّموني كِيفْ إِحْكِي.مَحمَّد دْغَيْلِي ألْجَوْكَرْ إلِّي شْتَغَلْ عَلَى كِلْ شِي فيّيِ"
+        "جون بيير هُوِّ لْمُرْشِدْ الروحِ لِلْفَريءْ.بَاشْ مُهَنْدِسْ أَحْمَدْ إِبْراهيمْ لِي ضَلُّو يِفِكْ وْيْرَكِّبْ فِيّيِ.سوزَانْ علُّوش و سمير حِجَازِي لِي بَرْمَجُونِي وعَلَّموني كِيفْ إِحْكِي.مَحمَّد دْغَيْلِي ألْجَوْكَرْ إلِّي شْتَغَلْ عَلَى كِلْ شِي فيّيِ. وعبدالله ركَّب إدَيْي و علمني إشيا زْيادة"
       ]
     },
     {
@@ -577,6 +621,46 @@
         "Let's see the color then ",
         "Show me the color to have a look at it",
         "Let me have a look at the color"
+      ]
+    },
+    {
+      "tag": "multiple_body_tracking",
+      "patterns": ["Can you focus on my hand",
+                  "Let's see if you can focus on what i say",
+                  "Let's see if you can focus",
+                  "Sam let's see you focus",
+                  "Sam let's play focus game",
+                  "Can you track my hand"
+    ],
+      "responses": [
+        "Give me a minute to get a good look at you",
+        "Let me ready my eyes first",
+        "Okay i will get ready, then tell what to focus on. ",
+        "Okay i will get ready, then tell what to focus on either right or left hand or head"
+      ]
+    },
+    {
+      "tag": "gender",
+      "patterns":["Can you guess my gender","What is my gender?"," Sam what is my gender","Sam am i a boy or girl","Sam am i a girl or boy","Sam am i a man or woman","Sam am i a woman or man"
+],
+      "responses": [
+       "Let me have a look at you, stand infront of me."
+      ]
+    },
+    {
+      "tag": "mood",
+      "patterns":["What is my mood","Can you see my facial expressions","Sam can you see my mood","Sam what are my facial expressions","Can you feel my mood"
+],
+      "responses": [
+       "Let me have a look at you, stand infront of me."
+      ]
+    },
+    {
+      "tag": "namewrong",
+      "patterns":["you got my name wrong","you said my name wrong","Sam you said my name wrong","Sam you got my name wrong"
+],
+      "responses": [
+       "Oh, really I thought you were someone else."
       ]
     }
   ]

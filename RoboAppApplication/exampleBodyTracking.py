@@ -81,8 +81,8 @@ def start_eye():
 				if x_pos>800:
 					#1300 eye
 					#200 head
-					new_code = "#1P1300T500\r\n"
-					face_code = "#2P1700T500"
+					new_code = "#1P1412T500\r\n"
+					face_code = "#2P1441T500"
 					
 				# elif x_pos>700:
 				# 	#1360 eye

@@ -4,7 +4,7 @@ from serialSender import talking_scenario
 import time
 def hand_shaking(langauge_code):
     print("Entered welcome scenario")
-    ser = serial.Serial("COM11", 9600)
+    ser = serial.Serial("COM15", 9600)
     msg = None
     counter = 0
     hang_greet_counter = 0
@@ -29,7 +29,7 @@ def hand_shaking(langauge_code):
             elif counter == 2:
                 grab_counter +=1
                 if close_hand:
-                    talking_scenario(5,"any", "#1P2500#2P2500#3P2500#4P2500#5P2500#6P500#7P500#8P1500#9P1430#10P1852#11P1500#12P1500#13P1500#14P1500#15P1500#16P1510#17P1500#18P1500#19P2500#20P1510#21P650#22P700#23P1100#24P1000#25P2400#26P2500#27P933#28P1200#29P1820#30P2192#31P1500#32P1500T500D500\r\n")
+                    talking_scenario(5,"any", "#1P2500#2P2500#3P2500#4P1900#5P1500#6P830#7P1476#8P1440#9P1842#10P1380#11P1500#12P1900#13P2500#14P1540#15P2140#16P1200#17P1500#18P1500#19P1500#20P1500#21P740#22P1180#23P1300#24P1260#25P1300#26P1350#27P1700#28P1660#29P2500#30P1500#31P1500#32P1500T500D500\r\n")
                     close_hand = False
                 print("Grab COunter", grab_counter)
                 if grab_counter == 50:
@@ -38,7 +38,7 @@ def hand_shaking(langauge_code):
                     else:
                         tts("تْرُوكْ إِيِدِيْ, شو بِيِكْ يَا خَيّْيِ ",'ar-LB')
             elif counter>=3:
-                servo_command_2 = "#1P2500#2P2500#3P2500#4P2500#5P2500#6P500#7P500#8P1500#9P1430#10P1752#11P1500#12P1500#13P1500#14P1500#15P1500#16P1510#17P1500#18P1500#19P1500#20P1620#21P2200#22P2200#23P2200#24P2200#25P2400#26P2500#27P833#28P1200#29P1500#30P2192#31P1500#32P1500T500D1000\r\n"
+                servo_command_2 = "#1P2500#2P2500#3P2500#4P1900#5P1500#6P1570#7P1486#8P1500#9P1842#10P1380#11P1500#12P1900#13P1540#14P1540#15P2140#16P1200#17P1500#18P1500#19P1500#20P1500#21P2340#22P2420#23P2340#24P2380#25P2500#26P1360#27P1500#28P1660#29P2500#30P1500#31P1500#32P1500T500D500\r\n"
                 talking_scenario(5,"any", servo_command_2)
                 time.sleep(1)
                 break
